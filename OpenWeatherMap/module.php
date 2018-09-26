@@ -73,5 +73,4 @@ class OpenWeatherMap extends IPSModule
     public function UpdateData()
     {
     }
-
 }
