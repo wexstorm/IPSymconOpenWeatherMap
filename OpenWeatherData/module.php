@@ -276,7 +276,7 @@ class OpenWeatherData extends IPSModule
             $this->SetValue('AbsoluteHumidity', $abs_humidity);
         }
 
-		$wind_speed = $this->ms2kmh($wind_speed);
+        $wind_speed = $this->ms2kmh($wind_speed);
         $this->SetValue('WindSpeed', $wind_speed);
         if ($with_windangle) {
             $this->SetValue('WindAngle', $wind_deg);
@@ -421,7 +421,7 @@ class OpenWeatherData extends IPSModule
 
             $this->SetValue($pre . 'Humidity' . $post, $humidity);
 
-			$wind_speed = $this->ms2kmh($wind_speed);
+            $wind_speed = $this->ms2kmh($wind_speed);
             $this->SetValue($pre . 'WindSpeed' . $post, $wind_speed);
             if ($with_windangle) {
                 $this->SetValue($pre . 'WindAngle' . $post, $wind_deg);
@@ -713,8 +713,8 @@ class OpenWeatherData extends IPSModule
         return $hi;
     }
 
-	private function ms2kmh($speed)
-	{
-		return is_numeric($speed) ? $speed * 3.6 : '';
-	}
+    private function ms2kmh($speed)
+    {
+        return is_numeric($speed) ? $speed * 3.6 : '';
+    }
 }
