@@ -211,9 +211,9 @@ class OpenWeatherData extends IPSModule
                 'units' => 'metric'
             ];
 
-		if (preg_match('/([a-z]*)_.*/', $_ENV['LANG'], $r)) {
-			$args['lang'] = $r[1];
-		}
+        if (preg_match('/([a-z]*)_.*/', $_ENV['LANG'], $r)) {
+            $args['lang'] = $r[1];
+        }
 
         $jdata = $this->do_HttpRequest('data/2.5/weather', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
@@ -350,9 +350,9 @@ class OpenWeatherData extends IPSModule
                 'units' => 'metric'
             ];
 
-		if (preg_match('/([a-z]*)_.*/', $_ENV['LANG'], $r)) {
-			$args['lang'] = $r[1];
-		}
+        if (preg_match('/([a-z]*)_.*/', $_ENV['LANG'], $r)) {
+            $args['lang'] = $r[1];
+        }
 
         $jdata = $this->do_HttpRequest('data/2.5/forecast', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
@@ -428,11 +428,11 @@ class OpenWeatherData extends IPSModule
                 $windstrength = $this->ConvertWindSpeed2Strength($wind_speed);
                 $this->SetValue($pre . 'WindStrength' . $post, $windstrength);
             }
-			if ($with_windstrength2text) {
-				$bft = $this->ConvertWindSpeed2Strength($wind_speed);
-				$windstrength = $this->ConvertWindStrength2Text($bft);
-				$this->SetValue($pre . 'WindStrengthText' . $post, $windstrength);
-			}
+            if ($with_windstrength2text) {
+                $bft = $this->ConvertWindSpeed2Strength($wind_speed);
+                $windstrength = $this->ConvertWindStrength2Text($bft);
+                $this->SetValue($pre . 'WindStrengthText' . $post, $windstrength);
+            }
 
             if ($with_winddirection) {
                 $dir = $this->ConvertWindDirection2Text($wind_deg) . ' (' . $wind_deg . '°)';
