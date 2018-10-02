@@ -135,15 +135,15 @@ trait OpenWeatherMapCommon
 
     private function GetArrayElem($data, $var, $dflt)
     {
-		$ret = $data;
-		$vs = explode('.', $var);
-		foreach ($vs as $v) {
-			if (!isset($ret[$v])) {
-				$ret = $dflt;
-				break;
-			}
-			$ret = $ret[$v];
-		}
+        $ret = $data;
+        $vs = explode('.', $var);
+        foreach ($vs as $v) {
+            if (!isset($ret[$v])) {
+                $ret = $dflt;
+                break;
+            }
+            $ret = $ret[$v];
+        }
         return $ret;
     }
 }

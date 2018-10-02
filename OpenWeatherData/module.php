@@ -22,36 +22,36 @@ class OpenWeatherData extends IPSModule
         $this->RegisterPropertyString('appid', '');
         $this->RegisterPropertyFloat('longitude', 0);
         $this->RegisterPropertyFloat('latitude', 0);
-		$this->RegisterPropertyFloat('altitude', 0);
+        $this->RegisterPropertyFloat('altitude', 0);
 
-		$this->RegisterPropertyBoolean('with_absolute_pressure', false);
-		$this->RegisterPropertyBoolean('with_absolute_humidity', false);
-		$this->RegisterPropertyBoolean('with_dewpoint', false);
-		$this->RegisterPropertyBoolean('with_windchill', false);
-		$this->RegisterPropertyBoolean('with_heatindex', false);
-		$this->RegisterPropertyBoolean('with_windstrength', false);
-		$this->RegisterPropertyBoolean('with_windangle', false);
-		$this->RegisterPropertyBoolean('with_winddirection', true);
-		$this->RegisterPropertyBoolean('with_cloudiness', false);
-		$this->RegisterPropertyBoolean('with_conditions', false);
+        $this->RegisterPropertyBoolean('with_absolute_pressure', false);
+        $this->RegisterPropertyBoolean('with_absolute_humidity', false);
+        $this->RegisterPropertyBoolean('with_dewpoint', false);
+        $this->RegisterPropertyBoolean('with_windchill', false);
+        $this->RegisterPropertyBoolean('with_heatindex', false);
+        $this->RegisterPropertyBoolean('with_windstrength', false);
+        $this->RegisterPropertyBoolean('with_windangle', false);
+        $this->RegisterPropertyBoolean('with_winddirection', true);
+        $this->RegisterPropertyBoolean('with_cloudiness', false);
+        $this->RegisterPropertyBoolean('with_conditions', false);
 
-		$this->RegisterPropertyInteger('hourly_forecast_count', 0);
+        $this->RegisterPropertyInteger('hourly_forecast_count', 0);
 
         $this->RegisterPropertyInteger('update_interval', 5);
 
-		$this->CreateVarProfile('OpenWeatherMap.Temperatur', vtFloat, ' °C', -10, 30, 0, 1, 'Temperature');
-		$this->CreateVarProfile('OpenWeatherMap.Humidity', vtFloat, ' %', 0, 0, 0, 0, 'Drops');
-		$this->CreateVarProfile('OpenWeatherMap.absHumidity', vtFloat, ' g/m³', 10, 100, 0, 0, 'Drops');
-		$this->CreateVarProfile('OpenWeatherMap.Dewpoint', vtFloat, ' °C', 0, 30, 0, 0, 'Drops');
-		$this->CreateVarProfile('OpenWeatherMap.Heatindex', vtFloat, ' °C', 0, 100, 0, 0, 'Temperature');
-		$this->CreateVarProfile('OpenWeatherMap.Pressure', vtFloat, ' mbar', 500, 1200, 0, 0, 'Gauge');
-		$this->CreateVarProfile('OpenWeatherMap.WindSpeed', vtFloat, ' km/h', 0, 100, 0, 0, 'WindSpeed');
-		$this->CreateVarProfile('OpenWeatherMap.WindStrength', vtInteger, ' bft', 0, 13, 0, 0, 'WindSpeed');
-		$this->CreateVarProfile('OpenWeatherMap.WindAngle', vtInteger, ' °', 0, 360, 0, 0, 'WindDirection');
-		$this->CreateVarProfile('OpenWeatherMap.WindDirection', vtString, '', 0, 0, 0, 0, 'WindDirection');
-		$this->CreateVarProfile('OpenWeatherMap.Rainfall', vtFloat, ' mm', 0, 60, 0, 1, 'Rainfall');
-		$this->CreateVarProfile('OpenWeatherMap.Snowfall', vtFloat, ' mm', 0, 60, 0, 1, 'Snow');
-		$this->CreateVarProfile('OpenWeatherMap.Cloudiness', vtFloat, ' %', 0, 0, 0, 0, 'Cloud');
+        $this->CreateVarProfile('OpenWeatherMap.Temperatur', vtFloat, ' °C', -10, 30, 0, 1, 'Temperature');
+        $this->CreateVarProfile('OpenWeatherMap.Humidity', vtFloat, ' %', 0, 0, 0, 0, 'Drops');
+        $this->CreateVarProfile('OpenWeatherMap.absHumidity', vtFloat, ' g/m³', 10, 100, 0, 0, 'Drops');
+        $this->CreateVarProfile('OpenWeatherMap.Dewpoint', vtFloat, ' °C', 0, 30, 0, 0, 'Drops');
+        $this->CreateVarProfile('OpenWeatherMap.Heatindex', vtFloat, ' °C', 0, 100, 0, 0, 'Temperature');
+        $this->CreateVarProfile('OpenWeatherMap.Pressure', vtFloat, ' mbar', 500, 1200, 0, 0, 'Gauge');
+        $this->CreateVarProfile('OpenWeatherMap.WindSpeed', vtFloat, ' km/h', 0, 100, 0, 0, 'WindSpeed');
+        $this->CreateVarProfile('OpenWeatherMap.WindStrength', vtInteger, ' bft', 0, 13, 0, 0, 'WindSpeed');
+        $this->CreateVarProfile('OpenWeatherMap.WindAngle', vtInteger, ' °', 0, 360, 0, 0, 'WindDirection');
+        $this->CreateVarProfile('OpenWeatherMap.WindDirection', vtString, '', 0, 0, 0, 0, 'WindDirection');
+        $this->CreateVarProfile('OpenWeatherMap.Rainfall', vtFloat, ' mm', 0, 60, 0, 1, 'Rainfall');
+        $this->CreateVarProfile('OpenWeatherMap.Snowfall', vtFloat, ' mm', 0, 60, 0, 1, 'Snow');
+        $this->CreateVarProfile('OpenWeatherMap.Cloudiness', vtFloat, ' %', 0, 0, 0, 0, 'Cloud');
 
         $this->RegisterTimer('UpdateData', 0, 'OpenWeatherData_UpdateData(' . $this->InstanceID . ');');
 
@@ -62,59 +62,59 @@ class OpenWeatherData extends IPSModule
     {
         parent::ApplyChanges();
 
-		$with_absolute_pressure = $this->ReadPropertyBoolean('with_absolute_pressure');
-		$with_absolute_humidity = $this->ReadPropertyBoolean('with_absolute_humidity');
-		$with_dewpoint = $this->ReadPropertyBoolean('with_dewpoint');
-		$with_windchill = $this->ReadPropertyBoolean('with_windchill');
-		$with_heatindex = $this->ReadPropertyBoolean('with_heatindex');
-		$with_windstrength = $this->ReadPropertyBoolean('with_windstrength');
-		$with_windangle = $this->ReadPropertyBoolean('with_windangle');
-		$with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
-		$with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
-		$with_conditions = $this->ReadPropertyBoolean('with_conditions');
-		$hourly_forecast_count = $this->ReadPropertyInteger('hourly_forecast_count');
+        $with_absolute_pressure = $this->ReadPropertyBoolean('with_absolute_pressure');
+        $with_absolute_humidity = $this->ReadPropertyBoolean('with_absolute_humidity');
+        $with_dewpoint = $this->ReadPropertyBoolean('with_dewpoint');
+        $with_windchill = $this->ReadPropertyBoolean('with_windchill');
+        $with_heatindex = $this->ReadPropertyBoolean('with_heatindex');
+        $with_windstrength = $this->ReadPropertyBoolean('with_windstrength');
+        $with_windangle = $this->ReadPropertyBoolean('with_windangle');
+        $with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
+        $with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
+        $with_conditions = $this->ReadPropertyBoolean('with_conditions');
+        $hourly_forecast_count = $this->ReadPropertyInteger('hourly_forecast_count');
 
         $vpos = 0;
-		$this->MaintainVariable('Temperature', $this->Translate('Temperature'), vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, true);
-		$this->MaintainVariable('Humidity', $this->Translate('Humidity'), vtFloat, 'OpenWeatherMap.Humidity', $vpos++, true);
-		$this->MaintainVariable('AbsoluteHumidity', $this->Translate('absolute humidity'), vtFloat, 'OpenWeatherMap.absHumidity', $vpos++, $with_absolute_humidity);
-		$this->MaintainVariable('Dewpoint', $this->Translate('Dewpoint'), vtFloat, 'OpenWeatherMap.Dewpoint', $vpos++, $with_dewpoint);
-		$this->MaintainVariable('Heatindex', $this->Translate('Heatindex'), vtFloat, 'OpenWeatherMap.Heatindex', $vpos++, $with_heatindex);
-		$this->MaintainVariable('Windchill', $this->Translate('Windchill'), vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, $with_windchill);
-		$this->MaintainVariable('Pressure', $this->Translate('Air pressure'), vtFloat, 'OpenWeatherMap.Pressure', $vpos++, true);
-		$this->MaintainVariable('AbsolutePressure', $this->Translate('absolute pressure'), vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $with_absolute_pressure);
-		$this->MaintainVariable('WindSpeed', $this->Translate('Windspeed'), vtFloat, 'OpenWeatherMap.WindSpeed', $vpos++, true);
-		$this->MaintainVariable('WindStrength', $this->Translate('Windstrength'), vtInteger, 'OpenWeatherMap.WindStrength', $vpos++, $with_windstrength);
-		$this->MaintainVariable('WindAngle', $this->Translate('Winddirection'), vtInteger, 'OpenWeatherMap.WindAngle', $vpos++, $with_windangle);
-		$this->MaintainVariable('WindDirection', $this->Translate('Winddirection'), vtString, 'OpenWeatherMap.WindDirection', $vpos++, $with_winddirection);
-		$this->MaintainVariable('Rain_3h', $this->Translate('Rainfall of last 3 hours'), vtFloat, 'OpenWeatherMap.Rainfall', $vpos++, true);
-		$this->MaintainVariable('Snow_3h', $this->Translate('Snowfall of last 3 hours'), vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, true);
-		$this->MaintainVariable('Cloudiness', $this->Translate('Cloudiness'), vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $with_cloudiness);
-		$this->MaintainVariable('Conditions', $this->Translate('Conditions'), vtString, '', $vpos++, $with_conditions);
+        $this->MaintainVariable('Temperature', $this->Translate('Temperature'), vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, true);
+        $this->MaintainVariable('Humidity', $this->Translate('Humidity'), vtFloat, 'OpenWeatherMap.Humidity', $vpos++, true);
+        $this->MaintainVariable('AbsoluteHumidity', $this->Translate('absolute humidity'), vtFloat, 'OpenWeatherMap.absHumidity', $vpos++, $with_absolute_humidity);
+        $this->MaintainVariable('Dewpoint', $this->Translate('Dewpoint'), vtFloat, 'OpenWeatherMap.Dewpoint', $vpos++, $with_dewpoint);
+        $this->MaintainVariable('Heatindex', $this->Translate('Heatindex'), vtFloat, 'OpenWeatherMap.Heatindex', $vpos++, $with_heatindex);
+        $this->MaintainVariable('Windchill', $this->Translate('Windchill'), vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, $with_windchill);
+        $this->MaintainVariable('Pressure', $this->Translate('Air pressure'), vtFloat, 'OpenWeatherMap.Pressure', $vpos++, true);
+        $this->MaintainVariable('AbsolutePressure', $this->Translate('absolute pressure'), vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $with_absolute_pressure);
+        $this->MaintainVariable('WindSpeed', $this->Translate('Windspeed'), vtFloat, 'OpenWeatherMap.WindSpeed', $vpos++, true);
+        $this->MaintainVariable('WindStrength', $this->Translate('Windstrength'), vtInteger, 'OpenWeatherMap.WindStrength', $vpos++, $with_windstrength);
+        $this->MaintainVariable('WindAngle', $this->Translate('Winddirection'), vtInteger, 'OpenWeatherMap.WindAngle', $vpos++, $with_windangle);
+        $this->MaintainVariable('WindDirection', $this->Translate('Winddirection'), vtString, 'OpenWeatherMap.WindDirection', $vpos++, $with_winddirection);
+        $this->MaintainVariable('Rain_3h', $this->Translate('Rainfall of last 3 hours'), vtFloat, 'OpenWeatherMap.Rainfall', $vpos++, true);
+        $this->MaintainVariable('Snow_3h', $this->Translate('Snowfall of last 3 hours'), vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, true);
+        $this->MaintainVariable('Cloudiness', $this->Translate('Cloudiness'), vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $with_cloudiness);
+        $this->MaintainVariable('Conditions', $this->Translate('Conditions'), vtString, '', $vpos++, $with_conditions);
         $this->MaintainVariable('LastMeasurement', $this->Translate('last measurement'), vtInteger, '~UnixTimestamp', $vpos++, true);
 
-		for ($i = 0; $i < 40; $i++) {
-			$vpos = 1000 + (100 * $i);
-			$use = $i < $hourly_forecast_count;
-			$s = ' #' . floor($i / 8 ) . '/' . ($i % 8);
-			$pre = 'HourlyForecast';
-			$post = '_' . sprintf('%02d', $i);
+        for ($i = 0; $i < 40; $i++) {
+            $vpos = 1000 + (100 * $i);
+            $use = $i < $hourly_forecast_count;
+            $s = ' #' . floor($i / 8) . '/' . ($i % 8);
+            $pre = 'HourlyForecast';
+            $post = '_' . sprintf('%02d', $i);
 
-			$this->MaintainVariable($pre . 'Begin' . $post, $this->Translate('Begin of forecast-period') . $s, vtInteger, '~UnixTimestamp', $vpos++, $use);
-			$this->MaintainVariable($pre . 'TemperatureMin' . $post, $this->Translate('minimum temperature') . $s, vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, $use);
-			$this->MaintainVariable($pre . 'TemperatureMax' . $post, $this->Translate('maximum temperature') . $s, vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, $use);
-			$this->MaintainVariable($pre . 'Humidity' . $post, $this->Translate('Humidity') . $s, vtFloat, 'OpenWeatherMap.Humidity', $vpos++, $use);
-			$this->MaintainVariable($pre . 'Pressure' . $post, $this->Translate('Air pressure') . $s, vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $use);
-			$this->MaintainVariable($pre . 'AbsolutePressure' . $post, $this->Translate('absolute pressure') . $s, vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $use && $with_absolute_pressure);
-			$this->MaintainVariable($pre . 'WindSpeed' . $post, $this->Translate('Windspeed') . $s, vtFloat, 'OpenWeatherMap.WindSpeed', $vpos++, $use);
-			$this->MaintainVariable($pre . 'WindStrength' . $post, $this->Translate('Windstrength') . $s, vtInteger, 'OpenWeatherMap.WindStrength', $vpos++, $use && $with_windstrength);
-			$this->MaintainVariable($pre . 'WindAngle' . $post, $this->Translate('Winddirection') . $s, vtInteger, 'OpenWeatherMap.WindAngle', $vpos++, $use && $with_windangle);
-			$this->MaintainVariable($pre . 'WindDirection' . $post, $this->Translate('Winddirection') . $s, vtString, 'OpenWeatherMap.WindDirection', $vpos++, $use && $with_winddirection);
-			$this->MaintainVariable($pre . 'Rain_3h' . $post, $this->Translate('Rainfall') . $s, vtFloat, 'OpenWeatherMap.Rainfall', $vpos++, $use);
-			$this->MaintainVariable($pre . 'Snow_3h' . $post, $this->Translate('Snowfall') . $s, vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, $use);
-			$this->MaintainVariable($pre . 'Cloudiness' . $post, $this->Translate('Cloudiness') . $s, vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $use && $with_cloudiness);
-			$this->MaintainVariable($pre . 'Conditions' . $post, $this->Translate('Conditions') . $s, vtString, '', $vpos++, $use && $with_conditions);
-		}
+            $this->MaintainVariable($pre . 'Begin' . $post, $this->Translate('Begin of forecast-period') . $s, vtInteger, '~UnixTimestamp', $vpos++, $use);
+            $this->MaintainVariable($pre . 'TemperatureMin' . $post, $this->Translate('minimum temperature') . $s, vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, $use);
+            $this->MaintainVariable($pre . 'TemperatureMax' . $post, $this->Translate('maximum temperature') . $s, vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, $use);
+            $this->MaintainVariable($pre . 'Humidity' . $post, $this->Translate('Humidity') . $s, vtFloat, 'OpenWeatherMap.Humidity', $vpos++, $use);
+            $this->MaintainVariable($pre . 'Pressure' . $post, $this->Translate('Air pressure') . $s, vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $use);
+            $this->MaintainVariable($pre . 'AbsolutePressure' . $post, $this->Translate('absolute pressure') . $s, vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $use && $with_absolute_pressure);
+            $this->MaintainVariable($pre . 'WindSpeed' . $post, $this->Translate('Windspeed') . $s, vtFloat, 'OpenWeatherMap.WindSpeed', $vpos++, $use);
+            $this->MaintainVariable($pre . 'WindStrength' . $post, $this->Translate('Windstrength') . $s, vtInteger, 'OpenWeatherMap.WindStrength', $vpos++, $use && $with_windstrength);
+            $this->MaintainVariable($pre . 'WindAngle' . $post, $this->Translate('Winddirection') . $s, vtInteger, 'OpenWeatherMap.WindAngle', $vpos++, $use && $with_windangle);
+            $this->MaintainVariable($pre . 'WindDirection' . $post, $this->Translate('Winddirection') . $s, vtString, 'OpenWeatherMap.WindDirection', $vpos++, $use && $with_winddirection);
+            $this->MaintainVariable($pre . 'Rain_3h' . $post, $this->Translate('Rainfall') . $s, vtFloat, 'OpenWeatherMap.Rainfall', $vpos++, $use);
+            $this->MaintainVariable($pre . 'Snow_3h' . $post, $this->Translate('Snowfall') . $s, vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, $use);
+            $this->MaintainVariable($pre . 'Cloudiness' . $post, $this->Translate('Cloudiness') . $s, vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $use && $with_cloudiness);
+            $this->MaintainVariable($pre . 'Conditions' . $post, $this->Translate('Conditions') . $s, vtString, '', $vpos++, $use && $with_conditions);
+        }
 
         $appid = $this->ReadPropertyString('appid');
         if ($appid == '') {
@@ -132,25 +132,25 @@ class OpenWeatherData extends IPSModule
         $formElements[] = ['type' => 'Label', 'label' => 'OpenWeatherMap'];
         $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'appid', 'caption' => 'API-Key'];
 
-		$formElements[] = ['type' => 'Label', 'label' => 'station data - if position is not set, Modue \'Location\' is used'];
+        $formElements[] = ['type' => 'Label', 'label' => 'station data - if position is not set, Modue \'Location\' is used'];
         $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'longitude', 'caption' => 'Longitude'];
         $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'latitude', 'caption' => 'Latitude'];
-		$formElements[] = ['type' => 'NumberSpinner', 'name' => 'altitude', 'caption' => 'Altitude'];
+        $formElements[] = ['type' => 'NumberSpinner', 'name' => 'altitude', 'caption' => 'Altitude'];
 
-		$formElements[] = ['type' => 'Label', 'label' => 'optional weather data'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_absolute_pressure', 'caption' => ' ... absolute Pressure'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_absolute_humidity', 'caption' => ' ... absolute Humidity'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_dewpoint', 'caption' => ' ... Dewpoint'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_heatindex', 'caption' => ' ... Heatindex'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_windchill', 'caption' => ' ... Windchill'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_windstrength', 'caption' => ' ... Windstrength'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_windangle', 'caption' => ' ... Winddirection in degrees'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_winddirection', 'caption' => ' ... Winddirection with label'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_cloudiness', 'caption' => ' ... Cloudiness'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_conditions', 'caption' => ' ... Conditions'];
+        $formElements[] = ['type' => 'Label', 'label' => 'optional weather data'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_absolute_pressure', 'caption' => ' ... absolute Pressure'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_absolute_humidity', 'caption' => ' ... absolute Humidity'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_dewpoint', 'caption' => ' ... Dewpoint'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_heatindex', 'caption' => ' ... Heatindex'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_windchill', 'caption' => ' ... Windchill'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_windstrength', 'caption' => ' ... Windstrength'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_windangle', 'caption' => ' ... Winddirection in degrees'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_winddirection', 'caption' => ' ... Winddirection with label'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_cloudiness', 'caption' => ' ... Cloudiness'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_conditions', 'caption' => ' ... Conditions'];
 
-		$formElements[] = ['type' => 'Label', 'label' => '3-hour forecast (max 5 days every 3rd hour = 40)'];
-		$formElements[] = ['type' => 'NumberSpinner', 'name' => 'hourly_forecast_count', 'caption' => 'Count'];
+        $formElements[] = ['type' => 'Label', 'label' => '3-hour forecast (max 5 days every 3rd hour = 40)'];
+        $formElements[] = ['type' => 'NumberSpinner', 'name' => 'hourly_forecast_count', 'caption' => 'Count'];
 
         $formElements[] = ['type' => 'Label', 'label' => 'Update weatherdata every X minutes'];
         $formElements[] = ['type' => 'IntervalBox', 'name' => 'update_interval', 'caption' => 'Minutes'];
@@ -184,9 +184,9 @@ class OpenWeatherData extends IPSModule
 
     public function UpdateData()
     {
-		$this->UpdateCurrent();
-		$this->UpdateHourlyForecast();
-	}
+        $this->UpdateCurrent();
+        $this->UpdateHourlyForecast();
+    }
 
     public function UpdateCurrent()
     {
@@ -207,103 +207,103 @@ class OpenWeatherData extends IPSModule
         $jdata = $this->do_HttpRequest('data/2.5/weather', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
 
-		if (isset($jdata['weather'])) {
-			$weather = $jdata['weather'];
-			$this->SendDebug(__FUNCTION__, 'weather=' . print_r($weather, true), 0);
-		}
+        if (isset($jdata['weather'])) {
+            $weather = $jdata['weather'];
+            $this->SendDebug(__FUNCTION__, 'weather=' . print_r($weather, true), 0);
+        }
 
-		$with_absolute_pressure = $this->ReadPropertyBoolean('with_absolute_pressure');
-		$with_absolute_humidity = $this->ReadPropertyBoolean('with_absolute_humidity');
-		$with_dewpoint = $this->ReadPropertyBoolean('with_dewpoint');
-		$with_windchill = $this->ReadPropertyBoolean('with_windchill');
-		$with_heatindex = $this->ReadPropertyBoolean('with_heatindex');
-		$with_windstrength = $this->ReadPropertyBoolean('with_windstrength');
-		$with_windangle = $this->ReadPropertyBoolean('with_windangle');
-		$with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
-		$with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
-		$with_conditions = $this->ReadPropertyBoolean('with_conditions');
+        $with_absolute_pressure = $this->ReadPropertyBoolean('with_absolute_pressure');
+        $with_absolute_humidity = $this->ReadPropertyBoolean('with_absolute_humidity');
+        $with_dewpoint = $this->ReadPropertyBoolean('with_dewpoint');
+        $with_windchill = $this->ReadPropertyBoolean('with_windchill');
+        $with_heatindex = $this->ReadPropertyBoolean('with_heatindex');
+        $with_windstrength = $this->ReadPropertyBoolean('with_windstrength');
+        $with_windangle = $this->ReadPropertyBoolean('with_windangle');
+        $with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
+        $with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
+        $with_conditions = $this->ReadPropertyBoolean('with_conditions');
 
-		$timestamp = $this->GetArrayElem($jdata, 'dt', 0);
-		$temperature = $this->GetArrayElem($jdata, 'main.temp', 0);
-		$pressure = $this->GetArrayElem($jdata, 'main.pressure', 0);
-		$humidity = $this->GetArrayElem($jdata, 'main.humidity', 0);
+        $timestamp = $this->GetArrayElem($jdata, 'dt', 0);
+        $temperature = $this->GetArrayElem($jdata, 'main.temp', 0);
+        $pressure = $this->GetArrayElem($jdata, 'main.pressure', 0);
+        $humidity = $this->GetArrayElem($jdata, 'main.humidity', 0);
 
-		$visibility = $this->GetArrayElem($jdata, 'visibility', 0);
+        $visibility = $this->GetArrayElem($jdata, 'visibility', 0);
 
-		$wind_speed = $this->GetArrayElem($jdata, 'wind.speed', 0);
-		$wind_deg = $this->GetArrayElem($jdata, 'wind.deg', 0);
+        $wind_speed = $this->GetArrayElem($jdata, 'wind.speed', 0);
+        $wind_deg = $this->GetArrayElem($jdata, 'wind.deg', 0);
 
-		$rain_3h = $this->GetArrayElem($jdata, 'rain.3h', 0);
-		$snow_3h = $this->GetArrayElem($jdata, 'snow.3h', 0);
+        $rain_3h = $this->GetArrayElem($jdata, 'rain.3h', 0);
+        $snow_3h = $this->GetArrayElem($jdata, 'snow.3h', 0);
 
-		$clouds = $this->GetArrayElem($jdata, 'clouds.all', 0);
+        $clouds = $this->GetArrayElem($jdata, 'clouds.all', 0);
 
-		$conditions = '';
-		$weather = $this->GetArrayElem($jdata, 'weather', '');
-		if ($weather != '') {
-			foreach ($weather as $w) {
-				$description = $this->GetArrayElem($w, 'description', '');
-				if ($description != '') {
-					$conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
-				}
-			}
-		}
+        $conditions = '';
+        $weather = $this->GetArrayElem($jdata, 'weather', '');
+        if ($weather != '') {
+            foreach ($weather as $w) {
+                $description = $this->GetArrayElem($w, 'description', '');
+                if ($description != '') {
+                    $conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
+                }
+            }
+        }
 
-		$this->SetValue('Temperature', $temperature);
+        $this->SetValue('Temperature', $temperature);
 
-		$this->SetValue('Pressure', $pressure);
-		if ($with_absolute_pressure) {
-			$altitude = $this->ReadPropertyFloat('altitude');
-			$abs_pressure = $this->CalcAbsolutePressure($pressure, $temperature, $altitude);
-			$this->SetValue('AbsolutePressure', $abs_pressure);
-		}
+        $this->SetValue('Pressure', $pressure);
+        if ($with_absolute_pressure) {
+            $altitude = $this->ReadPropertyFloat('altitude');
+            $abs_pressure = $this->CalcAbsolutePressure($pressure, $temperature, $altitude);
+            $this->SetValue('AbsolutePressure', $abs_pressure);
+        }
 
-		$this->SetValue('Humidity', $humidity);
-		if ($with_absolute_humidity) {
-			$abs_humidity = $this->CalcAbsoluteHumidity($temperature, $humidity);
+        $this->SetValue('Humidity', $humidity);
+        if ($with_absolute_humidity) {
+            $abs_humidity = $this->CalcAbsoluteHumidity($temperature, $humidity);
             $this->SetValue('AbsoluteHumidity', $abs_humidity);
-		}
+        }
 
-		$this->SetValue('WindSpeed', $wind_speed);
-		if ($with_windangle) {
-			$this->SetValue('WindAngle', $wind_deg);
-		}
-		if ($with_windstrength) {
-			$windstrength = $this->ConvertWindSpeed2Strength($wind_speed);
-			$this->SetValue('WindStrength', $windstrength);
-		}
+        $this->SetValue('WindSpeed', $wind_speed);
+        if ($with_windangle) {
+            $this->SetValue('WindAngle', $wind_deg);
+        }
+        if ($with_windstrength) {
+            $windstrength = $this->ConvertWindSpeed2Strength($wind_speed);
+            $this->SetValue('WindStrength', $windstrength);
+        }
 
-		if ($with_winddirection) {
-			$dir = $this->ConvertWindDirection2Text($wind_deg) . ' (' . $wind_deg . '°)';
-			$this->SetValue('WindDirection', $dir);
-		}
+        if ($with_winddirection) {
+            $dir = $this->ConvertWindDirection2Text($wind_deg) . ' (' . $wind_deg . '°)';
+            $this->SetValue('WindDirection', $dir);
+        }
 
-		$this->SetValue('Rain_3h', $rain_3h);
+        $this->SetValue('Rain_3h', $rain_3h);
 
-		$this->SetValue('Snow_3h', $snow_3h);
+        $this->SetValue('Snow_3h', $snow_3h);
 
-		if ($with_cloudiness) {
-			$this->SetValue('Cloudiness', $clouds);
-		}
+        if ($with_cloudiness) {
+            $this->SetValue('Cloudiness', $clouds);
+        }
 
-		if ($with_conditions) {
-			$this->SetValue('Conditions', $conditions);
-		}
+        if ($with_conditions) {
+            $this->SetValue('Conditions', $conditions);
+        }
 
-		if ($with_dewpoint) {
-			$dewpoint = $this->CalcDewpoint($temperature, $humidity);
+        if ($with_dewpoint) {
+            $dewpoint = $this->CalcDewpoint($temperature, $humidity);
             $this->SetValue('Dewpoint', $dewpoint);
-		}
+        }
 
-		if ($with_windchill) {
-			$windchill = $this->CalcWindchill($temperature, $wind_speed);
+        if ($with_windchill) {
+            $windchill = $this->CalcWindchill($temperature, $wind_speed);
             $this->SetValue('Windchill', $windchill);
-		}
+        }
 
-		if ($with_heatindex) {
-			$heatindex = $this->CalcHeatindex($temperature, $humidity);
+        if ($with_heatindex) {
+            $heatindex = $this->CalcHeatindex($temperature, $humidity);
             $this->SetValue('Heatindex', $heatindex);
-		}
+        }
 
         $this->SetValue('LastMeasurement', $timestamp);
 
@@ -313,8 +313,9 @@ class OpenWeatherData extends IPSModule
     public function UpdateHourlyForecast()
     {
         $hourly_forecast_count = $this->ReadPropertyInteger('hourly_forecast_count');
-		if (!$hourly_forecast_count)
-			return;
+        if (!$hourly_forecast_count) {
+            return;
+        }
 
         $lat = $this->ReadPropertyFloat('latitude');
         $lng = $this->ReadPropertyFloat('longitude');
@@ -328,99 +329,100 @@ class OpenWeatherData extends IPSModule
         $args = [
                 'lat'   => number_format($lat, 6, '.', ''),
                 'lon'   => number_format($lng, 6, '.', ''),
-				'cnt'   => $hourly_forecast_count,
+                'cnt'   => $hourly_forecast_count,
                 'units' => 'metric'
             ];
         $jdata = $this->do_HttpRequest('data/2.5/forecast', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
 
-		if (isset($jdata['list'])) {
-			$list = $jdata['list'];
-			$this->SendDebug(__FUNCTION__, 'list=' . print_r($list, true), 0);
-		}
+        if (isset($jdata['list'])) {
+            $list = $jdata['list'];
+            $this->SendDebug(__FUNCTION__, 'list=' . print_r($list, true), 0);
+        }
 
-		$with_absolute_pressure = $this->ReadPropertyBoolean('with_absolute_pressure');
-		$with_windstrength = $this->ReadPropertyBoolean('with_windstrength');
-		$with_windangle = $this->ReadPropertyBoolean('with_windangle');
-		$with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
-		$with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
-		$with_conditions = $this->ReadPropertyBoolean('with_conditions');
+        $with_absolute_pressure = $this->ReadPropertyBoolean('with_absolute_pressure');
+        $with_windstrength = $this->ReadPropertyBoolean('with_windstrength');
+        $with_windangle = $this->ReadPropertyBoolean('with_windangle');
+        $with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
+        $with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
+        $with_conditions = $this->ReadPropertyBoolean('with_conditions');
 
-		for ($i = 0; $i < 40; $i++) {
-			if ($i == $hourly_forecast_count)
-				break;
+        for ($i = 0; $i < 40; $i++) {
+            if ($i == $hourly_forecast_count) {
+                break;
+            }
 
-			$pre = 'HourlyForecast';
-			$post = '_' . sprintf('%02d', $i);
+            $pre = 'HourlyForecast';
+            $post = '_' . sprintf('%02d', $i);
 
-			$ent = isset($list[$i]) ? $list[$i] : '';
+            $ent = isset($list[$i]) ? $list[$i] : '';
 
-			$timestamp = $this->GetArrayElem($ent, 'dt', 0);
-			$temperature_min = $this->GetArrayElem($ent, 'main.temp_min', 0);
-			$temperature_max = $this->GetArrayElem($ent, 'main.temp_max', 0);
-			$pressure = $this->GetArrayElem($ent, 'main.grnd_level', 0);
-			$abs_pressure = $this->GetArrayElem($ent, 'main.sea_level', 0);
-			$humidity = $this->GetArrayElem($ent, 'main.humidity', 0);
+            $timestamp = $this->GetArrayElem($ent, 'dt', 0);
+            $temperature_min = $this->GetArrayElem($ent, 'main.temp_min', 0);
+            $temperature_max = $this->GetArrayElem($ent, 'main.temp_max', 0);
+            $pressure = $this->GetArrayElem($ent, 'main.grnd_level', 0);
+            $abs_pressure = $this->GetArrayElem($ent, 'main.sea_level', 0);
+            $humidity = $this->GetArrayElem($ent, 'main.humidity', 0);
 
-			$visibility = $this->GetArrayElem($ent, 'visibility', 0);
+            $visibility = $this->GetArrayElem($ent, 'visibility', 0);
 
-			$wind_speed = $this->GetArrayElem($ent, 'wind.speed', 0);
-			$wind_deg = $this->GetArrayElem($ent, 'wind.deg', 0);
+            $wind_speed = $this->GetArrayElem($ent, 'wind.speed', 0);
+            $wind_deg = $this->GetArrayElem($ent, 'wind.deg', 0);
 
-			$rain_3h = $this->GetArrayElem($ent, 'rain.3h', 0);
-			$snow_3h = $this->GetArrayElem($ent, 'snow.3h', 0);
-			$clouds = $this->GetArrayElem($ent, 'clouds.all', 0);
-			$conditions = $this->GetArrayElem($ent, 'weather.0.description', '');
+            $rain_3h = $this->GetArrayElem($ent, 'rain.3h', 0);
+            $snow_3h = $this->GetArrayElem($ent, 'snow.3h', 0);
+            $clouds = $this->GetArrayElem($ent, 'clouds.all', 0);
+            $conditions = $this->GetArrayElem($ent, 'weather.0.description', '');
 
-			$conditions = '';
-			$weather = $this->GetArrayElem($ent, 'weather', '');
-			if ($weather != '') {
-				foreach ($weather as $w) {
-					$description = $this->GetArrayElem($w, 'description', '');
-					if ($description != '') {
-						$conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
-					}
-				}
-			}
+            $conditions = '';
+            $weather = $this->GetArrayElem($ent, 'weather', '');
+            if ($weather != '') {
+                foreach ($weather as $w) {
+                    $description = $this->GetArrayElem($w, 'description', '');
+                    if ($description != '') {
+                        $conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
+                    }
+                }
+            }
 
-			$this->SetValue($pre . 'Begin' . $post, $timestamp);
+            $this->SetValue($pre . 'Begin' . $post, $timestamp);
 
-			$this->SetValue($pre . 'TemperatureMin' . $post, $temperature_min);
-			$this->SetValue($pre . 'TemperatureMax' . $post, $temperature_max);
+            $this->SetValue($pre . 'TemperatureMin' . $post, $temperature_min);
+            $this->SetValue($pre . 'TemperatureMax' . $post, $temperature_max);
 
-			$this->SetValue($pre . 'Pressure' . $post, $pressure);
-			if ($with_absolute_pressure) {
-				$this->SetValue($pre . 'AbsolutePressure' . $post, $abs_pressure);
-			}
+            $this->SetValue($pre . 'Pressure' . $post, $pressure);
+            if ($with_absolute_pressure) {
+                $this->SetValue($pre . 'AbsolutePressure' . $post, $abs_pressure);
+            }
 
-			$this->SetValue($pre . 'Humidity' . $post, $humidity);
+            $this->SetValue($pre . 'Humidity' . $post, $humidity);
 
-			$this->SetValue($pre . 'WindSpeed' . $post, $wind_speed);
-			if ($with_windangle) {
-				$this->SetValue($pre . 'WindAngle' . $post, $wind_deg);
-			}
-			if ($with_windstrength) {
-				$windstrength = $this->ConvertWindSpeed2Strength($wind_speed);
-				$this->SetValue($pre . 'WindStrength' . $post, $windstrength);
-			}
+            $this->SetValue($pre . 'WindSpeed' . $post, $wind_speed);
+            if ($with_windangle) {
+                $this->SetValue($pre . 'WindAngle' . $post, $wind_deg);
+            }
+            if ($with_windstrength) {
+                $windstrength = $this->ConvertWindSpeed2Strength($wind_speed);
+                $this->SetValue($pre . 'WindStrength' . $post, $windstrength);
+            }
 
-			if ($with_winddirection) {
-				$dir = $this->ConvertWindDirection2Text($wind_deg) . ' (' . $wind_deg . '°)';
-				$this->SetValue($pre . 'WindDirection' . $post, $dir);
-			}
+            if ($with_winddirection) {
+                $dir = $this->ConvertWindDirection2Text($wind_deg) . ' (' . $wind_deg . '°)';
+                $this->SetValue($pre . 'WindDirection' . $post, $dir);
+            }
 
-			$this->SetValue($pre . 'Rain_3h' . $post, $rain_3h);
+            $this->SetValue($pre . 'Rain_3h' . $post, $rain_3h);
 
-			$this->SetValue($pre . 'Snow_3h' . $post, $snow_3h);
+            $this->SetValue($pre . 'Snow_3h' . $post, $snow_3h);
 
-			if ($with_cloudiness) {
-				$this->SetValue($pre . 'Cloudiness' . $post, $clouds);
-			}
+            if ($with_cloudiness) {
+                $this->SetValue($pre . 'Cloudiness' . $post, $clouds);
+            }
 
-			if ($with_conditions) {
-				$this->SetValue($pre . 'Conditions' . $post, $conditions);
-			}
-		}
+            if ($with_conditions) {
+                $this->SetValue($pre . 'Conditions' . $post, $conditions);
+            }
+        }
 
         $this->SetStatus(102);
     }
