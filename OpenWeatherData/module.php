@@ -276,6 +276,7 @@ class OpenWeatherData extends IPSModule
             $this->SetValue('AbsoluteHumidity', $abs_humidity);
         }
 
+		$wind_speed = $this->ms2kmh($wind_speed);
         $this->SetValue('WindSpeed', $wind_speed);
         if ($with_windangle) {
             $this->SetValue('WindAngle', $wind_deg);
@@ -420,6 +421,7 @@ class OpenWeatherData extends IPSModule
 
             $this->SetValue($pre . 'Humidity' . $post, $humidity);
 
+			$wind_speed = $this->ms2kmh($wind_speed);
             $this->SetValue($pre . 'WindSpeed' . $post, $wind_speed);
             if ($with_windangle) {
                 $this->SetValue($pre . 'WindAngle' . $post, $wind_deg);
@@ -629,11 +631,11 @@ class OpenWeatherData extends IPSModule
     //   Quelle: https://de.wikipedia.org/wiki/Beaufortskala
     public function ConvertWindSpeed2Strength(int $speed)
     {
-        $kmh2bft = [0.3, 1.6, 3.4, 5.5, 8.0, 10.8, 13.9, 17.2, 20.8, 24.5, 28.5, 32.7];
+        $kn2bft = [1, 4, 7, 11, 16, 22, 28, 34, 41, 48, 56, 64];
 
-        $ms = $speed / 3.6;
-        for ($i = 0; $i < count($kmh2bft); $i++) {
-            if ($ms < $kmh2bft[$i]) {
+        $kn = $speed / 1.852;
+        for ($i = 0; $i < count($kn2bft); $i++) {
+            if ($kn < $kn2bft[$i]) {
                 break;
             }
         }
@@ -710,4 +712,9 @@ class OpenWeatherData extends IPSModule
         $hi = round($hi); // ohne NK
         return $hi;
     }
+
+	private function ms2kmh($speed)
+	{
+		return is_numeric($speed) ? $speed * 3.6 : '';
+	}
 }
