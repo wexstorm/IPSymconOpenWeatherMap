@@ -30,6 +30,7 @@ class OpenWeatherData extends IPSModule
         $this->RegisterPropertyBoolean('with_windchill', false);
         $this->RegisterPropertyBoolean('with_heatindex', false);
         $this->RegisterPropertyBoolean('with_windstrength', false);
+        $this->RegisterPropertyBoolean('with_windstrength2text', false);
         $this->RegisterPropertyBoolean('with_windangle', false);
         $this->RegisterPropertyBoolean('with_winddirection', true);
         $this->RegisterPropertyBoolean('with_cloudiness', false);
@@ -45,7 +46,7 @@ class OpenWeatherData extends IPSModule
         $this->CreateVarProfile('OpenWeatherMap.Dewpoint', vtFloat, ' °C', 0, 30, 0, 0, 'Drops');
         $this->CreateVarProfile('OpenWeatherMap.Heatindex', vtFloat, ' °C', 0, 100, 0, 0, 'Temperature');
         $this->CreateVarProfile('OpenWeatherMap.Pressure', vtFloat, ' mbar', 500, 1200, 0, 0, 'Gauge');
-        $this->CreateVarProfile('OpenWeatherMap.WindSpeed', vtFloat, ' km/h', 0, 100, 0, 0, 'WindSpeed');
+        $this->CreateVarProfile('OpenWeatherMap.WindSpeed', vtFloat, ' km/h', 0, 100, 0, 1, 'WindSpeed');
         $this->CreateVarProfile('OpenWeatherMap.WindStrength', vtInteger, ' bft', 0, 13, 0, 0, 'WindSpeed');
         $this->CreateVarProfile('OpenWeatherMap.WindAngle', vtInteger, ' °', 0, 360, 0, 0, 'WindDirection');
         $this->CreateVarProfile('OpenWeatherMap.WindDirection', vtString, '', 0, 0, 0, 0, 'WindDirection');
@@ -68,6 +69,7 @@ class OpenWeatherData extends IPSModule
         $with_windchill = $this->ReadPropertyBoolean('with_windchill');
         $with_heatindex = $this->ReadPropertyBoolean('with_heatindex');
         $with_windstrength = $this->ReadPropertyBoolean('with_windstrength');
+        $with_windstrength2text = $this->ReadPropertyBoolean('with_windstrength2text');
         $with_windangle = $this->ReadPropertyBoolean('with_windangle');
         $with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
         $with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
@@ -85,6 +87,7 @@ class OpenWeatherData extends IPSModule
         $this->MaintainVariable('AbsolutePressure', $this->Translate('absolute pressure'), vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $with_absolute_pressure);
         $this->MaintainVariable('WindSpeed', $this->Translate('Windspeed'), vtFloat, 'OpenWeatherMap.WindSpeed', $vpos++, true);
         $this->MaintainVariable('WindStrength', $this->Translate('Windstrength'), vtInteger, 'OpenWeatherMap.WindStrength', $vpos++, $with_windstrength);
+        $this->MaintainVariable('WindStrengthText', $this->Translate('Windstrength'), vtString, '', $vpos++, $with_windstrength2text);
         $this->MaintainVariable('WindAngle', $this->Translate('Winddirection'), vtInteger, 'OpenWeatherMap.WindAngle', $vpos++, $with_windangle);
         $this->MaintainVariable('WindDirection', $this->Translate('Winddirection'), vtString, 'OpenWeatherMap.WindDirection', $vpos++, $with_winddirection);
         $this->MaintainVariable('Rain_3h', $this->Translate('Rainfall of last 3 hours'), vtFloat, 'OpenWeatherMap.Rainfall', $vpos++, true);
@@ -96,7 +99,7 @@ class OpenWeatherData extends IPSModule
         for ($i = 0; $i < 40; $i++) {
             $vpos = 1000 + (100 * $i);
             $use = $i < $hourly_forecast_count;
-            $s = ' #' . floor($i / 8) . '/' . ($i % 8);
+            $s = ' - #' . ($i + 1);
             $pre = 'HourlyForecast';
             $post = '_' . sprintf('%02d', $i);
 
@@ -108,6 +111,7 @@ class OpenWeatherData extends IPSModule
             $this->MaintainVariable($pre . 'AbsolutePressure' . $post, $this->Translate('absolute pressure') . $s, vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $use && $with_absolute_pressure);
             $this->MaintainVariable($pre . 'WindSpeed' . $post, $this->Translate('Windspeed') . $s, vtFloat, 'OpenWeatherMap.WindSpeed', $vpos++, $use);
             $this->MaintainVariable($pre . 'WindStrength' . $post, $this->Translate('Windstrength') . $s, vtInteger, 'OpenWeatherMap.WindStrength', $vpos++, $use && $with_windstrength);
+            $this->MaintainVariable($pre . 'WindStrengthText' . $post, $this->Translate('Windstrength') . $s, vtString, '', $vpos++, $use && $with_windstrength2text);
             $this->MaintainVariable($pre . 'WindAngle' . $post, $this->Translate('Winddirection') . $s, vtInteger, 'OpenWeatherMap.WindAngle', $vpos++, $use && $with_windangle);
             $this->MaintainVariable($pre . 'WindDirection' . $post, $this->Translate('Winddirection') . $s, vtString, 'OpenWeatherMap.WindDirection', $vpos++, $use && $with_winddirection);
             $this->MaintainVariable($pre . 'Rain_3h' . $post, $this->Translate('Rainfall') . $s, vtFloat, 'OpenWeatherMap.Rainfall', $vpos++, $use);
@@ -144,12 +148,14 @@ class OpenWeatherData extends IPSModule
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_heatindex', 'caption' => ' ... Heatindex'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_windchill', 'caption' => ' ... Windchill'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_windstrength', 'caption' => ' ... Windstrength'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_windstrength2text', 'caption' => ' ... Windstrength as text'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_windangle', 'caption' => ' ... Winddirection in degrees'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_winddirection', 'caption' => ' ... Winddirection with label'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_cloudiness', 'caption' => ' ... Cloudiness'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_conditions', 'caption' => ' ... Conditions'];
 
         $formElements[] = ['type' => 'Label', 'label' => '3-hour forecast (max 5 days every 3rd hour = 40)'];
+        $formElements[] = ['type' => 'Label', 'label' => 'Attention: decreasing the number deletes the unused variables!'];
         $formElements[] = ['type' => 'NumberSpinner', 'name' => 'hourly_forecast_count', 'caption' => 'Count'];
 
         $formElements[] = ['type' => 'Label', 'label' => 'Update weatherdata every X minutes'];
@@ -204,6 +210,11 @@ class OpenWeatherData extends IPSModule
                 'lon'   => number_format($lng, 6, '.', ''),
                 'units' => 'metric'
             ];
+
+		if (preg_match('/([a-z]*)_.*/', $_ENV['LANG'], $r)) {
+			$args['lang'] = $r[1];
+		}
+
         $jdata = $this->do_HttpRequest('data/2.5/weather', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
 
@@ -218,6 +229,7 @@ class OpenWeatherData extends IPSModule
         $with_windchill = $this->ReadPropertyBoolean('with_windchill');
         $with_heatindex = $this->ReadPropertyBoolean('with_heatindex');
         $with_windstrength = $this->ReadPropertyBoolean('with_windstrength');
+        $with_windstrength2text = $this->ReadPropertyBoolean('with_windstrength2text');
         $with_windangle = $this->ReadPropertyBoolean('with_windangle');
         $with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
         $with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
@@ -271,6 +283,11 @@ class OpenWeatherData extends IPSModule
         if ($with_windstrength) {
             $windstrength = $this->ConvertWindSpeed2Strength($wind_speed);
             $this->SetValue('WindStrength', $windstrength);
+        }
+        if ($with_windstrength2text) {
+            $bft = $this->ConvertWindSpeed2Strength($wind_speed);
+            $windstrength = $this->ConvertWindStrength2Text($bft);
+            $this->SetValue('WindStrengthText', $windstrength);
         }
 
         if ($with_winddirection) {
@@ -332,6 +349,11 @@ class OpenWeatherData extends IPSModule
                 'cnt'   => $hourly_forecast_count,
                 'units' => 'metric'
             ];
+
+		if (preg_match('/([a-z]*)_.*/', $_ENV['LANG'], $r)) {
+			$args['lang'] = $r[1];
+		}
+
         $jdata = $this->do_HttpRequest('data/2.5/forecast', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
 
@@ -342,6 +364,7 @@ class OpenWeatherData extends IPSModule
 
         $with_absolute_pressure = $this->ReadPropertyBoolean('with_absolute_pressure');
         $with_windstrength = $this->ReadPropertyBoolean('with_windstrength');
+        $with_windstrength2text = $this->ReadPropertyBoolean('with_windstrength2text');
         $with_windangle = $this->ReadPropertyBoolean('with_windangle');
         $with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
         $with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
@@ -405,6 +428,11 @@ class OpenWeatherData extends IPSModule
                 $windstrength = $this->ConvertWindSpeed2Strength($wind_speed);
                 $this->SetValue($pre . 'WindStrength' . $post, $windstrength);
             }
+			if ($with_windstrength2text) {
+				$bft = $this->ConvertWindSpeed2Strength($wind_speed);
+				$windstrength = $this->ConvertWindStrength2Text($bft);
+				$this->SetValue($pre . 'WindStrengthText' . $post, $windstrength);
+			}
 
             if ($with_winddirection) {
                 $dir = $this->ConvertWindDirection2Text($wind_deg) . ' (' . $wind_deg . '°)';
@@ -633,7 +661,7 @@ class OpenWeatherData extends IPSModule
         ];
 
         if ($bft >= 0 && $bft < count($bft2txt)) {
-            $txt = $bft2txt[$bft];
+            $txt = $this->Translate($bft2txt[$bft]);
         } else {
             $txt = '';
         }
