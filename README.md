@@ -74,7 +74,7 @@ GUIDs
 
 - Modul: `{BCAEF996-FC2B-420D-A801-5C0B4A021225}`
 - Instanzen:
-  - OpenWeatherMap: `{8072158E-53BF-482A-B925-F4FBE522CEF2}`
+  - OpenWeatherData: `{8072158E-53BF-482A-B925-F4FBE522CEF2}`
 
 ## 7. Versions-Historie
 
