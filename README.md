@@ -20,7 +20,13 @@
 
 ## 1. Funktionsumfang
 
-Übernahme von Daten aus OpenWeatherMap
+_OpenWeatherMap_ (https://openweathermap.org) ist eine Web-Seite, die Wetterdaten bereit stellt. Es gibt eine API, die sowohl einen kostenlosen Zugriff erlaubt als auch komerzielle Angebote beinhaltet.
+
+Das Modul behandelt nur die kostenlosen Zugriffe:
+- aktuellen Daten (_Current weather data_)
+- stündlichen Vorhersagen (_5 day / 3 hour forecast_)
+
+In Vorbereitung ist die Möglichkeit, die Daten einer eigenen Wetterstation _OpenWeatherMap_ zur Verfügung zu stellen.
 
 ## 2. Voraussetzungen
 
@@ -40,33 +46,112 @@ und mit _OK_ bestätigen.
 
 Anschließend erscheint ein Eintrag für das Modul in der Liste der Instanz _Modules_
 
+### Anmeldung bei __OpenWeatherMap_
+oEs muss ein Account erstellt werden (_https://home.openweathermap.org/users/sign_up_). Nach Anmeldung kann man in dem Punkt _API keys_ einen API erzeugen bzw. diese verwalten.
+
 ### Einrichtung in IPS
 
-In IP-Symcon nun _Instanz hinzufügen_ (_CTRL+1_) auswählen unter der Kategorie, unter der man die Instanz hinzufügen will, und Hersteller _(sonstiges)_ und als Gerät _OpenWeatherMap_ auswählen.
+In IP-Symcon nun _Instanz hinzufügen_ (_CTRL+1_) auswählen unter der Kategorie, unter der man die Instanz hinzufügen will, und Hersteller _(sonstiges)_ und als Gerät _OpenWeatherData_ auswählen.
 
 ## 4. Funktionsreferenz
 
 ### zentrale Funktion
 
-`boolean OpenWeatherMap_xx(integer $InstanzID)`<br>
+`OpenWeatherData_UpdateData(int $InstanzID)`
+
+ruft die Daten von _OpenWeatherMap_ ab. Wird automatisch zyklisch durch die Instanz durchgeführt im Abstand wie in der Konfiguration angegeben.
+
+### Hilfsfunktionen
+
+`float OpenWeatherData_CalcAbsoluteHumidity(int $InstanzID, float $Temperatur, float $Humidity)`
+
+berechnet aus der Temperatur (in °C) und der relativen Luftfeuchtigkeit (in %) die absulte Feuchte (in g/m³)
+
+
+`float OpenWeatherData_CalcAbsolutePressure(int $InstanzID, float $Pressure, $Temperatur, int $Altitude)`
+
+berechnet aus dem relativen Luftdruck (in mbar) und der Temperatur (in °C) und Höhe (in m) der absoluten Luftdruck (in mbar)
+ist die Höhe nicht angegeben, wird die Höhe der Netatmo-Wettersttaion verwendet
+
+
+`float OpenWeatherData_CalcDewpoint(int $InstanzID, float $Temperatur, float $Humidity)`
+
+berechnet aus der Temperatur (in °C) und der relativen Luftfeuchtigkeit (in %) den Taupunkt (in °C)
+
+
+`float OpenWeatherData_CalcHeatindex(int $InstanzID, float $Temperatur, float $Humidity)`
+
+berechnet aus der Temperatur (in °C) und der relativen Luftfeuchtigkeit (in %) den Hitzeindex (in °C)
+
+
+`float OpenWeatherData_CalcWindchill(int $InstanzID, float $Temperatur, float $WindSpeed)`
+
+berechnet aus der Temperatur (in °C) und der Windgeschwindigkeit (in km/h) den Windchill (Windkühle) (in °C)
+
+
+`string OpenWeatherData_ConvertWindDirection2Text(int $InstanzID, int $WindDirection)`
+
+ermittelt aus der Windrichtung (in °) die korespondierende Bezeichnung auf der Windrose
+
+
+`int OpenWeatherData_ConvertWindSpeed2Strength(int $InstanzID, float $WindSpeed)`
+
+berechnet aus der Windgeschwindigkeit (in km/h) die Windstärke (in bft)
+
+
+`string OpenWeatherData_ConvertWindStrength2Text(int $InstanzID, int $WindStrength)`
+
+ermittelt aus der Windstärke (in bft) die korespondierende Bezeichnung gemäß Beaufortskala
+
 
 ## 5. Konfiguration:
 
 ### Variablen
 
-| Eigenschaft                          | Typ      | Standardwert    | Beschreibung |
-| :----------------------------------: | :-----:  | :-------------: | :----------------------------------------------------------------------------------------------------------: |
+| Eigenschaft               | Typ     | Standardwert | Beschreibung                               |
+| :-----------------------: | :-----: | :----------: | :----------------------------------------: |
+| appid                     | string  |              | API-Schlüssel von _OpenWeatherMap_         |
+|                           |         |              |                                            |
+| longitude                 | float   |              | Längengrad der Station                     |
+| latitude                  | float   |              | Breitengrad der Station                    |
+| altitude                  | float   |              | Höhe der Station                           |
+|                           |         |              |                                            |
+| with_absolute_humidity    | boolean | false        | absolute Luftfeuchtigkeit                  |
+| with_absolute_pressure    | boolean | false        | absoluter Luftdruck                        |
+| with_dewpoint             | boolean | false        | Taupunkt                                   |
+| with_heatindex            | boolean | false        | Hitzeindex                                 |
+| with_windchill            | boolean | false        | Windchill (Windkühle)                      |
+
+| with_windstrength         | boolean | false        | Windstärke                                 |
+| with_windstrength2text    | boolean | false        | Windstärke                                 |
+| with_windangle            | boolean | true         | Windrichtung in Grad                       |
+| with_cloudiness           | boolean | false        | Bewölkung                                  |
+| with_conditions           | boolean | false        | Wetterbedingungen                          |
+| with_icons                | boolean | false        | Wetterbedingung-Symbole                    |
+|                           |         |              |                                            |
+| hourly_forecast_count     | integer | 0            | Anzahl der Vorhersagen (max. 5 Tage alle 3 Stunden) |
+|                           |         |              |                                            |
+| update_interval           | integer | 60           | Aktualisierungsintervall in Minuten        |
+
+Wenn _longitude_ und _latitude_ auf **0** stehen, werden die Daten aus dem Modul _Location_ verwendet. Die ANgabe von _åltitude_ ist nur erforderlich zu Berechnung des absoluten Luftdrucks.
 
 #### Schaltflächen
 
 | Bezeichnung                  | Beschreibung |
 | :--------------------------: | :-------------------------------------------------: |
+| Aktualiseren                 | Wetterdaten aktualisieren |
 
 ### Variablenprofile
 
 Es werden folgende Variableprofile angelegt:
 * Integer<br>
-  - OpenWeatherMap.xxx
+OpenWeatherMap.WindStrength, OpenWeatherMap.WindAngle
+
+* Float<br>
+OpenWeatherMap.Temperatur, OpenWeatherMap.Humidity, OpenWeatherMap.absHumidity, OpenWeatherMap.Dewpoint, OpenWeatherMap.Heatindex, OpenWeatherMap.Pressure, OpenWeatherMap.WindSpeed, OpenWeatherMap.Rainfall, OpenWeatherMap.Snowfall, OpenWeatherMap.Cloudiness
+
+* String<br>
+OpenWeatherMap.WindDirection
 
 ## 6. Anhang
 
@@ -75,6 +160,10 @@ GUIDs
 - Modul: `{BCAEF996-FC2B-420D-A801-5C0B4A021225}`
 - Instanzen:
   - OpenWeatherData: `{8072158E-53BF-482A-B925-F4FBE522CEF2}`
+
+Verweise:
+- https://openweathermap.org/api
+
 
 ## 7. Versions-Historie
 

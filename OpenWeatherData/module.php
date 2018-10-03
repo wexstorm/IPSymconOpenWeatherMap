@@ -31,8 +31,8 @@ class OpenWeatherData extends IPSModule
         $this->RegisterPropertyBoolean('with_heatindex', false);
         $this->RegisterPropertyBoolean('with_windstrength', false);
         $this->RegisterPropertyBoolean('with_windstrength2text', false);
-        $this->RegisterPropertyBoolean('with_windangle', false);
-        $this->RegisterPropertyBoolean('with_winddirection', true);
+        $this->RegisterPropertyBoolean('with_windangle', true);
+        $this->RegisterPropertyBoolean('with_winddirection', false);
         $this->RegisterPropertyBoolean('with_cloudiness', false);
         $this->RegisterPropertyBoolean('with_conditions', false);
         $this->RegisterPropertyBoolean('with_icons', false);
