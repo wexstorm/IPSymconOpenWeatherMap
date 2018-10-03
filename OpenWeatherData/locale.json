@@ -39,6 +39,8 @@
 			"minimum temperature": "minimale Temperatur",
 			"Rainfall": "Regenmenge",
 			"Snowfall": "Schneefall",
+			"Rainfall of last 3 hours": "Regenmenge der letzten drei Stunden",
+			"Snowfall of last 3 hours": "Schneefall der letzten drei Stunden",
 			"Temperature": "Temperatur",
 			"Windchill": "Windchill",
 			"Winddirection": "Windrichtung",
