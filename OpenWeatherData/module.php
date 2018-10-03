@@ -35,6 +35,7 @@ class OpenWeatherData extends IPSModule
         $this->RegisterPropertyBoolean('with_winddirection', true);
         $this->RegisterPropertyBoolean('with_cloudiness', false);
         $this->RegisterPropertyBoolean('with_conditions', false);
+        $this->RegisterPropertyBoolean('with_icons', false);
 
         $this->RegisterPropertyInteger('hourly_forecast_count', 0);
 
@@ -74,6 +75,7 @@ class OpenWeatherData extends IPSModule
         $with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
         $with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
         $with_conditions = $this->ReadPropertyBoolean('with_conditions');
+        $with_icons = $this->ReadPropertyBoolean('with_icons');
         $hourly_forecast_count = $this->ReadPropertyInteger('hourly_forecast_count');
 
         $vpos = 0;
@@ -94,12 +96,13 @@ class OpenWeatherData extends IPSModule
         $this->MaintainVariable('Snow_3h', $this->Translate('Snowfall of last 3 hours'), vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, true);
         $this->MaintainVariable('Cloudiness', $this->Translate('Cloudiness'), vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $with_cloudiness);
         $this->MaintainVariable('Conditions', $this->Translate('Conditions'), vtString, '', $vpos++, $with_conditions);
+        $this->MaintainVariable('ConditionIcons', $this->Translate('Condition-icons'), vtString, '', $vpos++, $with_icons);
         $this->MaintainVariable('LastMeasurement', $this->Translate('last measurement'), vtInteger, '~UnixTimestamp', $vpos++, true);
 
         for ($i = 0; $i < 40; $i++) {
             $vpos = 1000 + (100 * $i);
             $use = $i < $hourly_forecast_count;
-            $s = ' - #' . ($i + 1);
+            $s = ' #' . ($i + 1);
             $pre = 'HourlyForecast';
             $post = '_' . sprintf('%02d', $i);
 
@@ -118,6 +121,7 @@ class OpenWeatherData extends IPSModule
             $this->MaintainVariable($pre . 'Snow_3h' . $post, $this->Translate('Snowfall') . $s, vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, $use);
             $this->MaintainVariable($pre . 'Cloudiness' . $post, $this->Translate('Cloudiness') . $s, vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $use && $with_cloudiness);
             $this->MaintainVariable($pre . 'Conditions' . $post, $this->Translate('Conditions') . $s, vtString, '', $vpos++, $use && $with_conditions);
+			$this->MaintainVariable($pre . 'ConditionIcons' . $post, $this->Translate('Condition-icons'), vtString, '', $vpos++, $use && $with_icons);
         }
 
         $appid = $this->ReadPropertyString('appid');
@@ -153,6 +157,7 @@ class OpenWeatherData extends IPSModule
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_winddirection', 'caption' => ' ... Winddirection with label'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_cloudiness', 'caption' => ' ... Cloudiness'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_conditions', 'caption' => ' ... Conditions'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_icons', 'caption' => ' ... Condition-icons'];
 
         $formElements[] = ['type' => 'Label', 'label' => '3-hour forecast (max 5 days every 3rd hour = 40)'];
         $formElements[] = ['type' => 'Label', 'label' => 'Attention: decreasing the number deletes the unused variables!'];
@@ -234,6 +239,7 @@ class OpenWeatherData extends IPSModule
         $with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
         $with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
         $with_conditions = $this->ReadPropertyBoolean('with_conditions');
+        $with_icons = $this->ReadPropertyBoolean('with_icons');
 
         $timestamp = $this->GetArrayElem($jdata, 'dt', 0);
         $temperature = $this->GetArrayElem($jdata, 'main.temp', 0);
@@ -251,6 +257,7 @@ class OpenWeatherData extends IPSModule
         $clouds = $this->GetArrayElem($jdata, 'clouds.all', 0);
 
         $conditions = '';
+        $icons = '';
         $weather = $this->GetArrayElem($jdata, 'weather', '');
         if ($weather != '') {
             foreach ($weather as $w) {
@@ -258,6 +265,10 @@ class OpenWeatherData extends IPSModule
                 if ($description != '') {
                     $conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
                 }
+				$icon = $this->GetArrayElem($w, 'icon', '');
+				if ($icon != '') {
+					$icons .= ($icons != '' ? ', ' : '') . $icon;
+				}
             }
         }
 
@@ -307,6 +318,10 @@ class OpenWeatherData extends IPSModule
         if ($with_conditions) {
             $this->SetValue('Conditions', $conditions);
         }
+
+		if ($with_icons) {
+			$this->SetValue('ConditionIcons', $icons);
+		}
 
         if ($with_dewpoint) {
             $dewpoint = $this->CalcDewpoint($temperature, $humidity);
@@ -370,6 +385,7 @@ class OpenWeatherData extends IPSModule
         $with_winddirection = $this->ReadPropertyBoolean('with_winddirection');
         $with_cloudiness = $this->ReadPropertyBoolean('with_cloudiness');
         $with_conditions = $this->ReadPropertyBoolean('with_conditions');
+        $with_icons = $this->ReadPropertyBoolean('with_icons');
 
         for ($i = 0; $i < 40; $i++) {
             if ($i == $hourly_forecast_count) {
@@ -399,12 +415,17 @@ class OpenWeatherData extends IPSModule
             $conditions = $this->GetArrayElem($ent, 'weather.0.description', '');
 
             $conditions = '';
+            $icons = '';
             $weather = $this->GetArrayElem($ent, 'weather', '');
             if ($weather != '') {
                 foreach ($weather as $w) {
                     $description = $this->GetArrayElem($w, 'description', '');
                     if ($description != '') {
                         $conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
+                    }
+                    $icon = $this->GetArrayElem($w, 'icon', '');
+                    if ($icon != '') {
+                        $icons .= ($icons != '' ? ', ' : '') . $icon;
                     }
                 }
             }
@@ -451,6 +472,10 @@ class OpenWeatherData extends IPSModule
 
             if ($with_conditions) {
                 $this->SetValue($pre . 'Conditions' . $post, $conditions);
+            }
+
+            if ($with_icons) {
+                $this->SetValue($pre . 'ConditionIcons' . $post, $icons);
             }
         }
 
