@@ -121,7 +121,7 @@ class OpenWeatherData extends IPSModule
             $this->MaintainVariable($pre . 'Snow_3h' . $post, $this->Translate('Snowfall') . $s, vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, $use);
             $this->MaintainVariable($pre . 'Cloudiness' . $post, $this->Translate('Cloudiness') . $s, vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $use && $with_cloudiness);
             $this->MaintainVariable($pre . 'Conditions' . $post, $this->Translate('Conditions') . $s, vtString, '', $vpos++, $use && $with_conditions);
-			$this->MaintainVariable($pre . 'ConditionIcons' . $post, $this->Translate('Condition-icons'), vtString, '', $vpos++, $use && $with_icons);
+            $this->MaintainVariable($pre . 'ConditionIcons' . $post, $this->Translate('Condition-icons'), vtString, '', $vpos++, $use && $with_icons);
         }
 
         $appid = $this->ReadPropertyString('appid');
@@ -265,10 +265,10 @@ class OpenWeatherData extends IPSModule
                 if ($description != '') {
                     $conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
                 }
-				$icon = $this->GetArrayElem($w, 'icon', '');
-				if ($icon != '') {
-					$icons .= ($icons != '' ? ', ' : '') . $icon;
-				}
+                $icon = $this->GetArrayElem($w, 'icon', '');
+                if ($icon != '') {
+                    $icons .= ($icons != '' ? ', ' : '') . $icon;
+                }
             }
         }
 
@@ -319,9 +319,9 @@ class OpenWeatherData extends IPSModule
             $this->SetValue('Conditions', $conditions);
         }
 
-		if ($with_icons) {
-			$this->SetValue('ConditionIcons', $icons);
-		}
+        if ($with_icons) {
+            $this->SetValue('ConditionIcons', $icons);
+        }
 
         if ($with_dewpoint) {
             $dewpoint = $this->CalcDewpoint($temperature, $humidity);
