@@ -216,11 +216,11 @@ class OpenWeatherData extends IPSModule
                 'units' => 'metric'
             ];
 
-		if (isset($_ENV['LANG'])) {
-			$lang = $_ENV['LANG'];
-        	if (preg_match('/([a-z]*)_.*/', $lang, $r)) {
-            	$args['lang'] = $r[1];
-        	}
+        if (isset($_ENV['LANG'])) {
+            $lang = $_ENV['LANG'];
+            if (preg_match('/([a-z]*)_.*/', $lang, $r)) {
+                $args['lang'] = $r[1];
+            }
         }
 
         $jdata = $this->do_HttpRequest('data/2.5/weather', $args);
