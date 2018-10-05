@@ -216,7 +216,7 @@ class OpenWeatherData extends IPSModule
                 'units' => 'metric'
             ];
 
-		is (isset($_ENV['LANG'])) {
+		if (isset($_ENV['LANG'])) {
 			$lang = $_ENV['LANG'];
         	if (preg_match('/([a-z]*)_.*/', $lang, $r)) {
             	$args['lang'] = $r[1];
