@@ -24,9 +24,9 @@ class OpenWeatherData extends IPSModule
         $this->RegisterPropertyFloat('latitude', 0);
         $this->RegisterPropertyFloat('altitude', 0);
 
-		$lang = '';
+        $lang = '';
         if (isset($_ENV['LANG']) && preg_match('/([a-z]*)_.*/', $_ENV['LANG'], $r)) {
-			$lang = $r[1];
+            $lang = $r[1];
         }
         $this->RegisterPropertyString('lang', $lang);
 
@@ -225,9 +225,9 @@ class OpenWeatherData extends IPSModule
                 'units' => 'metric'
             ];
 
-		$lang = $this->ReadPropertyString('lang');;
-		if ($lang != '') {
-			$args['lang'] = $lang;
+        $lang = $this->ReadPropertyString('lang');
+        if ($lang != '') {
+            $args['lang'] = $lang;
         }
 
         $jdata = $this->do_HttpRequest('data/2.5/weather', $args);
@@ -376,9 +376,9 @@ class OpenWeatherData extends IPSModule
                 'units' => 'metric'
             ];
 
-		$lang = $this->ReadPropertyString('lang');;
-		if ($lang != '') {
-			$args['lang'] = $lang;
+        $lang = $this->ReadPropertyString('lang');
+        if ($lang != '') {
+            $args['lang'] = $lang;
         }
 
         $jdata = $this->do_HttpRequest('data/2.5/forecast', $args);
