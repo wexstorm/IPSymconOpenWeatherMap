@@ -24,6 +24,12 @@ class OpenWeatherData extends IPSModule
         $this->RegisterPropertyFloat('latitude', 0);
         $this->RegisterPropertyFloat('altitude', 0);
 
+		$lang = '';
+        if (isset($_ENV['LANG']) && preg_match('/([a-z]*)_.*/', $_ENV['LANG'], $r)) {
+			$lang = $r[1];
+        }
+        $this->RegisterPropertyString('lang', $lang);
+
         $this->RegisterPropertyBoolean('with_absolute_pressure', false);
         $this->RegisterPropertyBoolean('with_absolute_humidity', false);
         $this->RegisterPropertyBoolean('with_dewpoint', false);
@@ -145,6 +151,9 @@ class OpenWeatherData extends IPSModule
         $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'latitude', 'caption' => 'Latitude'];
         $formElements[] = ['type' => 'NumberSpinner', 'name' => 'altitude', 'caption' => 'Altitude'];
 
+        $formElements[] = ['type' => 'Label', 'label' => 'Language setting for textual weather-information'];
+        $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'lang', 'caption' => 'Language code'];
+
         $formElements[] = ['type' => 'Label', 'label' => 'optional weather data'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_absolute_pressure', 'caption' => ' ... absolute Pressure'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_absolute_humidity', 'caption' => ' ... absolute Humidity'];
@@ -216,11 +225,9 @@ class OpenWeatherData extends IPSModule
                 'units' => 'metric'
             ];
 
-        if (isset($_ENV['LANG'])) {
-            $lang = $_ENV['LANG'];
-            if (preg_match('/([a-z]*)_.*/', $lang, $r)) {
-                $args['lang'] = $r[1];
-            }
+		$lang = $this->ReadPropertyString('lang');;
+		if ($lang != '') {
+			$args['lang'] = $lang;
         }
 
         $jdata = $this->do_HttpRequest('data/2.5/weather', $args);
@@ -369,11 +376,9 @@ class OpenWeatherData extends IPSModule
                 'units' => 'metric'
             ];
 
-        if (isset($_ENV['LANG'])) {
-            $lang = $_ENV['LANG'];
-            if (preg_match('/([a-z]*)_.*/', $lang, $r)) {
-                $args['lang'] = $r[1];
-            }
+		$lang = $this->ReadPropertyString('lang');;
+		if ($lang != '') {
+			$args['lang'] = $lang;
         }
 
         $jdata = $this->do_HttpRequest('data/2.5/forecast', $args);

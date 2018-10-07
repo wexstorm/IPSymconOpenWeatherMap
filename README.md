@@ -1,7 +1,7 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.0-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.0-blue.svg)
+![Module-Version](https://img.shields.io/badge/Modul_Version-1.1-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![StyleCI](https://github.styleci.io/repos/126683101/shield?branch=master)](https://github.styleci.io/repos/146979798)
@@ -116,12 +116,13 @@ ermittelt aus der Windstärke (in bft) die korespondierende Bezeichnung gemäß 
 | latitude                  | float   |              | Breitengrad der Station                    |
 | altitude                  | float   |              | Höhe der Station                           |
 |                           |         |              |                                            |
+| lang                      | string  |              | Spracheinstellung für textuelle Angaben    |
+|                           |         |              |                                            |
 | with_absolute_humidity    | boolean | false        | absolute Luftfeuchtigkeit                  |
 | with_absolute_pressure    | boolean | false        | absoluter Luftdruck                        |
 | with_dewpoint             | boolean | false        | Taupunkt                                   |
 | with_heatindex            | boolean | false        | Hitzeindex                                 |
 | with_windchill            | boolean | false        | Windchill (Windkühle)                      |
-
 | with_windstrength         | boolean | false        | Windstärke                                 |
 | with_windstrength2text    | boolean | false        | Windstärke                                 |
 | with_windangle            | boolean | true         | Windrichtung in Grad                       |
@@ -134,6 +135,10 @@ ermittelt aus der Windstärke (in bft) die korespondierende Bezeichnung gemäß 
 | update_interval           | integer | 60           | Aktualisierungsintervall in Minuten        |
 
 Wenn _longitude_ und _latitude_ auf **0** stehen, werden die Daten aus dem Modul _Location_ verwendet. Die ANgabe von _åltitude_ ist nur erforderlich zu Berechnung des absoluten Luftdrucks.
+
+Die unterstützen Spracheinstellung finden sich in der API-Dokumentatin unter der Überschrift _Multilingual support_ und sind z.B. (_de_, _en_, _fr_ ...).
+
+
 
 #### Schaltflächen
 
@@ -166,6 +171,9 @@ Verweise:
 
 
 ## 7. Versions-Historie
+
+- 1.1 @ 07.10.2018 10:27<br>
+  - Sprache der texuellen Informationen per Konfigurationsdialog einstellbar
 
 - 1.0 @ 25.09.2018 17:35<br>
   Initiale Version

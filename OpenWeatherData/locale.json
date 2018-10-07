@@ -6,6 +6,9 @@
 			"Latitude" : "Breitengrad",
 			"Altitude" : "Höhe",
 
+			"Language setting for textual weather-information": "Spracheinstellung für textuelle Wetterinformationen",
+			"Language code": "Sprach-Code",
+
 			"optional weather data": "optionale Wetterdaten",
 			" ... absolute Pressure": " ... absoluter Luftdruck",
 			" ... absolute Humidity": " ... absolute Luftfeuchte",
