@@ -174,6 +174,7 @@ Verweise:
 
 - 1.1 @ 07.10.2018 10:27<br>
   - Sprache der texuellen Informationen per Konfigurationsdialog einstellbar
+  - Angabe der Einheiten bestimmer Felder im Konfigurationsdialog
 
 - 1.0 @ 25.09.2018 17:35<br>
   Initiale Version

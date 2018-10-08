@@ -6,7 +6,8 @@
 			"Latitude" : "Breitengrad",
 			"Altitude" : "Höhe",
 
-			"Language setting for textual weather-information": "Spracheinstellung für textuelle Wetterinformationen",
+			"Language setting for textual weather-information (de, en, ...)":
+				"Spracheinstellung für textuelle Wetterinformationen (de, en, ...)",
 			"Language code": "Sprach-Code",
 
 			"optional weather data": "optionale Wetterdaten",

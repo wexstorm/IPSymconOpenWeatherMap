@@ -147,11 +147,11 @@ class OpenWeatherData extends IPSModule
         $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'appid', 'caption' => 'API-Key'];
 
         $formElements[] = ['type' => 'Label', 'label' => 'station data - if position is not set, Modue \'Location\' is used'];
-        $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'longitude', 'caption' => 'Longitude'];
-        $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'latitude', 'caption' => 'Latitude'];
-        $formElements[] = ['type' => 'NumberSpinner', 'name' => 'altitude', 'caption' => 'Altitude'];
+        $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'longitude', 'caption' => 'Longitude', 'suffix' => '°'];
+        $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'latitude', 'caption' => 'Latitude', 'suffix' => '°'];
+        $formElements[] = ['type' => 'NumberSpinner', 'name' => 'altitude', 'caption' => 'Altitude', 'suffix' => 'm'];
 
-        $formElements[] = ['type' => 'Label', 'label' => 'Language setting for textual weather-information'];
+        $formElements[] = ['type' => 'Label', 'label' => 'Language setting for textual weather-information (de, en, ...)'];
         $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'lang', 'caption' => 'Language code'];
 
         $formElements[] = ['type' => 'Label', 'label' => 'optional weather data'];
