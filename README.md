@@ -114,7 +114,7 @@ ermittelt aus der Windstärke (in bft) die korespondierende Bezeichnung gemäß 
 |                           |         |              |                                            |
 | longitude                 | float   |              | Längengrad der Station                     |
 | latitude                  | float   |              | Breitengrad der Station                    |
-| altitude                  | float   |              | Höhe der Station                           |
+| altitude                  | float   |              | Höhe der Station über dem Meeresspiegel in Metern |
 |                           |         |              |                                            |
 | lang                      | string  |              | Spracheinstellung für textuelle Angaben    |
 |                           |         |              |                                            |
@@ -134,7 +134,7 @@ ermittelt aus der Windstärke (in bft) die korespondierende Bezeichnung gemäß 
 |                           |         |              |                                            |
 | update_interval           | integer | 60           | Aktualisierungsintervall in Minuten        |
 
-Wenn _longitude_ und _latitude_ auf **0** stehen, werden die Daten aus dem Modul _Location_ verwendet. Die ANgabe von _åltitude_ ist nur erforderlich zu Berechnung des absoluten Luftdrucks.
+Wenn _longitude_ und _latitude_ auf **0** stehen, werden die Daten aus dem Modul _Location_ verwendet. Die Angabe von _altitude_ ist nur erforderlich zur Berechnung des absoluten Luftdrucks.
 
 Die unterstützen Spracheinstellung finden sich in der API-Dokumentatin unter der Überschrift _Multilingual support_ und sind z.B. (_de_, _en_, _fr_ ...).
 
