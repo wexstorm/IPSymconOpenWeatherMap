@@ -48,7 +48,7 @@ class OpenWeatherData extends IPSModule
         $this->RegisterPropertyInteger('update_interval', 5);
 
         $this->RegisterPropertyBoolean('with_summary', false);
-		$this->RegisterPropertyInteger('summary_script', 0);
+        $this->RegisterPropertyInteger('summary_script', 0);
 
         $this->CreateVarProfile('OpenWeatherMap.Temperatur', vtFloat, ' °C', -10, 30, 0, 1, 'Temperature');
         $this->CreateVarProfile('OpenWeatherMap.Humidity', vtFloat, ' %', 0, 0, 0, 0, 'Drops');
@@ -109,7 +109,7 @@ class OpenWeatherData extends IPSModule
         $this->MaintainVariable('ConditionIcons', $this->Translate('Condition-icons'), vtString, '', $vpos++, $with_icons);
         $this->MaintainVariable('LastMeasurement', $this->Translate('last measurement'), vtInteger, '~UnixTimestamp', $vpos++, true);
         $this->MaintainVariable('LastMeasurement', $this->Translate('last measurement'), vtInteger, '~UnixTimestamp', $vpos++, true);
-		$this->MaintainVariable('WeatherSummary', $this->Translate('Summary of weather'), vtString, '~HTMLBox', $vpos++, $with_summary);
+        $this->MaintainVariable('WeatherSummary', $this->Translate('Summary of weather'), vtString, '~HTMLBox', $vpos++, $with_summary);
 
         for ($i = 0; $i < 40; $i++) {
             $vpos = 1000 + (100 * $i);
@@ -173,10 +173,10 @@ class OpenWeatherData extends IPSModule
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_cloudiness', 'caption' => ' ... Cloudiness'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_conditions', 'caption' => ' ... Conditions'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_icons', 'caption' => ' ... Condition-icons'];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'with_summary', 'caption' => ' ... html-box with summary of weather'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'with_summary', 'caption' => ' ... html-box with summary of weather'];
 
-		$formElements[] = ['type' => 'Label', 'label' => 'script for alternate weather summary'];
-		$formElements[] = ['type' => 'SelectScript', 'name' => 'summary_script', 'caption' => 'script'];
+        $formElements[] = ['type' => 'Label', 'label' => 'script for alternate weather summary'];
+        $formElements[] = ['type' => 'SelectScript', 'name' => 'summary_script', 'caption' => 'script'];
 
         $formElements[] = ['type' => 'Label', 'label' => '3-hour forecast (max 5 days every 3rd hour = 40)'];
         $formElements[] = ['type' => 'NumberSpinner', 'name' => 'hourly_forecast_count', 'caption' => 'Count'];
@@ -219,15 +219,15 @@ class OpenWeatherData extends IPSModule
         $this->UpdateCurrent();
         $this->UpdateHourlyForecast();
 
-		if ($with_summary) {
+        if ($with_summary) {
             $summary_script = $this->ReadPropertyInteger('summary_script');
-			if ($summary_script > 0) {
-				$html = IPS_RunScriptWaitEx($summary_script, ['InstanceID' => $this->InstanceID]);
-			} else {
-				$html = $this->Build_WeatherSummary();
-			}
-			$this->SetValue('WeatherSummary', $html);
-		}
+            if ($summary_script > 0) {
+                $html = IPS_RunScriptWaitEx($summary_script, ['InstanceID' => $this->InstanceID]);
+            } else {
+                $html = $this->Build_WeatherSummary();
+            }
+            $this->SetValue('WeatherSummary', $html);
+        }
     }
 
     public function UpdateCurrent()
@@ -235,7 +235,7 @@ class OpenWeatherData extends IPSModule
         $lat = $this->ReadPropertyFloat('latitude');
         $lng = $this->ReadPropertyFloat('longitude');
         if ($lat == 0 || $lng == 0) {
-            $id = IPS_GetInstanceListByModuleID("{45E97A63-F870-408A-B259-2933F7EABF74}")[0];
+            $id = IPS_GetInstanceListByModuleID('{45E97A63-F870-408A-B259-2933F7EABF74}')[0];
             $loc = json_decode(IPS_GetProperty($id, 'Location'), true);
             $lat = $loc['latitude'];
             $lng = $loc['longitude'];
@@ -521,13 +521,13 @@ class OpenWeatherData extends IPSModule
 
         $hourly_forecast_count = $this->ReadPropertyInteger('hourly_forecast_count');
 
-		$temperature = $this->GetValue('Temperature');
-		$humidity = $this->GetValue('Humidity');
-		$wind_speed = $this->GetValue('WindSpeed');
-		$rain_3h = $this->GetValue('Rain_3h');
-		$icon = $this->GetValue('ConditionIcons');
+        $temperature = $this->GetValue('Temperature');
+        $humidity = $this->GetValue('Humidity');
+        $wind_speed = $this->GetValue('WindSpeed');
+        $rain_3h = $this->GetValue('Rain_3h');
+        $icon = $this->GetValue('ConditionIcons');
 
-		$url = $img_url . $icon . '.png';
+        $url = $img_url . $icon . '.png';
 
         $html = '
 <table>
@@ -556,37 +556,37 @@ class OpenWeatherData extends IPSModule
     </td>
 ';
 
-/*
-// Add forecast
-$isExclude = true;
-foreach($json->list as $day) {
-    if(isToday($day->dt)){
-        $weekDay = "Today";
-        $isExclude = false;
-    } else {
-        //$Wochentag =$tag[date("w",intval($day->dt))]; // Wochentage auf Deutsch
+        /*
+        // Add forecast
+        $isExclude = true;
+        foreach($json->list as $day) {
+            if(isToday($day->dt)){
+                $weekDay = "Today";
+                $isExclude = false;
+            } else {
+                //$Wochentag =$tag[date("w",intval($day->dt))]; // Wochentage auf Deutsch
+        
+                $weekDay = date("l",intval($day->dt));
+            }
+            if (!$isExclude) { // Forecast enthält auch gestern daher ist filtern nötig
+                $iconOWMURL = "http://openweathermap.org/img/w/".($day->weather[0]->icon).".png";
+                $htmlOWM .= "<td align='center' valign='top'  style='width:140px;padding-left:20px;'>
+                              ".$weekDay."<br>
+                              <img src='".$iconOWMURL."' style='float:left; padding-left: 17px;'>
+                              <div style='float:right; padding-right: 17px'>
+                               ".round($day->temp->min)."°C
+                               ".round($day->temp->max)."°C
+                              </div>
+                              <div style='clear:both; font-size: 11px;'>Ø Wind: ".$day->speed." km/h<br/>
+                              Rain: ".($day->rain)." mm<br/>
+                              Cloudiness: ".($day->clouds)." %
+                              </div>
+                          </td>";
+            }
+        }
+        */
 
-        $weekDay = date("l",intval($day->dt));
-    }
-    if (!$isExclude) { // Forecast enthält auch gestern daher ist filtern nötig
-        $iconOWMURL = "http://openweathermap.org/img/w/".($day->weather[0]->icon).".png";
-        $htmlOWM .= "<td align='center' valign='top'  style='width:140px;padding-left:20px;'>
-                      ".$weekDay."<br>
-                      <img src='".$iconOWMURL."' style='float:left; padding-left: 17px;'>
-                      <div style='float:right; padding-right: 17px'>
-                       ".round($day->temp->min)."°C
-                       ".round($day->temp->max)."°C
-                      </div>
-                      <div style='clear:both; font-size: 11px;'>Ø Wind: ".$day->speed." km/h<br/>
-                      Rain: ".($day->rain)." mm<br/>
-                      Cloudiness: ".($day->clouds)." %
-                      </div>
-                  </td>";
-    }
-}
-*/
-
-$html .= '
+        $html .= '
   </tr>
 </table>';
 
