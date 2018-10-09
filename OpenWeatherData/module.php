@@ -525,7 +525,7 @@ class OpenWeatherData extends IPSModule
         $humidity = $this->GetValue('Humidity');
         $wind_speed = $this->GetValue('WindSpeed');
         $rain_3h = $this->GetValue('Rain_3h');
-		$clouds = $this->GetValue('Cloudiness');
+        $clouds = $this->GetValue('Cloudiness');
         $icon = $this->GetValue('ConditionIcons');
 
         $url = $img_url . $icon . '.png';
@@ -570,19 +570,19 @@ class OpenWeatherData extends IPSModule
             $temperature_min = $this->GetValue($pre . 'TemperatureMin' . $post);
             $temperature_max = $this->GetValue($pre . 'TemperatureMax' . $post);
 
-			$wind_speed = $this->GetValue('WindSpeed');
+            $wind_speed = $this->GetValue('WindSpeed');
 
-			$rain_3h = $this->GetValue($pre . 'Rain_3h' . $post);
-			$clouds = $this->GetValue($pre . 'Cloudiness' . $post);
-			$icon = $this->GetValue($pre . 'ConditionIcons' . $post);
+            $rain_3h = $this->GetValue($pre . 'Rain_3h' . $post);
+            $clouds = $this->GetValue($pre . 'Cloudiness' . $post);
+            $icon = $this->GetValue($pre . 'ConditionIcons' . $post);
 
-			$url = $img_url . $icon . '.png';
+            $url = $img_url . $icon . '.png';
 
-			$is_today = date('d.m.Y', $timestamp) == date('d.m.Y', time());
-			$weekDay = $is_today ? 'today' : date('l', $timestamp);
-			$time = date('H:i', $timestamp);
+            $is_today = date('d.m.Y', $timestamp) == date('d.m.Y', time());
+            $weekDay = $is_today ? 'today' : date('l', $timestamp);
+            $time = date('H:i', $timestamp);
 
-			$html .= '
+            $html .= '
     <td align="center" valign="top" style="width: 140px; padding-left: 20px;">
 ' . $this->Translate($weekDay) . ' <font size="2">' . $time . '</font><br>
       <img src="' . $url . '" style="float: left; padding-left: 17px;">
@@ -610,8 +610,7 @@ class OpenWeatherData extends IPSModule
       </div>
     </td>
 ';
-
-		}
+        }
 
         $html .= '
   </tr>
@@ -881,8 +880,8 @@ class OpenWeatherData extends IPSModule
         return is_numeric($speed) ? $speed * 3.6 : '';
     }
 
-	public function GetData($ident)
+    public function GetData($ident)
     {
-		return $this->GetValue($ident);
+        return $this->GetValue($ident);
     }
 }
