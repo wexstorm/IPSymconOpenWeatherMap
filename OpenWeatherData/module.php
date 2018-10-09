@@ -525,6 +525,7 @@ class OpenWeatherData extends IPSModule
         $humidity = $this->GetValue('Humidity');
         $wind_speed = $this->GetValue('WindSpeed');
         $rain_3h = $this->GetValue('Rain_3h');
+		$clouds = $this->GetValue('Cloudiness');
         $icon = $this->GetValue('ConditionIcons');
 
         $url = $img_url . $icon . '.png';
@@ -532,10 +533,10 @@ class OpenWeatherData extends IPSModule
         $html = '
 <table>
   <tr>
-    <td align=Wcenter" valign="top" style="width:140px;padding-left:20px;">
-' . $this->Translate('Current') . '<br>
+    <td align="center" valign="top" style="width:140px;padding-left:20px;">
+' . $this->Translate('current') . '<br>
       <img src="' . $url . '" style="float: left; padding-left: 17px;">
-      <div style="float: right; font-size: 15px; padding-right: 17px;">
+      <div style="float: right; font-size: 13px; padding-right: 17px;">
         ' . round($temperature) . '°C<br>
         ' . round($humidity) . '%<br>
       </div>
@@ -550,41 +551,67 @@ class OpenWeatherData extends IPSModule
             <td>' . $this->Translate('Rain 3h') . '</td>
             <td>' . $rain_3h . ' mm</td>
           </tr>
+          <tr>
+            <td>' . $this->Translate('Cloudiness') . '</td>
+            <td>' . $clouds . ' %</td>
+          </tr>
         </table>
       </div>
 
     </td>
 ';
 
-        /*
-        // Add forecast
-        $isExclude = true;
-        foreach($json->list as $day) {
-            if(isToday($day->dt)){
-                $weekDay = "Today";
-                $isExclude = false;
-            } else {
-                //$Wochentag =$tag[date("w",intval($day->dt))]; // Wochentage auf Deutsch
-        
-                $weekDay = date("l",intval($day->dt));
-            }
-            if (!$isExclude) { // Forecast enthält auch gestern daher ist filtern nötig
-                $iconOWMURL = "http://openweathermap.org/img/w/".($day->weather[0]->icon).".png";
-                $htmlOWM .= "<td align='center' valign='top'  style='width:140px;padding-left:20px;'>
-                              ".$weekDay."<br>
-                              <img src='".$iconOWMURL."' style='float:left; padding-left: 17px;'>
-                              <div style='float:right; padding-right: 17px'>
-                               ".round($day->temp->min)."°C
-                               ".round($day->temp->max)."°C
-                              </div>
-                              <div style='clear:both; font-size: 11px;'>Ø Wind: ".$day->speed." km/h<br/>
-                              Rain: ".($day->rain)." mm<br/>
-                              Cloudiness: ".($day->clouds)." %
-                              </div>
-                          </td>";
-            }
-        }
-        */
+        for ($i = 0; $i < $hourly_forecast_count; $i++) {
+            $pre = 'HourlyForecast';
+            $post = '_' . sprintf('%02d', $i);
+
+            $timestamp = $this->GetValue($pre . 'Begin' . $post);
+
+            $temperature_min = $this->GetValue($pre . 'TemperatureMin' . $post);
+            $temperature_max = $this->GetValue($pre . 'TemperatureMax' . $post);
+
+			$wind_speed = $this->GetValue('WindSpeed');
+
+			$rain_3h = $this->GetValue($pre . 'Rain_3h' . $post);
+			$clouds = $this->GetValue($pre . 'Cloudiness' . $post);
+			$icon = $this->GetValue($pre . 'ConditionIcons' . $post);
+
+			$url = $img_url . $icon . '.png';
+
+			$is_today = date('d.m.Y', $timestamp) == date('d.m.Y', time());
+			$weekDay = $is_today ? 'today' : date('l', $timestamp);
+			$time = date('H:i', $timestamp);
+
+			$html .= '
+    <td align="center" valign="top" style="width: 140px; padding-left: 20px;">
+' . $this->Translate($weekDay) . ' <font size="2">' . $time . '</font><br>
+      <img src="' . $url . '" style="float: left; padding-left: 17px;">
+      <div style="float: right; font-size: 13px; padding-right: 17px;">
+        ' . round($temperature_min) . '°C<br>
+        ' . round($temperature_max) . '°C<br>
+      </div>
+
+
+      <div style="clear: both; font-size: 11px;">
+        <table>
+          <tr>
+            <td>' . $this->Translate('Ø Wind') . '</td>
+            <td>' . $wind_speed . ' km/h<td>
+          </tr>
+          <tr>
+            <td>' . $this->Translate('Rain 3h') . '</td>
+            <td>' . $rain_3h . ' mm</td>
+          </tr>
+          <tr>
+            <td>' . $this->Translate('Cloudiness') . '</td>
+            <td>' . $clouds . ' %</td>
+          </tr>
+        </table>
+      </div>
+    </td>
+';
+
+		}
 
         $html .= '
   </tr>
@@ -852,5 +879,10 @@ class OpenWeatherData extends IPSModule
     private function ms2kmh($speed)
     {
         return is_numeric($speed) ? $speed * 3.6 : '';
+    }
+
+	public function GetData($ident)
+    {
+		return $this->GetValue($ident);
     }
 }

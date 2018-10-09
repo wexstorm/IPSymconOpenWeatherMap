@@ -1,7 +1,7 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.0-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.2-blue.svg)
+![Module-Version](https://img.shields.io/badge/Modul_Version-1.3-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![StyleCI](https://github.styleci.io/repos/126683101/shield?branch=master)](https://github.styleci.io/repos/146979798)
@@ -130,6 +130,9 @@ ermittelt aus der Windstärke (in bft) die korespondierende Bezeichnung gemäß 
 | with_conditions           | boolean | false        | Wetterbedingungen                          |
 | with_icons                | boolean | false        | Wetterbedingung-Symbole                    |
 |                           |         |              |                                            |
+| with_summary              | boolean | false        | HTML-Box mit einer Zusammenfassung         |
+| summary_script            | integer | 0            | ID eines Scriptes zur alternative Erstellung der HTML-Box |
+|                           |         |              |                                            |
 | hourly_forecast_count     | integer | 0            | Anzahl der Vorhersagen (max. 5 Tage alle 3 Stunden) |
 |                           |         |              |                                            |
 | update_interval           | integer | 60           | Aktualisierungsintervall in Minuten        |
@@ -138,6 +141,22 @@ Wenn _longitude_ und _latitude_ auf **0** stehen, werden die Daten aus dem Modul
 
 Die unterstützen Spracheinstellung finden sich in der API-Dokumentatin unter der Überschrift _Multilingual support_ und sind z.B. (_de_, _en_, _fr_ ...).
 
+
+Erläuterung zu _summary_script_:
+mit diesem Scripten kann man eine alternative Darstellung realisieren.
+
+Ein passendes Code-Fragment für ein Script:
+
+```
+$instID = $_IPS['InstanceID'];
+
+$temperatur = OpenWeatherData_GetData($instID, 'Temperature');
+
+$html = 'Temperatur: ' . $temperatur . ' °C<br>';
+
+echo $html;
+
+```
 
 
 #### Schaltflächen
@@ -171,6 +190,9 @@ Verweise:
 
 
 ## 7. Versions-Historie
+
+- 1.3 @ 09.10.2018 17:38<br>
+  - optische Aufbereitung der Wetterinformationen
 
 - 1.2 @ 08.10.2018 22:21<br>
   - Korrektur des Zugriffs auf _Location_

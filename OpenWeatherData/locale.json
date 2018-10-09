@@ -55,9 +55,19 @@
 			"Windspeed": "Windgeschwindigkeit",
 			"Windstrength": "Windstärke",
 
-			"Current": "aktuell",
+			"current": "aktuell",
 			"Ø Wind": "Ø Wind",
 			"Rain 3h": "Regen 3h",
+
+			"today": "heute",
+
+			"Monday": "Montag",
+			"Tuesday": "Dienstag",
+			"Wednesday": "Mittwoch",
+			"Thursday": "Donnerstag",
+			"Friday": "Freitag",
+			"Saturday": "Samstag",
+			"Sunday": "Sonntag",
 
 			"N": "N",
 			"NNE": "NNO",
