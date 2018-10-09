@@ -385,7 +385,7 @@ class OpenWeatherData extends IPSModule
         $lat = $this->ReadPropertyFloat('latitude');
         $lng = $this->ReadPropertyFloat('longitude');
         if ($lat == 0 || $lng == 0) {
-            $id = IPS_GetInstanceListByModuleID("{45E97A63-F870-408A-B259-2933F7EABF74}")[0];
+            $id = IPS_GetInstanceListByModuleID('{45E97A63-F870-408A-B259-2933F7EABF74}')[0];
             $loc = json_decode(IPS_GetProperty($id, 'Location'), true);
             $lat = $loc['latitude'];
             $lng = $loc['longitude'];
