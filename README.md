@@ -1,7 +1,7 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.0-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.3-blue.svg)
+![Module-Version](https://img.shields.io/badge/Modul_Version-1.4-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![StyleCI](https://github.styleci.io/repos/126683101/shield?branch=master)](https://github.styleci.io/repos/146979798)
@@ -129,6 +129,7 @@ ermittelt aus der Windstärke (in bft) die korespondierende Bezeichnung gemäß 
 | with_cloudiness           | boolean | false        | Bewölkung                                  |
 | with_conditions           | boolean | false        | Wetterbedingungen                          |
 | with_icons                | boolean | false        | Wetterbedingung-Symbole                    |
+| with_condition_ids        | boolean | false        | Wetterbedingung-Ids                        |
 |                           |         |              |                                            |
 | with_summary              | boolean | false        | HTML-Box mit einer Zusammenfassung         |
 | summary_script            | integer | 0            | ID eines Scriptes zur alternative Erstellung der HTML-Box |
@@ -141,6 +142,15 @@ Wenn _longitude_ und _latitude_ auf **0** stehen, werden die Daten aus dem Modul
 
 Die unterstützen Spracheinstellung finden sich in der API-Dokumentatin unter der Überschrift _Multilingual support_ und sind z.B. (_de_, _en_, _fr_ ...).
 
+Hinweis zu _conditions_, _icons_ und _condition_ids_: diese Attribute können in der Nachricht mehrfach vorkommen. Daher werde diese in den Variablen als Komma-separierte Liste gespeichert.
+Die _conditions_ können, das es sich um text handelt, direkt ausgegeben werden, die beiden anderen Felder müssen entsprechend behandelt werden.
+
+Möchte man nur das erst Icon verwenden wäre das z.B.
+```
+$icons = GetValue(4711);
+$icon = explode(',', $icons)[0];
+$url = 'http://openweathermap.org/img/w/' . $icon . '.png';
+```
 
 Erläuterung zu _summary_script_:
 mit diesem Scripten kann man eine alternative Darstellung realisieren.
@@ -157,7 +167,6 @@ $html = 'Temperatur: ' . $temperatur . ' °C<br>';
 echo $html;
 
 ```
-
 
 #### Schaltflächen
 
@@ -190,6 +199,9 @@ Verweise:
 
 
 ## 7. Versions-Historie
+
+- 1.4 @ 10.10.2018 15:27<br>
+  - optionale Übernahme der Ids der Wetterbedingungen
 
 - 1.3 @ 09.10.2018 17:38<br>
   - optische Aufbereitung der Wetterinformationen

@@ -23,6 +23,7 @@
 			" ... Cloudiness": " ... Bewölkung",
 			" ... Conditions": " ... Wetterbedingungen",
 			" ... Condition-icons": " ... Wetterbedingung-Symbole",
+			" ... Condition-ids": " ... Wetterbedingung-Ids",
 			" ... html-box with summary of weather": " ... HTML-Box mit der Zusammenfassung des Wetters",
 			"script for alternate weather summary": "Script zur alternativen Zusammenfassung des Wetters",
 
@@ -37,6 +38,7 @@
 			"Begin of forecast-period": "Beginn des Vorhersage-Zeitraumes",
 			"Cloudiness": "Bewölkung",
 			"Condition-icons": "Wetterbedingung-Symbole",
+			"Condition-ids": "Wetterbedingung-Ids",
 			"Conditions": "Wetterbedingungen",
 			"Dewpoint": "Taupunkt",
 			"Heatindex": "Hitzeindex",
