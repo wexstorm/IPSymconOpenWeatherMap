@@ -304,7 +304,7 @@ class OpenWeatherData extends IPSModule
                 if ($description != '') {
                     $conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
                 }
-				$icons[] = $this->GetArrayElem($w, 'icon', '');
+                $icons[] = $this->GetArrayElem($w, 'icon', '');
                 $ids[] = $this->GetArrayElem($w, 'id', '');
             }
         }
@@ -467,8 +467,8 @@ class OpenWeatherData extends IPSModule
                     if ($description != '') {
                         $conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
                     }
-					$icons[] = $this->GetArrayElem($w, 'icon', '');
-					$ids[] = $this->GetArrayElem($w, 'id', '');
+                    $icons[] = $this->GetArrayElem($w, 'icon', '');
+                    $ids[] = $this->GetArrayElem($w, 'id', '');
                 }
             }
 
@@ -520,9 +520,9 @@ class OpenWeatherData extends IPSModule
                 $this->SetValue($pre . 'ConditionIcons' . $post, implode(',', $icons));
             }
 
-			if ($with_condition_ids) {
-				$this->SetValue($pre . 'ConditionIds' . $post, implode(',', $ids));
-			}
+            if ($with_condition_ids) {
+                $this->SetValue($pre . 'ConditionIds' . $post, implode(',', $ids));
+            }
         }
 
         $this->SetStatus(102);
@@ -547,11 +547,11 @@ class OpenWeatherData extends IPSModule
     <td align="center" valign="top" style="width:140px;padding-left:20px;">
 ' . $this->Translate('current') . '<br>
 ';
-		if ($icons != '') {
-			$icon = explode(',', $icons)[0];
-			$html .= '      <img src="' . $img_url . $icon . '.png" style="float: left; padding-left: 17px;">
+        if ($icons != '') {
+            $icon = explode(',', $icons)[0];
+            $html .= '      <img src="' . $img_url . $icon . '.png" style="float: left; padding-left: 17px;">
 ';
-		}
+        }
         $html .= '
       <div style="float: right; font-size: 13px; padding-right: 17px;">
         ' . round($temperature) . '°C<br>
@@ -603,12 +603,12 @@ class OpenWeatherData extends IPSModule
     <td align="center" valign="top" style="width: 140px; padding-left: 20px;">
 ' . $this->Translate($weekDay) . ' <font size="2">' . $time . '</font><br>
 ';
-			if ($icons != '') {
-				$icon = explode(',', $icons)[0];
-				$html .= '      <img src="' . $img_url . $icon . '.png" style="float: left; padding-left: 17px;">
+            if ($icons != '') {
+                $icon = explode(',', $icons)[0];
+                $html .= '      <img src="' . $img_url . $icon . '.png" style="float: left; padding-left: 17px;">
 ';
-			}
-			$html .= '
+            }
+            $html .= '
       <div style="float: right; font-size: 13px; padding-right: 17px;">
         ' . round($temperature_min) . '°C<br>
         ' . round($temperature_max) . '°C<br>
