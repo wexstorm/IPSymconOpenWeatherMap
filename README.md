@@ -215,7 +215,7 @@ Verweise:
 - 1.4 @ 11.10.2018 18:08<br>
   - _ConditionIcons_ und _ConditionIds_ (Plural) ersetzt durch _ConditionIcon_ und _ConditionId_ (Singular).
   Es wird nur noch der wichtigste Eintrag gespeichert - laut _OpenWeatherMap_ ist das jeweils der erste Eintrag.
-  - Zusätzliche temporäre Ablage der Originaldaten in internem Buffer und Funktion zum Abruf der Daten (_OpenWeatherMap_GetRawData()_)
+  - zusätzliche temporäre Ablage der Originaldaten in internen Buffern und Funktion zum Abruf der Daten (_OpenWeatherMap_GetRawData()_)
 
 - 1.4 @ 10.10.2018 15:27<br>
   - optionale Übernahme der Ids der Wetterbedingungen
