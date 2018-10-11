@@ -259,10 +259,10 @@ class OpenWeatherData extends IPSModule
 
         $jdata = $this->do_HttpRequest('data/2.5/weather', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
-		if ($jdata == '') {
-			$this->SetBuffer('Current', '');
-			return;
-		}
+        if ($jdata == '') {
+            $this->SetBuffer('Current', '');
+            return;
+        }
 
         if (isset($jdata['weather'])) {
             $weather = $jdata['weather'];
@@ -309,8 +309,8 @@ class OpenWeatherData extends IPSModule
                     $conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
                 }
             }
-			$icon = $this->GetArrayElem($weather, '0.icon', '');
-			$id = $this->GetArrayElem($weather, '0.id', '');
+            $icon = $this->GetArrayElem($weather, '0.icon', '');
+            $id = $this->GetArrayElem($weather, '0.id', '');
         }
 
         $this->SetValue('Temperature', $temperature);
@@ -385,7 +385,7 @@ class OpenWeatherData extends IPSModule
 
         $this->SetValue('LastMeasurement', $timestamp);
 
-		$this->SetBuffer('Current', json_encode($jdata));
+        $this->SetBuffer('Current', json_encode($jdata));
 
         $this->SetStatus(102);
     }
@@ -420,10 +420,10 @@ class OpenWeatherData extends IPSModule
 
         $jdata = $this->do_HttpRequest('data/2.5/forecast', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
-		if ($jdata == '') {
-			$this->SetBuffer('HourlyForecast', '');
-			return;
-		}
+        if ($jdata == '') {
+            $this->SetBuffer('HourlyForecast', '');
+            return;
+        }
 
         if (isset($jdata['list'])) {
             $list = $jdata['list'];
@@ -476,8 +476,8 @@ class OpenWeatherData extends IPSModule
                         $conditions .= ($conditions != '' ? ', ' : '') . $this->Translate($description);
                     }
                 }
-				$icon = $this->GetArrayElem($weather, '0.icon', '');
-				$id = $this->GetArrayElem($weather, '0.id', '');
+                $icon = $this->GetArrayElem($weather, '0.icon', '');
+                $id = $this->GetArrayElem($weather, '0.id', '');
             }
 
             $this->SetValue($pre . 'Begin' . $post, $timestamp);
@@ -533,7 +533,7 @@ class OpenWeatherData extends IPSModule
             }
         }
 
-		$this->SetBuffer('HourlyForecast', json_encode($jdata));
+        $this->SetBuffer('HourlyForecast', json_encode($jdata));
 
         $this->SetStatus(102);
     }
@@ -909,10 +909,10 @@ class OpenWeatherData extends IPSModule
         return is_numeric($speed) ? $speed * 3.6 : '';
     }
 
-	public function GetRawData(string $name)
+    public function GetRawData(string $name)
     {
-		$data = $this->GetBuffer($name);
-		$this->SendDebug(__FUNCTION__, 'name=' . $name . ', size=' . strlen($data) . ', data=' . $data, 0);
-		return $data;
-	}
+        $data = $this->GetBuffer($name);
+        $this->SendDebug(__FUNCTION__, 'name=' . $name . ', size=' . strlen($data) . ', data=' . $data, 0);
+        return $data;
+    }
 }
