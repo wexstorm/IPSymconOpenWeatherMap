@@ -1,7 +1,7 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.0-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.4-blue.svg)
+![Module-Version](https://img.shields.io/badge/Modul_Version-1.5-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![StyleCI](https://github.styleci.io/repos/126683101/shield?branch=master)](https://github.styleci.io/repos/146979798)
@@ -62,6 +62,17 @@ In IP-Symcon nun _Instanz hinzufügen_ (_CTRL+1_) auswählen unter der Kategorie
 ruft die Daten von _OpenWeatherMap_ ab. Wird automatisch zyklisch durch die Instanz durchgeführt im Abstand wie in der Konfiguration angegeben.
 
 ### Hilfsfunktionen
+
+`string OpenWeatherData_GetRawData(int $InstanzID, string $name)`
+
+liefert die Original-Ergebnisse der HTML-Aufrufe, z.B. zur Darstellung der HTML-Box. Folgende Daten stehen zur Verfügung:
+
+| Name              | Bedeutung               |
+| :---------------: | :---------------------: |
+| Current           | aktuelle Wetterdaten    |
+| HourlyForecast    | 3-stündliche Vorhersage |
+
+
 
 `float OpenWeatherData_CalcAbsoluteHumidity(int $InstanzID, float $Temperatur, float $Humidity)`
 
@@ -142,15 +153,9 @@ Wenn _longitude_ und _latitude_ auf **0** stehen, werden die Daten aus dem Modul
 
 Die unterstützen Spracheinstellung finden sich in der API-Dokumentatin unter der Überschrift _Multilingual support_ und sind z.B. (_de_, _en_, _fr_ ...).
 
-Hinweis zu _conditions_, _icons_ und _condition_ids_: diese Attribute können in der Nachricht mehrfach vorkommen. Daher werde diese in den Variablen als Komma-separierte Liste gespeichert.
-Die _conditions_ können, das es sich um text handelt, direkt ausgegeben werden, die beiden anderen Felder müssen entsprechend behandelt werden.
+Hinweis zu _with_icon_ und _with_condition_id_: diese Attribute können in der Nachricht mehrfach vorkommen. Damit man aber damit gut umgehen kann, wird immer nur der wichtigste Eintrag übernommen; laut _OpenWeatherMap_ ist das jeweils der erste Eintrag.
 
-Möchte man nur das erst Icon verwenden wäre das z.B.
-```
-$icons = GetValue(4711);
-$icon = explode(',', $icons)[0];
-$url = 'http://openweathermap.org/img/w/' . $icon . '.png';
-```
+Hinweis zu _with_conditions_: diese werden alle, durch Komma getrennt, übernommen.
 
 Erläuterung zu _summary_script_:
 mit diesem Scripten kann man eine alternative Darstellung realisieren.
@@ -160,9 +165,16 @@ Ein passendes Code-Fragment für ein Script:
 ```
 $instID = $_IPS['InstanceID'];
 
-$temperatur = OpenWeatherData_GetData($instID, 'Temperature');
+$html = '';
 
-$html = 'Temperatur: ' . $temperatur . ' °C<br>';
+$data = OpenWeatherData_GetData($instID, 'Current');
+if ($data) {
+	$jdata = json_decode($data, true);
+
+	$temperature = $jdata['main']['temp'];
+
+	$html = 'Temperatur: ' . $temperatur . ' °C<br>';
+}
 
 echo $html;
 
@@ -170,8 +182,8 @@ echo $html;
 
 #### Schaltflächen
 
-| Bezeichnung                  | Beschreibung |
-| :--------------------------: | :-------------------------------------------------: |
+| Bezeichnung                  | Beschreibung              |
+| :--------------------------: | :-----------------------: |
 | Aktualiseren                 | Wetterdaten aktualisieren |
 
 ### Variablenprofile
@@ -199,6 +211,11 @@ Verweise:
 
 
 ## 7. Versions-Historie
+
+- 1.4 @ 11.10.2018 18:08<br>
+  - _ConditionIcons_ und _ConditionIds_ (Plural) ersetzt durch _ConditionIcon_ und _ConditionId_ (Singular).
+  Es wird nur noch der wichtigste Eintrag gespeichert - laut _OpenWeatherMap_ ist das jeweils der erste Eintrag.
+  - Zusätzliche temporäre Ablage der Originaldaten in internem Buffer und Funktion zum Abruf der Daten (_OpenWeatherMap_GetRawData()_)
 
 - 1.4 @ 10.10.2018 15:27<br>
   - optionale Übernahme der Ids der Wetterbedingungen
