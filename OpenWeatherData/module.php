@@ -551,7 +551,7 @@ class OpenWeatherData extends IPSModule
         $clouds = $this->GetValue('Cloudiness');
         $icon = $this->GetValue('ConditionIcon');
 
-		$wind_speed = round($wind_speed);
+        $wind_speed = round($wind_speed);
 
         $html = '
 <table>
