@@ -136,8 +136,8 @@ class OpenWeatherData extends IPSModule
             $this->MaintainVariable($pre . 'Snow_3h' . $post, $this->Translate('Snowfall') . $s, vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, $use);
             $this->MaintainVariable($pre . 'Cloudiness' . $post, $this->Translate('Cloudiness') . $s, vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $use && $with_cloudiness);
             $this->MaintainVariable($pre . 'Conditions' . $post, $this->Translate('Conditions') . $s, vtString, '', $vpos++, $use && $with_conditions);
-            $this->MaintainVariable($pre . 'ConditionIcon' . $post, $this->Translate('Condition-icon'), vtString, '', $vpos++, $use && $with_icon);
-            $this->MaintainVariable($pre . 'ConditionId' . $post, $this->Translate('Condition-id'), vtString, '', $vpos++, $use && $with_condition_id);
+            $this->MaintainVariable($pre . 'ConditionIcon' . $post, $this->Translate('Condition-icon') . $s, vtString, '', $vpos++, $use && $with_icon);
+            $this->MaintainVariable($pre . 'ConditionId' . $post, $this->Translate('Condition-id') . $s, vtString, '', $vpos++, $use && $with_condition_id);
         }
 
         $appid = $this->ReadPropertyString('appid');
@@ -551,6 +551,8 @@ class OpenWeatherData extends IPSModule
         $clouds = $this->GetValue('Cloudiness');
         $icon = $this->GetValue('ConditionIcon');
 
+		$wind_speed = round($wind_speed);
+
         $html = '
 <table>
   <tr>
@@ -592,16 +594,14 @@ class OpenWeatherData extends IPSModule
             $post = '_' . sprintf('%02d', $i);
 
             $timestamp = $this->GetValue($pre . 'Begin' . $post);
-
             $temperature_min = $this->GetValue($pre . 'TemperatureMin' . $post);
             $temperature_max = $this->GetValue($pre . 'TemperatureMax' . $post);
-
-            $wind_speed = $this->GetValue('WindSpeed');
-
+            $wind_speed = $this->GetValue($pre . 'WindSpeed' . $post);
             $rain_3h = $this->GetValue($pre . 'Rain_3h' . $post);
             $clouds = $this->GetValue($pre . 'Cloudiness' . $post);
             $icon = $this->GetValue($pre . 'ConditionIcon' . $post);
 
+            $wind_speed = round($wind_speed);
             $is_today = date('d.m.Y', $timestamp) == date('d.m.Y', time());
             $weekDay = $is_today ? 'today' : date('l', $timestamp);
             $time = date('H:i', $timestamp);
