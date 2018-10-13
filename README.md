@@ -1,7 +1,7 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.0-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.5-blue.svg)
+![Module-Version](https://img.shields.io/badge/Modul_Version-1.6-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![StyleCI](https://github.styleci.io/repos/126683101/shield?branch=master)](https://github.styleci.io/repos/146979798)
@@ -212,7 +212,11 @@ Verweise:
 
 ## 7. Versions-Historie
 
-- 1.4 @ 11.10.2018 18:08<br>
+- 1.6 @ 12.10.2018 19:29<br>
+  - Bugfix: z.T. fehlende Suffixe bei Vorhersage-Variablen, falsche Windgeschwindigkeit in der HTML-Darstellung
+  - in der HTML-Darstellung wird die WIndgeschwindigkeit ohne Nachkommastellen ausgegeben
+
+- 1.5 @ 11.10.2018 18:08<br>
   - _ConditionIcons_ und _ConditionIds_ (Plural) ersetzt durch _ConditionIcon_ und _ConditionId_ (Singular).
   Es wird nur noch der wichtigste Eintrag gespeichert - laut _OpenWeatherMap_ ist das jeweils der erste Eintrag.
   - zusätzliche temporäre Ablage der Originaldaten in internen Buffern und Funktion zum Abruf der Daten (_OpenWeatherMap_GetRawData()_)
