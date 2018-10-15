@@ -69,8 +69,8 @@ class OpenWeatherData extends IPSModule
 
         $this->RegisterMessage(0, IPS_KERNELMESSAGE);
 
-        $this->SetMultiBuffer('Current', '');;
-        $this->SetMultiBuffer('HourlyForecast', '');;
+        $this->SetMultiBuffer('Current', '');
+        $this->SetMultiBuffer('HourlyForecast', '');
     }
 
     public function ApplyChanges()
