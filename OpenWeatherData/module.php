@@ -68,6 +68,9 @@ class OpenWeatherData extends IPSModule
         $this->RegisterTimer('UpdateData', 0, 'OpenWeatherData_UpdateData(' . $this->InstanceID . ');');
 
         $this->RegisterMessage(0, IPS_KERNELMESSAGE);
+
+        $this->SetMultiBuffer('Current', '');;
+        $this->SetMultiBuffer('HourlyForecast', '');;
     }
 
     public function ApplyChanges()
@@ -260,7 +263,7 @@ class OpenWeatherData extends IPSModule
         $jdata = $this->do_HttpRequest('data/2.5/weather', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
         if ($jdata == '') {
-            $this->SetBuffer('Current', '');
+            $this->SetMultiBuffer('Current', '');
             return;
         }
 
@@ -385,7 +388,7 @@ class OpenWeatherData extends IPSModule
 
         $this->SetValue('LastMeasurement', $timestamp);
 
-        $this->SetBuffer('Current', json_encode($jdata));
+        $this->SetMultiBuffer('Current', json_encode($jdata));
 
         $this->SetStatus(102);
     }
@@ -421,7 +424,7 @@ class OpenWeatherData extends IPSModule
         $jdata = $this->do_HttpRequest('data/2.5/forecast', $args);
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
         if ($jdata == '') {
-            $this->SetBuffer('HourlyForecast', '');
+            $this->SetMultiBuffer('HourlyForecast', '');
             return;
         }
 
@@ -533,7 +536,7 @@ class OpenWeatherData extends IPSModule
             }
         }
 
-        $this->SetBuffer('HourlyForecast', json_encode($jdata));
+        $this->SetMultiBuffer('HourlyForecast', json_encode($jdata));
 
         $this->SetStatus(102);
     }
@@ -556,19 +559,18 @@ class OpenWeatherData extends IPSModule
         $html = '
 <table>
   <tr>
+
     <td align="center" valign="top" style="width:140px;padding-left:20px;">
-' . $this->Translate('current') . '<br>
-';
+      ' . $this->Translate('current') . '<br>';
         if ($icon != '') {
-            $html .= '      <img src="' . $img_url . $icon . '.png" style="float: left; padding-left: 17px;">
-';
+            $html .= '
+      <img src="' . $img_url . $icon . '.png" style="float: left; padding-left: 17px;">';
         }
         $html .= '
       <div style="float: right; font-size: 13px; padding-right: 17px;">
         ' . round($temperature) . '°C<br>
         ' . round($humidity) . '%<br>
       </div>
-
       <div style="clear: both; font-size: 11px;">
         <table>
           <tr>
@@ -585,7 +587,6 @@ class OpenWeatherData extends IPSModule
           </tr>
         </table>
       </div>
-
     </td>
 ';
 
@@ -608,19 +609,16 @@ class OpenWeatherData extends IPSModule
 
             $html .= '
     <td align="center" valign="top" style="width: 140px; padding-left: 20px;">
-' . $this->Translate($weekDay) . ' <font size="2">' . $time . '</font><br>
-';
+      ' . $this->Translate($weekDay) . ' <font size="2">' . $time . '</font><br>';
             if ($icon != '') {
-                $html .= '      <img src="' . $img_url . $icon . '.png" style="float: left; padding-left: 17px;">
-';
+                $html .= '
+      <img src="' . $img_url . $icon . '.png" style="float: left; padding-left: 17px;">';
             }
             $html .= '
       <div style="float: right; font-size: 13px; padding-right: 17px;">
         ' . round($temperature_min) . '°C<br>
         ' . round($temperature_max) . '°C<br>
       </div>
-
-
       <div style="clear: both; font-size: 11px;">
         <table>
           <tr>
@@ -911,7 +909,7 @@ class OpenWeatherData extends IPSModule
 
     public function GetRawData(string $name)
     {
-        $data = $this->GetBuffer($name);
+        $data = $this->GetMultiBuffer($name);
         $this->SendDebug(__FUNCTION__, 'name=' . $name . ', size=' . strlen($data) . ', data=' . $data, 0);
         return $data;
     }
