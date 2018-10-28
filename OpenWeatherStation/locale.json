@@ -1,0 +1,47 @@
+{
+	"translations": {
+		"de": {
+			"OpenWeatherMap - Transmission of measurement values of own weather station": "OpenWeatherMap - Übertragung von Werten einer eigenen Wetterstation",
+			"station data - if position is not set, Modue 'Location' is used": "Angaben zur Station - falls die Position nicht angegeben ist, wird das Modul 'Location' verwendet",
+			"Longitude" : "Längengrad",
+			"Latitude" : "Breitengrad",
+			"Altitude" : "Höhe",
+
+			"API-Key": "API-Key",
+			"Station-ID": "Station-ID",
+			"external ID": "externe ID",
+			"Name": "Name",
+
+			"Variables with measurement values": "Variablen mit Messwerten",
+			"Time of measurement": "Messzeitpunkt",
+			"Temperature (°C)": "Temperatur (°C)",
+			"Wind speed (m/s)": "Windgeschwindigkeit (m/s)",
+			"Wind gusts (m/s)": "Böen (m/s)",
+			"Wind direction (°)": "Windrichtung (°)",
+			"Pressure (mbar)": "Luftdruck (mbar)",
+			"Humidity (%)": "Luftfeuchte (%)",
+			"Rainfall 1h (mm)": "Regen 1h (mm)",
+			"Rainfall 6h (mm)": "Regen 6h (mm)",
+			"Rainfall today (mm)": "Regen heute (mm)",
+			"Snow 1h (mm)": "Schnee 1h (mm)",
+			"Snow 6h (mm)": "Schnee 6h (mm)",
+			"Snow today (mm)": "Schnee heute (mm)",
+			"script to convert values": "Script um Messwerte umzurechnen",
+			"script": "Script",
+			"Transmit weatherdata every X minutes": "Übertragung der Messwerte alle X Minuten",
+			"Minutes": "Minuten",
+			"Transmit weatherdata": "Wetterdaten übertragen",
+			"Module description": "Modulbeschreibung",
+
+			"last transmission": "letzte Übertragung",
+
+			"Instance getting created": "Instanz wird erstellt",
+			"Instance is active": "Instanz ist aktiv",
+			"Instance is inactive": "Instanz ist inaktiv",
+			"Instance is inactive (invalid configuration)": "Instanz ist inaktiv (ungültige Konfiguration)",
+			"Instance is inactive (server error)": "Instanz ist inaktiv (Serverfehler)",
+			"Instance is inactive (http error)": "Instanz ist inaktiv (HTTP-Fehler)",
+			"Instance is inactive (invalid data)": "Instanz ist inaktiv (ungültige Daten)"
+		}
+	}
+}

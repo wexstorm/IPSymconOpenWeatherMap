@@ -1,0 +1,409 @@
+<?php
+
+require_once __DIR__ . '/../libs/common.php';  // globale Funktionen
+
+if (!defined('vtBoolean')) {
+    define('vtBoolean', 0);
+    define('vtInteger', 1);
+    define('vtFloat', 2);
+    define('vtString', 3);
+    define('vtArray', 8);
+    define('vtObject', 9);
+}
+
+if (!defined('StatusCode_inactive')) {
+    define('StatusCode_creating', 101);
+    define('StatusCode_active', 102);
+    define('StatusCode_inactive', 104);
+	define('StatusCode_InvalidConfig', 201);
+	define('StatusCode_ServerError', 202);
+	define('StatusCode_HttpError', 203);
+	define('StatusCode_InvalidData', 204);
+}
+
+class OpenWeatherStation extends IPSModule
+{
+    use OpenWeatherMapCommon;
+
+    public function Create()
+    {
+        parent::Create();
+
+        $this->RegisterPropertyString('appid', '');
+        $this->RegisterPropertyString('station_id', '');
+
+        $this->RegisterPropertyString('external_id', '');
+        $this->RegisterPropertyString('name', '');
+        $this->RegisterPropertyFloat('longitude', 0);
+        $this->RegisterPropertyFloat('latitude', 0);
+        $this->RegisterPropertyFloat('altitude', 0);
+
+        $this->RegisterPropertyInteger('dt_var', 0);
+        $this->RegisterPropertyInteger('temperature_var', 0);
+        $this->RegisterPropertyInteger('wind_speed_var', 0);
+        $this->RegisterPropertyInteger('wind_gust_var', 0);
+        $this->RegisterPropertyInteger('wind_deg_var', 0);
+        $this->RegisterPropertyInteger('pressure_var', 0);
+        $this->RegisterPropertyInteger('humidity_var', 0);
+        $this->RegisterPropertyInteger('rain_1h_var', 0);
+        $this->RegisterPropertyInteger('rain_6h_var', 0);
+        $this->RegisterPropertyInteger('rain_24h_var', 0);
+        $this->RegisterPropertyInteger('snow_1h_var', 0);
+        $this->RegisterPropertyInteger('snow_6h_var', 0);
+        $this->RegisterPropertyInteger('snow_24h_var', 0);
+
+        $this->RegisterPropertyInteger('convert_script', 0);
+
+        $this->RegisterPropertyInteger('transmit_interval', 5);
+
+        $this->RegisterTimer('TransmitMeasurements', 0, 'OpenWeatherStation_TransmitMeasurements(' . $this->InstanceID . ');');
+    }
+
+    public function ApplyChanges()
+    {
+        parent::ApplyChanges();
+
+        $vpos = 0;
+        $this->MaintainVariable('LastTransmission', $this->Translate('last transmission'), vtInteger, '~UnixTimestamp', $vpos++, true);
+
+        $appid = $this->ReadPropertyString('appid');
+        if ($appid == '') {
+            $this->SetStatus(StatusCode_InvalidConfig);
+        } else {
+            $this->SetStatus(StatusCode_active);
+        }
+
+        $this->SetTransmitInterval();
+    }
+
+    public function GetConfigurationForm()
+    {
+        $formElements = [];
+        $formElements[] = ['type' => 'Label', 'label' => 'OpenWeatherMap - Transmission of measurement values of own weather station'];
+        $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'appid', 'caption' => 'API-Key'];
+
+        $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'station_id', 'caption' => 'Station-ID'];
+
+        $formElements[] = ['type' => 'Label', 'label' => 'station data - if position is not set, Modue \'Location\' is used'];
+        $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'external_id', 'caption' => 'external ID'];
+        $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'name', 'caption' => 'Name'];
+        $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'longitude', 'caption' => 'Longitude', 'suffix' => '°'];
+        $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'latitude', 'caption' => 'Latitude', 'suffix' => '°'];
+        $formElements[] = ['type' => 'NumberSpinner', 'name' => 'altitude', 'caption' => 'Altitude', 'suffix' => 'm'];
+
+        $formElements[] = ['type' => 'Label', 'label' => 'Variables with measurement values'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'dt_var', 'caption' => 'Time of measurement'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'temperature_var', 'caption' => 'Temperature (°C)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'wind_speed_var', 'caption' => 'Wind speed (m/s)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'wind_gust_var', 'caption' => 'Wind gusts (m/s)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'wind_deg_var', 'caption' => 'Wind direction (°)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'pressure_var', 'caption' => 'Pressure (mbar)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'humidity_var', 'caption' => 'Humidity (%)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'rain_1h_var', 'caption' => 'Rainfall 1h (mm)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'rain_6h_var', 'caption' => 'Rainfall 6h (mm)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'rain_24h_var', 'caption' => 'Rainfall today (mm)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'snow_1h_var', 'caption' => 'Snow 1h (mm)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'snow_6h_var', 'caption' => 'Snow 6h (mm)'];
+        $formElements[] = ['type' => 'SelectVariable', 'name' => 'snow_24h_var', 'caption' => 'Snow today (mm)'];
+
+        $formElements[] = ['type' => 'Label', 'label' => 'script to convert values'];
+        $formElements[] = ['type' => 'SelectScript', 'name' => 'convert_script', 'caption' => 'script'];
+
+        $formElements[] = ['type' => 'Label', 'label' => 'Transmit weatherdata every X minutes'];
+        $formElements[] = ['type' => 'IntervalBox', 'name' => 'transmit_interval', 'caption' => 'Minutes'];
+
+        $formActions = [];
+        $formActions[] = ['type' => 'Button', 'label' => 'Transmit weatherdata', 'onClick' => 'OpenWeatherStation_TransmitMeasurements($id);'];
+        $formActions[] = ['type' => 'Label', 'label' => '____________________________________________________________________________________________________'];
+        $formActions[] = [
+                            'type'    => 'Button',
+                            'caption' => 'Module description',
+                            'onClick' => 'echo "https://github.com/demel42/IPSymconOpenWeatherMap/blob/master/README.md";'
+                        ];
+
+        $formStatus = [];
+        $formStatus[] = ['code' => StatusCode_creating, 'icon' => 'inactive', 'caption' => 'Instance getting created'];
+        $formStatus[] = ['code' => StatusCode_active, 'icon' => 'active', 'caption' => 'Instance is active'];
+        $formStatus[] = ['code' => StatusCode_inactive, 'icon' => 'inactive', 'caption' => 'Instance is inactive'];
+        $formStatus[] = ['code' => StatusCode_InvalidConfig, 'icon' => 'error', 'caption' => 'Instance is inactive (invalid configuration)'];
+        $formStatus[] = ['code' => StatusCode_ServerError, 'icon' => 'error', 'caption' => 'Instance is inactive (server error)'];
+        $formStatus[] = ['code' => StatusCode_HttpError, 'icon' => 'error', 'caption' => 'Instance is inactive (http error)'];
+        $formStatus[] = ['code' => StatusCode_InvalidData, 'icon' => 'error', 'caption' => 'Instance is inactive (invalid data)'];
+        return json_encode(['elements' => $formElements, 'actions' => $formActions, 'status' => $formStatus]);
+    }
+
+    protected function SetTransmitInterval()
+    {
+        $min = $this->ReadPropertyInteger('transmit_interval');
+        $msec = $min > 0 ? $min * 1000 * 60 : 0;
+        $this->SetTimerInterval('TransmitMeasurements', $msec);
+    }
+
+    public function TransmitMeasurements()
+    {
+        $station_id = $this->ReadPropertyString('station_id');
+		if ($station_id == '')
+			return false;
+
+		$now = time();
+
+		$vars = [
+				'dt',
+				'temperature',
+				'wind_speed', 'wind_gust', 'wind_deg',
+				'pressure',
+				'humidity',
+				'rain_1h', 'rain_6h', 'rain_24h',
+				'snow_1h', 'snow_6h', 'snow_24h',
+			];
+
+		$values = [];
+		foreach ($vars as $var) {
+			$varID = $this->ReadPropertyInteger($var . '_var');
+			$val = $varID != 0 ? GetValue($varID) : '';
+			$values[$var] = $val;
+		}
+
+		$this->SendDebug(__FUNCTION__, 'values=' . print_r($values, true), 0);
+
+		$convert_script = $this->ReadPropertyInteger('convert_script');
+		if ($convert_script > 0) {
+			$r = IPS_RunScriptWaitEx($convert_script, ['InstanceID' => $this->InstanceID, 'values' => json_encode($values)]);
+			if ($r != '') {
+				$values = json_decode($r, true);
+				$this->SendDebug(__FUNCTION__, 'modified values=' . print_r($values, true), 0);
+			}
+		}
+
+		if ($values['dt'] == '')
+			$values['dt'] = $now;
+
+		$v = [];
+		$v['station_id'] = $station_id;
+		foreach ($vars as $var) {
+			if (!isset($values[$var]))
+				continue;
+			$val = $values[$var];
+			if ($val == '')
+				continue;
+			$v[$var] = $val;
+		}
+		$postdata = [];
+		$postdata[] = $v;
+
+		$statuscode = $this->do_HttpRequest('data/3.0/measurements', '', $postdata, 'POST', $result);
+		$this->SetStatus($statuscode ? $statuscode : StatusCode_active);
+		if ($statuscode) {
+			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+			return false;
+		}
+
+		$this->SetValue('LastTransmission', $now);
+		return true;
+    }
+
+    public function FetchMeasurements(int $from, int $to, string $type = 'm', int $limit = 100)
+    {
+        $station_id = $this->ReadPropertyString('station_id');
+		if ($station_id == '')
+			return false;
+
+		$now = time();
+
+		if ($to == '' || $to == 0)
+			$to = $now;
+		if ($from == '' || $from == 0 || $from > $to)
+			$from = $now - 24 * 60 * 60;
+
+		$args = [
+				'station_id' => $station_id,
+				'type'       => $type,
+				'limit'      => $limit,
+				'from'       => $from,
+				'to'         => $to
+			];
+
+		$statuscode = $this->do_HttpRequest('data/3.0/measurements', $args, '', 'GET', $result);
+		if ($statuscode) {
+			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+			return false;
+		}
+		return $result;
+	}
+
+    public function RegisterStation()
+    {
+        $station_id = $this->ReadPropertyString('station_id');
+		if ($station_id != '')
+			return false;
+
+        $external_id = $this->ReadPropertyString('external_id');
+        $name = $this->ReadPropertyString('name');
+        $latitude = $this->ReadPropertyFloat('latitude');
+        $longitude = $this->ReadPropertyFloat('longitude');
+        $altitude = $this->ReadPropertyFloat('altitude');
+
+		if ($latitude == 0 || $longitude == 0) {
+			$id = IPS_GetInstanceListByModuleID('{45E97A63-F870-408A-B259-2933F7EABF74}')[0];
+			$loc = json_decode(IPS_GetProperty($id, 'Location'), true);
+			$latitude = $loc['latitude'];
+			$longitude = $loc['longitude'];
+		}
+
+		$postdata = [
+				'external_id' => $external_id,
+				'name'        => $name,
+				'latitude'    => $latitude,
+				'longitude'   => $longitude,
+				'altitude'    => $altitude
+			];
+
+		$statuscode = $this->do_HttpRequest('data/3.0/stations', '', $postdata, 'POST', $result);
+		if ($statuscode) {
+			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+			return false;
+		}
+		return $result;
+    }
+
+    public function UpdateStation()
+    {
+        $station_id = $this->ReadPropertyString('station_id');
+		if ($station_id == '')
+			return false;
+
+        $external_id = $this->ReadPropertyString('external_id');
+        $name = $this->ReadPropertyString('name');
+        $latitude = $this->ReadPropertyFloat('latitude');
+        $longitude = $this->ReadPropertyFloat('longitude');
+        $altitude = $this->ReadPropertyFloat('altitude');
+
+		if ($latitude == 0 || $longitude == 0) {
+			$id = IPS_GetInstanceListByModuleID('{45E97A63-F870-408A-B259-2933F7EABF74}')[0];
+			$loc = json_decode(IPS_GetProperty($id, 'Location'), true);
+			$latitude = $loc['latitude'];
+			$longitude = $loc['longitude'];
+		}
+
+		$postdata = [
+				'external_id' => $external_id,
+				'name'        => $name,
+				'latitude'    => $latitude,
+				'longitude'   => $longitude,
+				'altitude'    => $altitude
+			];
+
+		$statuscode = $this->do_HttpRequest('data/3.0/stations/' . $station_id, '', $postdata, 'PUT', $result);
+		return $result;
+    }
+
+    public function ListStations()
+    {
+		$statuscode = $this->do_HttpRequest('data/3.0/stations', '', '', 'GET', $result);
+		if ($statuscode) {
+			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+			return false;
+		}
+		return $result;
+    }
+
+    public function DeleteStation(string $station_id)
+    {
+		$statuscode = $this->do_HttpRequest('data/3.0/stations/' . $station_id, '', '', 'DELETE', $result);
+		if ($statuscode) {
+			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+			return false;
+		}
+		return $result;
+    }
+
+    private function do_HttpRequest($cmd, $args, $postdata, $mode, &$result)
+    {
+        $appid = $this->ReadPropertyString('appid');
+
+        $url = 'https://api.openweathermap.org/' . $cmd . '?appid=' . $appid;
+
+        if ($args != '') {
+            foreach ($args as $arg => $value) {
+                $url .= '&' . $arg;
+                if ($value != '') {
+                    $url .= '=' . rawurlencode($value);
+                }
+            }
+        }
+
+		$header = [];
+		$header[] = 'Content-Type: application/json';
+		if ($postdata != '') {
+			$header[] = 'Content-Length: ' . strlen(json_encode($postdata));
+		}
+
+        $this->SendDebug(__FUNCTION__, 'http: url=' . $url . ', mode=' . $mode, 0);
+		$this->SendDebug(__FUNCTION__, '   header=' . print_r($header, true), 0);
+		if ($postdata != '') {
+			$this->SendDebug(__FUNCTION__, '    postdata=' . json_encode($postdata), 0);
+		}
+
+        $time_start = microtime(true);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+		switch ($mode) {
+			case 'GET':
+				break;
+			case 'POST':
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postdata));
+				break;
+			case 'PUT':
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postdata));
+				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $mode);
+				break;
+			case 'DELETE':
+				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $mode);
+				break;
+		}
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		$cdata = curl_exec($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $duration = round(microtime(true) - $time_start, 2);
+        $this->SendDebug(__FUNCTION__, ' => httpcode=' . $httpcode . ', duration=' . $duration . 's', 0);
+        $this->SendDebug(__FUNCTION__, '    cdata=' . $cdata, 0);
+
+        $statuscode = 0;
+        $err = '';
+        $result = '';
+        if ($httpcode < 200 || $httpcode > 299) {
+			if ($httpcode >= 500 && $httpcode <= 599) {
+                $statuscode = StatusCode_ServerError;
+                $err = "got http-code $httpcode (server error)";
+            } else {
+                $err = "got http-code $httpcode";
+                $statuscode = StatusCode_HttpError;
+            }
+        } elseif ($cdata == '') {
+			if ($httpcode < 200 || $httpcode > 299) {
+				$statuscode = StatusCode_InvalidData;
+				$err = 'no data';
+			}
+        } else {
+            $result = json_decode($cdata, true);
+            if ($result == '') {
+                $statuscode = StatusCode_InvalidData;
+                $err = 'malformed response';
+            }
+        }
+
+        if ($statuscode) {
+            echo 'url=' . $url . ' => statuscode=' . $statuscode . ', err=' . $err . PHP_EOL;
+            $this->SendDebug(__FUNCTION__, ' => statuscode=' . $statuscode . ', err=' . $err, 0);
+        }
+
+		return $statuscode;
+    }
+}
