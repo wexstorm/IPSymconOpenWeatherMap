@@ -14,15 +14,15 @@
 
 ## 1. Funktionsumfang
 
-[siehe hier](../README.md#1-funktionsumfang)
+siehe [hier](../README.md#1-funktionsumfang)
 
 ## 2. Voraussetzungen
 
-[siehe hier](../README.md#2-voraussetzungen)
+siehe [hier](../README.md#2-voraussetzungen)
 
 ## 3. Installation
 
-[siehe hier](../README.md#3-installationgen)
+Allgemeine Einrichtung siehe [hier](../README.md#3-installationgen)
 
 ### Einrichtung in IPS
 
@@ -209,6 +209,9 @@ echo json_encode($values);
 ## 6. Anhang
 
 [siehe hier](../README.md#6-anhang)
+
+Verweise:
+- https://openweathermap.org/stations
 
 ## 7. Versions-Historie
 
