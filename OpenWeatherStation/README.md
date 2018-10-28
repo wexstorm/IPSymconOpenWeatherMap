@@ -22,20 +22,7 @@
 
 ## 3. Installation
 
-Die Konsole von IP-Symcon öffnen. Im Objektbaum unter Kerninstanzen die Instanz __*Modules*__ durch einen doppelten Mausklick öffnen.
-
-In der _Modules_ Instanz rechts oben auf den Button __*Hinzufügen*__ drücken.
-
-In dem sich öffnenden Fenster folgende URL hinzufügen:
-
-`https://github.com/demel42/IPSymconOpenWeatherMap.git`
-
-und mit _OK_ bestätigen.
-
-Anschließend erscheint ein Eintrag für das Modul in der Liste der Instanz _Modules_
-
-### Anmeldung bei _OpenWeatherMap_
-Man muss hier (_https://home.openweathermap.org/users/sign_up_) ein Account erstellen. Nach Anmeldung kann man in dem Punkt _API keys_ einen API-Key erzeugen bzw. diese verwalten.
+[siehe hier](../README.md#3-installationgen)
 
 ### Einrichtung in IPS
 
