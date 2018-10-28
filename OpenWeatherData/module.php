@@ -15,10 +15,10 @@ if (!defined('StatusCode_inactive')) {
     define('StatusCode_creating', 101);
     define('StatusCode_active', 102);
     define('StatusCode_inactive', 104);
-	define('StatusCode_InvalidConfig', 201);
-	define('StatusCode_ServerError', 202);
-	define('StatusCode_HttpError', 203);
-	define('StatusCode_InvalidData', 204);
+    define('StatusCode_InvalidConfig', 201);
+    define('StatusCode_ServerError', 202);
+    define('StatusCode_HttpError', 203);
+    define('StatusCode_InvalidData', 204);
 }
 
 class OpenWeatherData extends IPSModule

@@ -15,10 +15,10 @@ if (!defined('StatusCode_inactive')) {
     define('StatusCode_creating', 101);
     define('StatusCode_active', 102);
     define('StatusCode_inactive', 104);
-	define('StatusCode_InvalidConfig', 201);
-	define('StatusCode_ServerError', 202);
-	define('StatusCode_HttpError', 203);
-	define('StatusCode_InvalidData', 204);
+    define('StatusCode_InvalidConfig', 201);
+    define('StatusCode_ServerError', 202);
+    define('StatusCode_HttpError', 203);
+    define('StatusCode_InvalidData', 204);
 }
 
 class OpenWeatherStation extends IPSModule
@@ -142,100 +142,108 @@ class OpenWeatherStation extends IPSModule
     public function TransmitMeasurements()
     {
         $station_id = $this->ReadPropertyString('station_id');
-		if ($station_id == '')
-			return false;
+        if ($station_id == '') {
+            return false;
+        }
 
-		$now = time();
+        $now = time();
 
-		$vars = [
-				'dt',
-				'temperature',
-				'wind_speed', 'wind_gust', 'wind_deg',
-				'pressure',
-				'humidity',
-				'rain_1h', 'rain_6h', 'rain_24h',
-				'snow_1h', 'snow_6h', 'snow_24h',
-			];
+        $vars = [
+                'dt',
+                'temperature',
+                'wind_speed', 'wind_gust', 'wind_deg',
+                'pressure',
+                'humidity',
+                'rain_1h', 'rain_6h', 'rain_24h',
+                'snow_1h', 'snow_6h', 'snow_24h',
+            ];
 
-		$values = [];
-		foreach ($vars as $var) {
-			$varID = $this->ReadPropertyInteger($var . '_var');
-			$val = $varID != 0 ? GetValue($varID) : '';
-			$values[$var] = $val;
-		}
+        $values = [];
+        foreach ($vars as $var) {
+            $varID = $this->ReadPropertyInteger($var . '_var');
+            $val = $varID != 0 ? GetValue($varID) : '';
+            $values[$var] = $val;
+        }
 
-		$this->SendDebug(__FUNCTION__, 'values=' . print_r($values, true), 0);
+        $this->SendDebug(__FUNCTION__, 'values=' . print_r($values, true), 0);
 
-		$convert_script = $this->ReadPropertyInteger('convert_script');
-		if ($convert_script > 0) {
-			$r = IPS_RunScriptWaitEx($convert_script, ['InstanceID' => $this->InstanceID, 'values' => json_encode($values)]);
-			if ($r != '') {
-				$values = json_decode($r, true);
-				$this->SendDebug(__FUNCTION__, 'modified values=' . print_r($values, true), 0);
-			}
-		}
+        $convert_script = $this->ReadPropertyInteger('convert_script');
+        if ($convert_script > 0) {
+            $r = IPS_RunScriptWaitEx($convert_script, ['InstanceID' => $this->InstanceID, 'values' => json_encode($values)]);
+            if ($r != '') {
+                $values = json_decode($r, true);
+                $this->SendDebug(__FUNCTION__, 'modified values=' . print_r($values, true), 0);
+            }
+        }
 
-		if ($values['dt'] == '')
-			$values['dt'] = $now;
+        if ($values['dt'] == '') {
+            $values['dt'] = $now;
+        }
 
-		$v = [];
-		$v['station_id'] = $station_id;
-		foreach ($vars as $var) {
-			if (!isset($values[$var]))
-				continue;
-			$val = $values[$var];
-			if ($val == '')
-				continue;
-			$v[$var] = $val;
-		}
-		$postdata = [];
-		$postdata[] = $v;
+        $v = [];
+        $v['station_id'] = $station_id;
+        foreach ($vars as $var) {
+            if (!isset($values[$var])) {
+                continue;
+            }
+            $val = $values[$var];
+            if ($val == '') {
+                continue;
+            }
+            $v[$var] = $val;
+        }
+        $postdata = [];
+        $postdata[] = $v;
 
-		$statuscode = $this->do_HttpRequest('data/3.0/measurements', '', $postdata, 'POST', $result);
-		$this->SetStatus($statuscode ? $statuscode : StatusCode_active);
-		if ($statuscode) {
-			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
-			return false;
-		}
+        $statuscode = $this->do_HttpRequest('data/3.0/measurements', '', $postdata, 'POST', $result);
+        $this->SetStatus($statuscode ? $statuscode : StatusCode_active);
+        if ($statuscode) {
+            $this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+            return false;
+        }
 
-		$this->SetValue('LastTransmission', $now);
-		return true;
+        $this->SetValue('LastTransmission', $now);
+        return true;
     }
 
     public function FetchMeasurements(int $from, int $to, string $type = 'm', int $limit = 100)
     {
         $station_id = $this->ReadPropertyString('station_id');
-		if ($station_id == '')
-			return false;
+        if ($station_id == '') {
+            return false;
+        }
 
-		$now = time();
+        $now = time();
 
-		if ($to == '' || $to == 0)
-			$to = $now;
-		if ($from == '' || $from == 0 || $from > $to)
-			$from = $now - 24 * 60 * 60;
+        if ($to == '' || $to == 0) {
+            $to = $now;
+        }
+        if ($from == '' || $from == 0 || $from > $to) {
+            $from = $now - 24 * 60 * 60;
+        }
 
-		$args = [
-				'station_id' => $station_id,
-				'type'       => $type,
-				'limit'      => $limit,
-				'from'       => $from,
-				'to'         => $to
-			];
+        $args = [
+                'station_id' => $station_id,
+                'type'       => $type,
+                'limit'      => $limit,
+                'from'       => $from,
+                'to'         => $to
+            ];
 
-		$statuscode = $this->do_HttpRequest('data/3.0/measurements', $args, '', 'GET', $result);
-		if ($statuscode) {
-			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
-			return false;
-		}
-		return $result;
-	}
+        $statuscode = $this->do_HttpRequest('data/3.0/measurements', $args, '', 'GET', $result);
+        if ($statuscode) {
+            $this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+            return false;
+        }
+        return $result;
+    }
 
     public function RegisterStation()
     {
         $station_id = $this->ReadPropertyString('station_id');
-		if ($station_id != '')
-			return false;
+        if ($station_id != '') {
+            return false;
+        }
 
         $external_id = $this->ReadPropertyString('external_id');
         $name = $this->ReadPropertyString('name');
@@ -243,34 +251,35 @@ class OpenWeatherStation extends IPSModule
         $longitude = $this->ReadPropertyFloat('longitude');
         $altitude = $this->ReadPropertyFloat('altitude');
 
-		if ($latitude == 0 || $longitude == 0) {
-			$id = IPS_GetInstanceListByModuleID('{45E97A63-F870-408A-B259-2933F7EABF74}')[0];
-			$loc = json_decode(IPS_GetProperty($id, 'Location'), true);
-			$latitude = $loc['latitude'];
-			$longitude = $loc['longitude'];
-		}
+        if ($latitude == 0 || $longitude == 0) {
+            $id = IPS_GetInstanceListByModuleID('{45E97A63-F870-408A-B259-2933F7EABF74}')[0];
+            $loc = json_decode(IPS_GetProperty($id, 'Location'), true);
+            $latitude = $loc['latitude'];
+            $longitude = $loc['longitude'];
+        }
 
-		$postdata = [
-				'external_id' => $external_id,
-				'name'        => $name,
-				'latitude'    => $latitude,
-				'longitude'   => $longitude,
-				'altitude'    => $altitude
-			];
+        $postdata = [
+                'external_id' => $external_id,
+                'name'        => $name,
+                'latitude'    => $latitude,
+                'longitude'   => $longitude,
+                'altitude'    => $altitude
+            ];
 
-		$statuscode = $this->do_HttpRequest('data/3.0/stations', '', $postdata, 'POST', $result);
-		if ($statuscode) {
-			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
-			return false;
-		}
-		return $result;
+        $statuscode = $this->do_HttpRequest('data/3.0/stations', '', $postdata, 'POST', $result);
+        if ($statuscode) {
+            $this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+            return false;
+        }
+        return $result;
     }
 
     public function UpdateStation()
     {
         $station_id = $this->ReadPropertyString('station_id');
-		if ($station_id == '')
-			return false;
+        if ($station_id == '') {
+            return false;
+        }
 
         $external_id = $this->ReadPropertyString('external_id');
         $name = $this->ReadPropertyString('name');
@@ -278,43 +287,43 @@ class OpenWeatherStation extends IPSModule
         $longitude = $this->ReadPropertyFloat('longitude');
         $altitude = $this->ReadPropertyFloat('altitude');
 
-		if ($latitude == 0 || $longitude == 0) {
-			$id = IPS_GetInstanceListByModuleID('{45E97A63-F870-408A-B259-2933F7EABF74}')[0];
-			$loc = json_decode(IPS_GetProperty($id, 'Location'), true);
-			$latitude = $loc['latitude'];
-			$longitude = $loc['longitude'];
-		}
+        if ($latitude == 0 || $longitude == 0) {
+            $id = IPS_GetInstanceListByModuleID('{45E97A63-F870-408A-B259-2933F7EABF74}')[0];
+            $loc = json_decode(IPS_GetProperty($id, 'Location'), true);
+            $latitude = $loc['latitude'];
+            $longitude = $loc['longitude'];
+        }
 
-		$postdata = [
-				'external_id' => $external_id,
-				'name'        => $name,
-				'latitude'    => $latitude,
-				'longitude'   => $longitude,
-				'altitude'    => $altitude
-			];
+        $postdata = [
+                'external_id' => $external_id,
+                'name'        => $name,
+                'latitude'    => $latitude,
+                'longitude'   => $longitude,
+                'altitude'    => $altitude
+            ];
 
-		$statuscode = $this->do_HttpRequest('data/3.0/stations/' . $station_id, '', $postdata, 'PUT', $result);
-		return $result;
+        $statuscode = $this->do_HttpRequest('data/3.0/stations/' . $station_id, '', $postdata, 'PUT', $result);
+        return $result;
     }
 
     public function ListStations()
     {
-		$statuscode = $this->do_HttpRequest('data/3.0/stations', '', '', 'GET', $result);
-		if ($statuscode) {
-			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
-			return false;
-		}
-		return $result;
+        $statuscode = $this->do_HttpRequest('data/3.0/stations', '', '', 'GET', $result);
+        if ($statuscode) {
+            $this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+            return false;
+        }
+        return $result;
     }
 
     public function DeleteStation(string $station_id)
     {
-		$statuscode = $this->do_HttpRequest('data/3.0/stations/' . $station_id, '', '', 'DELETE', $result);
-		if ($statuscode) {
-			$this->SendDebug(__FUNCTION__, 'http-request failed', 0);
-			return false;
-		}
-		return $result;
+        $statuscode = $this->do_HttpRequest('data/3.0/stations/' . $station_id, '', '', 'DELETE', $result);
+        if ($statuscode) {
+            $this->SendDebug(__FUNCTION__, 'http-request failed', 0);
+            return false;
+        }
+        return $result;
     }
 
     private function do_HttpRequest($cmd, $args, $postdata, $mode, &$result)
@@ -332,43 +341,43 @@ class OpenWeatherStation extends IPSModule
             }
         }
 
-		$header = [];
-		$header[] = 'Content-Type: application/json';
-		if ($postdata != '') {
-			$header[] = 'Content-Length: ' . strlen(json_encode($postdata));
-		}
+        $header = [];
+        $header[] = 'Content-Type: application/json';
+        if ($postdata != '') {
+            $header[] = 'Content-Length: ' . strlen(json_encode($postdata));
+        }
 
         $this->SendDebug(__FUNCTION__, 'http: url=' . $url . ', mode=' . $mode, 0);
-		$this->SendDebug(__FUNCTION__, '   header=' . print_r($header, true), 0);
-		if ($postdata != '') {
-			$this->SendDebug(__FUNCTION__, '    postdata=' . json_encode($postdata), 0);
-		}
+        $this->SendDebug(__FUNCTION__, '   header=' . print_r($header, true), 0);
+        if ($postdata != '') {
+            $this->SendDebug(__FUNCTION__, '    postdata=' . json_encode($postdata), 0);
+        }
 
         $time_start = microtime(true);
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-		switch ($mode) {
-			case 'GET':
-				break;
-			case 'POST':
-				curl_setopt($ch, CURLOPT_POST, true);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postdata));
-				break;
-			case 'PUT':
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postdata));
-				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $mode);
-				break;
-			case 'DELETE':
-				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $mode);
-				break;
-		}
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-		$cdata = curl_exec($ch);
-		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        switch ($mode) {
+            case 'GET':
+                break;
+            case 'POST':
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postdata));
+                break;
+            case 'PUT':
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postdata));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $mode);
+                break;
+            case 'DELETE':
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $mode);
+                break;
+        }
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        $cdata = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
         $duration = round(microtime(true) - $time_start, 2);
@@ -379,7 +388,7 @@ class OpenWeatherStation extends IPSModule
         $err = '';
         $result = '';
         if ($httpcode < 200 || $httpcode > 299) {
-			if ($httpcode >= 500 && $httpcode <= 599) {
+            if ($httpcode >= 500 && $httpcode <= 599) {
                 $statuscode = StatusCode_ServerError;
                 $err = "got http-code $httpcode (server error)";
             } else {
@@ -387,10 +396,10 @@ class OpenWeatherStation extends IPSModule
                 $statuscode = StatusCode_HttpError;
             }
         } elseif ($cdata == '') {
-			if ($httpcode < 200 || $httpcode > 299) {
-				$statuscode = StatusCode_InvalidData;
-				$err = 'no data';
-			}
+            if ($httpcode < 200 || $httpcode > 299) {
+                $statuscode = StatusCode_InvalidData;
+                $err = 'no data';
+            }
         } else {
             $result = json_decode($cdata, true);
             if ($result == '') {
@@ -404,6 +413,6 @@ class OpenWeatherStation extends IPSModule
             $this->SendDebug(__FUNCTION__, ' => statuscode=' . $statuscode . ', err=' . $err, 0);
         }
 
-		return $statuscode;
+        return $statuscode;
     }
 }
