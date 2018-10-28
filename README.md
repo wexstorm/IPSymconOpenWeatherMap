@@ -54,15 +54,15 @@ Man muss hier (_https://home.openweathermap.org/users/sign_up_) ein Account erst
 
 ### Einrichtung in IPS
 
-siehe [OpenWeatherData](OpenWeatherData/README.md#1-funktionsumfang) und [OpenWeatherStation](OpenWeatherStation/README.md#1-funktionsumfang)
+siehe [OpenWeatherData](OpenWeatherData/README.md#3-installation) und [OpenWeatherStation](OpenWeatherStation/README.md#3-installation)
 
 ## 4. Funktionsreferenz
 
-siehe [OpenWeatherData](OpenWeatherData/README.md#1-funktionsumfang) und [OpenWeatherStation](OpenWeatherStation/README.md#1-funktionsumfang)
+siehe [OpenWeatherData](OpenWeatherData/README.md#4-funktionsreferenz) und [OpenWeatherStation](OpenWeatherStation/README.md#4-funktionsreferenz)
 
 ## 5. Konfiguration
 
-siehe [OpenWeatherData](OpenWeatherData/README.md#1-funktionsumfang) und [OpenWeatherStation](OpenWeatherStation/README.md#1-funktionsumfang)
+siehe [OpenWeatherData](OpenWeatherData/README.md#5-konfiguration) und [OpenWeatherStation](OpenWeatherStation/README.md#5-konfiguration)
 
 ## 6. Anhang
 
