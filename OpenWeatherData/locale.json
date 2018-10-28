@@ -1,10 +1,14 @@
 {
 	"translations": {
 		"de": {
+			"OpenWeatherMap - fetch current observations and forecast": "OpenWeatherMap - Abruf aktueller Beobachtungen und Vorhersagen",
+
 			"station data - if position is not set, Modue 'Location' is used": "Angaben zur Station - falls die Position nicht angegeben ist, wird das Modul 'Location' verwendet",
 			"Longitude" : "Längengrad",
 			"Latitude" : "Breitengrad",
 			"Altitude" : "Höhe",
+
+			"API-Key": "API-Key",
 
 			"Language setting for textual weather-information (de, en, ...)":
 				"Spracheinstellung für textuelle Wetterinformationen (de, en, ...)",

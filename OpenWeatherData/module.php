@@ -11,6 +11,16 @@ if (!defined('vtBoolean')) {
     define('vtObject', 9);
 }
 
+if (!defined('StatusCode_inactive')) {
+    define('StatusCode_creating', 101);
+    define('StatusCode_active', 102);
+    define('StatusCode_inactive', 104);
+	define('StatusCode_InvalidConfig', 201);
+	define('StatusCode_ServerError', 202);
+	define('StatusCode_HttpError', 203);
+	define('StatusCode_InvalidData', 204);
+}
+
 class OpenWeatherData extends IPSModule
 {
     use OpenWeatherMapCommon;
@@ -67,8 +77,6 @@ class OpenWeatherData extends IPSModule
 
         $this->RegisterTimer('UpdateData', 0, 'OpenWeatherData_UpdateData(' . $this->InstanceID . ');');
 
-        $this->RegisterMessage(0, IPS_KERNELMESSAGE);
-
         $this->SetMultiBuffer('Current', '');
         $this->SetMultiBuffer('HourlyForecast', '');
     }
@@ -114,7 +122,6 @@ class OpenWeatherData extends IPSModule
         $this->MaintainVariable('ConditionIcon', $this->Translate('Condition-icon'), vtString, '', $vpos++, $with_icon);
         $this->MaintainVariable('ConditionId', $this->Translate('Condition-id'), vtString, '', $vpos++, $with_condition_id);
         $this->MaintainVariable('LastMeasurement', $this->Translate('last measurement'), vtInteger, '~UnixTimestamp', $vpos++, true);
-        $this->MaintainVariable('LastMeasurement', $this->Translate('last measurement'), vtInteger, '~UnixTimestamp', $vpos++, true);
         $this->MaintainVariable('WeatherSummary', $this->Translate('Summary of weather'), vtString, '~HTMLBox', $vpos++, $with_summary);
 
         for ($i = 0; $i < 40; $i++) {
@@ -145,9 +152,9 @@ class OpenWeatherData extends IPSModule
 
         $appid = $this->ReadPropertyString('appid');
         if ($appid == '') {
-            $this->SetStatus(201);
+            $this->SetStatus(StatusCode_InvalidConfig);
         } else {
-            $this->SetStatus(102);
+            $this->SetStatus(StatusCode_active);
         }
 
         $this->SetUpdateInterval();
@@ -156,7 +163,7 @@ class OpenWeatherData extends IPSModule
     public function GetConfigurationForm()
     {
         $formElements = [];
-        $formElements[] = ['type' => 'Label', 'label' => 'OpenWeatherMap'];
+        $formElements[] = ['type' => 'Label', 'label' => 'OpenWeatherMap - fetch current observations and forecast'];
         $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'appid', 'caption' => 'API-Key'];
 
         $formElements[] = ['type' => 'Label', 'label' => 'station data - if position is not set, Modue \'Location\' is used'];
@@ -203,13 +210,13 @@ class OpenWeatherData extends IPSModule
                         ];
 
         $formStatus = [];
-        $formStatus[] = ['code' => '101', 'icon' => 'inactive', 'caption' => 'Instance getting created'];
-        $formStatus[] = ['code' => '102', 'icon' => 'active', 'caption' => 'Instance is active'];
-        $formStatus[] = ['code' => '104', 'icon' => 'inactive', 'caption' => 'Instance is inactive'];
-        $formStatus[] = ['code' => '201', 'icon' => 'error', 'caption' => 'Instance is inactive (invalid configuration)'];
-        $formStatus[] = ['code' => '202', 'icon' => 'error', 'caption' => 'Instance is inactive (server error)'];
-        $formStatus[] = ['code' => '203', 'icon' => 'error', 'caption' => 'Instance is inactive (http error)'];
-        $formStatus[] = ['code' => '204', 'icon' => 'error', 'caption' => 'Instance is inactive (invalid data)'];
+        $formStatus[] = ['code' => StatusCode_creating, 'icon' => 'inactive', 'caption' => 'Instance getting created'];
+        $formStatus[] = ['code' => StatusCode_active, 'icon' => 'active', 'caption' => 'Instance is active'];
+        $formStatus[] = ['code' => StatusCode_inactive, 'icon' => 'inactive', 'caption' => 'Instance is inactive'];
+        $formStatus[] = ['code' => StatusCode_InvalidConfig, 'icon' => 'error', 'caption' => 'Instance is inactive (invalid configuration)'];
+        $formStatus[] = ['code' => StatusCode_ServerError, 'icon' => 'error', 'caption' => 'Instance is inactive (server error)'];
+        $formStatus[] = ['code' => StatusCode_HttpError, 'icon' => 'error', 'caption' => 'Instance is inactive (http error)'];
+        $formStatus[] = ['code' => StatusCode_InvalidData, 'icon' => 'error', 'caption' => 'Instance is inactive (invalid data)'];
         return json_encode(['elements' => $formElements, 'actions' => $formActions, 'status' => $formStatus]);
     }
 
@@ -390,7 +397,7 @@ class OpenWeatherData extends IPSModule
 
         $this->SetMultiBuffer('Current', json_encode($jdata));
 
-        $this->SetStatus(102);
+        $this->SetStatus(StatusCode_active);
     }
 
     public function UpdateHourlyForecast()
@@ -538,7 +545,7 @@ class OpenWeatherData extends IPSModule
 
         $this->SetMultiBuffer('HourlyForecast', json_encode($jdata));
 
-        $this->SetStatus(102);
+        $this->SetStatus(StatusCode_active);
     }
 
     private function Build_WeatherSummary()
@@ -683,25 +690,25 @@ class OpenWeatherData extends IPSModule
         $jdata = '';
         if ($httpcode != 200) {
             if ($httpcode >= 500 && $httpcode <= 599) {
-                $statuscode = 202;
+                $statuscode = StatusCode_ServerError;
                 $err = "got http-code $httpcode (server error)";
             } else {
                 $err = "got http-code $httpcode";
-                $statuscode = 203;
+                $statuscode = StatusCode_HttpError;
             }
         } elseif ($cdata == '') {
-            $statuscode = 204;
+            $statuscode = StatusCode_InvalidData;
             $err = 'no data';
         } else {
             $jdata = json_decode($cdata, true);
             if ($jdata == '') {
-                $statuscode = 204;
+                $statuscode = StatusCode_InvalidData;
                 $err = 'malformed response';
             }
         }
 
         if ($statuscode) {
-            echo "url=$url => statuscode=$statuscode, err=$err";
+            echo 'url=' . $url . ' => statuscode=' . $statuscode . ', err=' . $err . PHP_EOL;
             $this->SendDebug(__FUNCTION__, ' => statuscode=' . $statuscode . ', err=' . $err, 0);
             $this->SetStatus($statuscode);
         }
