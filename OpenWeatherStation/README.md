@@ -14,11 +14,11 @@
 
 ## 1. Funktionsumfang
 
-[siehe hier](../README.md)
+[siehe hier](../README.md#1-funktionsumfang)
 
 ## 2. Voraussetzungen
 
-[siehe hier](..README.md#2-voraussetzungen)
+[siehe hier](../README.md#2-voraussetzungen)
 
 ## 3. Installation
 
@@ -219,3 +219,10 @@ echo json_encode($values);
 | :--------------------------: | :-----------------------: |
 | Wetterdaten übertragen       | Übertragun der aktuellen Daten |
 
+## 6. Anhang
+
+[siehe hier](../README.md#6-anhang)
+
+## 7. Versions-Historie
+
+[siehe hier](../README.md#7-versions-historie)
