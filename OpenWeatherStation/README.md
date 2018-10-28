@@ -208,11 +208,11 @@ echo json_encode($values);
 
 ## 6. Anhang
 
-[siehe hier](../README.md#6-anhang)
+siehe [hier](../README.md#6-anhang)
 
 Verweise:
 - https://openweathermap.org/stations
 
 ## 7. Versions-Historie
 
-[siehe hier](../README.md#7-versions-historie)
+siehe [hier](../README.md#7-versions-historie)

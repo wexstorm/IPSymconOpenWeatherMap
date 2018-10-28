@@ -173,11 +173,11 @@ OpenWeatherMap.WindDirection
 
 ## 6. Anhang
 
-[siehe hier](../README.md#6-anhang)
+siehe [hier](../README.md#6-anhang)
 
 Verweise:
 - https://openweathermap.org/current, https://openweathermap.org/forecast5
 
 ## 7. Versions-Historie
 
-[siehe hier](../README.md#7-versions-historie)
+siehe [hier](../README.md#7-versions-historie)
