@@ -1,7 +1,7 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.0-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.7-blue.svg)
+![Module-Version](https://img.shields.io/badge/Modul_Version-1.8-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![StyleCI](https://github.styleci.io/repos/126683101/shield?branch=master)](https://github.styleci.io/repos/146979798)
@@ -22,11 +22,14 @@
 
 _OpenWeatherMap_ (https://openweathermap.org) ist eine Web-Seite, die Wetterdaten bereit stellt. Es gibt eine API, die sowohl einen kostenlosen Zugriff erlaubt als auch komerzielle Angebote beinhaltet.
 
-Das Modul behandelt nur die kostenlosen Zugriffe:
+Das Modul behandelt nur die kostenlosen Zugriffe.
+
+_OpenWeatherData_:
 - aktuellen Daten (_Current weather data_)
 - stündlichen Vorhersagen (_5 day / 3 hour forecast_)
 
-In Vorbereitung ist die Möglichkeit, die Daten einer eigenen Wetterstation _OpenWeatherMap_ zur Verfügung zu stellen.
+_OpenWeatherStation:
+- Übertragng von Daten einer lokalen Wetterstation an _OpenWeather_
 
 ## 2. Voraussetzungen
 
@@ -46,16 +49,14 @@ und mit _OK_ bestätigen.
 
 Anschließend erscheint ein Eintrag für das Modul in der Liste der Instanz _Modules_
 
-### Anmeldung bei __OpenWeatherMap_
-oEs muss ein Account erstellt werden (_https://home.openweathermap.org/users/sign_up_). Nach Anmeldung kann man in dem Punkt _API keys_ einen API erzeugen bzw. diese verwalten.
+### Anmeldung bei _OpenWeatherMap_
+Man muss hier (_https://home.openweathermap.org/users/sign_up_) ein Account erstellen. Nach Anmeldung kann man in dem Punkt _API keys_ einen API-Key erzeugen bzw. diese verwalten.
 
 ### Einrichtung in IPS
 
 In IP-Symcon nun _Instanz hinzufügen_ (_CTRL+1_) auswählen unter der Kategorie, unter der man die Instanz hinzufügen will, und Hersteller _(sonstiges)_ und als Gerät _OpenWeatherData_ auswählen.
 
 ## 4. Funktionsreferenz
-
-### zentrale Funktion
 
 `OpenWeatherData_UpdateData(int $InstanzID)`
 
@@ -71,7 +72,6 @@ liefert die Original-Ergebnisse der HTML-Aufrufe, z.B. zur Darstellung der HTML-
 | :---------------: | :---------------------: |
 | Current           | aktuelle Wetterdaten    |
 | HourlyForecast    | 3-stündliche Vorhersage |
-
 
 
 `float OpenWeatherData_CalcAbsoluteHumidity(int $InstanzID, float $Temperatur, float $Humidity)`
@@ -115,7 +115,7 @@ berechnet aus der Windgeschwindigkeit (in km/h) die Windstärke (in bft)
 ermittelt aus der Windstärke (in bft) die korespondierende Bezeichnung gemäß Beaufortskala
 
 
-## 5. Konfiguration:
+## 5. Konfiguration
 
 ### Variablen
 
@@ -205,12 +205,16 @@ GUIDs
 - Modul: `{BCAEF996-FC2B-420D-A801-5C0B4A021225}`
 - Instanzen:
   - OpenWeatherData: `{8072158E-53BF-482A-B925-F4FBE522CEF2}`
+  - OpenWeatherStation: `{604AD7FF-7883-47E7-A2A8-0C6D3C343BE9}`
 
 Verweise:
 - https://openweathermap.org/api
 
 
 ## 7. Versions-Historie
+
+- 1.8 @ 28.10.2018 09:23<br>
+  - _OpenWeatherStation_ dazu
 
 - 1.7 @ 13.10.2018 17:52<br>
   - Umstellung der internen Speicherung zur Vermeidung der Warnung _Puffer > 8kb_.
