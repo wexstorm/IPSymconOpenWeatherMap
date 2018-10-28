@@ -14,11 +14,11 @@
 
 ## 1. Funktionsumfang
 
-[siehe hier](..)
+[siehe hier](../README.md)
 
 ## 2. Voraussetzungen
 
-[siehe hier](..#2-voraussetzungen)
+[siehe hier](..README.md#2-voraussetzungen)
 
 ## 3. Installation
 
