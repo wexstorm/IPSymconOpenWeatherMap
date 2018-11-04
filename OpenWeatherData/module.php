@@ -11,16 +11,6 @@ if (!defined('vtBoolean')) {
     define('vtObject', 9);
 }
 
-if (!defined('StatusCode_inactive')) {
-    define('StatusCode_creating', 101);
-    define('StatusCode_active', 102);
-    define('StatusCode_inactive', 104);
-    define('StatusCode_InvalidConfig', 201);
-    define('StatusCode_ServerError', 202);
-    define('StatusCode_HttpError', 203);
-    define('StatusCode_InvalidData', 204);
-}
-
 class OpenWeatherData extends IPSModule
 {
     use OpenWeatherMapCommon;
@@ -152,9 +142,9 @@ class OpenWeatherData extends IPSModule
 
         $appid = $this->ReadPropertyString('appid');
         if ($appid == '') {
-            $this->SetStatus(StatusCode_InvalidConfig);
+            $this->SetStatus(IS_INVALIDCONFIG);
         } else {
-            $this->SetStatus(StatusCode_active);
+            $this->SetStatus(IS_ACTIVE);
         }
 
         $this->SetUpdateInterval();
@@ -210,13 +200,16 @@ class OpenWeatherData extends IPSModule
                         ];
 
         $formStatus = [];
-        $formStatus[] = ['code' => StatusCode_creating, 'icon' => 'inactive', 'caption' => 'Instance getting created'];
-        $formStatus[] = ['code' => StatusCode_active, 'icon' => 'active', 'caption' => 'Instance is active'];
-        $formStatus[] = ['code' => StatusCode_inactive, 'icon' => 'inactive', 'caption' => 'Instance is inactive'];
-        $formStatus[] = ['code' => StatusCode_InvalidConfig, 'icon' => 'error', 'caption' => 'Instance is inactive (invalid configuration)'];
-        $formStatus[] = ['code' => StatusCode_ServerError, 'icon' => 'error', 'caption' => 'Instance is inactive (server error)'];
-        $formStatus[] = ['code' => StatusCode_HttpError, 'icon' => 'error', 'caption' => 'Instance is inactive (http error)'];
-        $formStatus[] = ['code' => StatusCode_InvalidData, 'icon' => 'error', 'caption' => 'Instance is inactive (invalid data)'];
+        $formStatus[] = ['code' => IS_CREATING, 'icon' => 'inactive', 'caption' => 'Instance getting created'];
+        $formStatus[] = ['code' => IS_ACTIVE, 'icon' => 'active', 'caption' => 'Instance is active'];
+		$formStatus[] = ['code' => IS_DELETING, 'icon' => 'inactive', 'caption' => 'Instance is deleted'];
+        $formStatus[] = ['code' => IS_INACTIVE, 'icon' => 'inactive', 'caption' => 'Instance is inactive'];
+		$formStatus[] = ['code' => IS_NOTCREATED, 'icon' => 'inactive', 'caption' => 'Instance is not created'];
+
+        $formStatus[] = ['code' => IS_INVALIDCONFIG, 'icon' => 'error', 'caption' => 'Instance is inactive (invalid configuration)'];
+        $formStatus[] = ['code' => IS_SERVERERROR, 'icon' => 'error', 'caption' => 'Instance is inactive (server error)'];
+        $formStatus[] = ['code' => IS_HTTPERROR, 'icon' => 'error', 'caption' => 'Instance is inactive (http error)'];
+        $formStatus[] = ['code' => IS_INVALIDDATA, 'icon' => 'error', 'caption' => 'Instance is inactive (invalid data)'];
         return json_encode(['elements' => $formElements, 'actions' => $formActions, 'status' => $formStatus]);
     }
 
@@ -397,7 +390,7 @@ class OpenWeatherData extends IPSModule
 
         $this->SetMultiBuffer('Current', json_encode($jdata));
 
-        $this->SetStatus(StatusCode_active);
+        $this->SetStatus(IS_ACTIVE);
     }
 
     public function UpdateHourlyForecast()
@@ -545,7 +538,7 @@ class OpenWeatherData extends IPSModule
 
         $this->SetMultiBuffer('HourlyForecast', json_encode($jdata));
 
-        $this->SetStatus(StatusCode_active);
+        $this->SetStatus(IS_ACTIVE);
     }
 
     private function Build_WeatherSummary()
@@ -690,19 +683,19 @@ class OpenWeatherData extends IPSModule
         $jdata = '';
         if ($httpcode != 200) {
             if ($httpcode >= 500 && $httpcode <= 599) {
-                $statuscode = StatusCode_ServerError;
+                $statuscode = IS_SERVERERROR;
                 $err = "got http-code $httpcode (server error)";
             } else {
                 $err = "got http-code $httpcode";
-                $statuscode = StatusCode_HttpError;
+                $statuscode = IS_HTTPERROR;
             }
         } elseif ($cdata == '') {
-            $statuscode = StatusCode_InvalidData;
+            $statuscode = IS_INVALIDDATA;
             $err = 'no data';
         } else {
             $jdata = json_decode($cdata, true);
             if ($jdata == '') {
-                $statuscode = StatusCode_InvalidData;
+                $statuscode = IS_INVALIDDATA;
                 $err = 'malformed response';
             }
         }
