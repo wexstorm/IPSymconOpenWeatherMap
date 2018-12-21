@@ -113,8 +113,5 @@ Verweise:
   - Sprache der texuellen Informationen per Konfigurationsdialog einstellbar
   - Angabe der Einheiten bestimmer Felder im Konfigurationsdialog
 
-- 1.1 @ 21.12.2018 13:10<br>
-  - Standard-Konstanten verwenden
-
 - 1.0 @ 25.09.2018 17:35<br>
   Initiale Version
