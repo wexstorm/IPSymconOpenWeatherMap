@@ -42,19 +42,19 @@ class OpenWeatherData extends IPSModule
         $this->RegisterPropertyBoolean('with_summary', false);
         $this->RegisterPropertyInteger('summary_script', 0);
 
-        $this->CreateVarProfile('OpenWeatherMap.Temperatur', vtFloat, ' °C', -10, 30, 0, 1, 'Temperature');
-        $this->CreateVarProfile('OpenWeatherMap.Humidity', vtFloat, ' %', 0, 0, 0, 0, 'Drops');
-        $this->CreateVarProfile('OpenWeatherMap.absHumidity', vtFloat, ' g/m³', 10, 100, 0, 0, 'Drops');
-        $this->CreateVarProfile('OpenWeatherMap.Dewpoint', vtFloat, ' °C', 0, 30, 0, 0, 'Drops');
-        $this->CreateVarProfile('OpenWeatherMap.Heatindex', vtFloat, ' °C', 0, 100, 0, 0, 'Temperature');
-        $this->CreateVarProfile('OpenWeatherMap.Pressure', vtFloat, ' mbar', 500, 1200, 0, 0, 'Gauge');
-        $this->CreateVarProfile('OpenWeatherMap.WindSpeed', vtFloat, ' km/h', 0, 100, 0, 1, 'WindSpeed');
-        $this->CreateVarProfile('OpenWeatherMap.WindStrength', vtInteger, ' bft', 0, 13, 0, 0, 'WindSpeed');
-        $this->CreateVarProfile('OpenWeatherMap.WindAngle', vtInteger, ' °', 0, 360, 0, 0, 'WindDirection');
-        $this->CreateVarProfile('OpenWeatherMap.WindDirection', vtString, '', 0, 0, 0, 0, 'WindDirection');
-        $this->CreateVarProfile('OpenWeatherMap.Rainfall', vtFloat, ' mm', 0, 60, 0, 1, 'Rainfall');
-        $this->CreateVarProfile('OpenWeatherMap.Snowfall', vtFloat, ' mm', 0, 60, 0, 1, 'Snow');
-        $this->CreateVarProfile('OpenWeatherMap.Cloudiness', vtFloat, ' %', 0, 0, 0, 0, 'Cloud');
+        $this->CreateVarProfile('OpenWeatherMap.Temperatur', VARIABLETYPE_FLOAT, ' °C', -10, 30, 0, 1, 'Temperature');
+        $this->CreateVarProfile('OpenWeatherMap.Humidity', VARIABLETYPE_FLOAT, ' %', 0, 0, 0, 0, 'Drops');
+        $this->CreateVarProfile('OpenWeatherMap.absHumidity', VARIABLETYPE_FLOAT, ' g/m³', 10, 100, 0, 0, 'Drops');
+        $this->CreateVarProfile('OpenWeatherMap.Dewpoint', VARIABLETYPE_FLOAT, ' °C', 0, 30, 0, 0, 'Drops');
+        $this->CreateVarProfile('OpenWeatherMap.Heatindex', VARIABLETYPE_FLOAT, ' °C', 0, 100, 0, 0, 'Temperature');
+        $this->CreateVarProfile('OpenWeatherMap.Pressure', VARIABLETYPE_FLOAT, ' mbar', 500, 1200, 0, 0, 'Gauge');
+        $this->CreateVarProfile('OpenWeatherMap.WindSpeed', VARIABLETYPE_FLOAT, ' km/h', 0, 100, 0, 1, 'WindSpeed');
+        $this->CreateVarProfile('OpenWeatherMap.WindStrength', VARIABLETYPE_INTEGER, ' bft', 0, 13, 0, 0, 'WindSpeed');
+        $this->CreateVarProfile('OpenWeatherMap.WindAngle', VARIABLETYPE_INTEGER, ' °', 0, 360, 0, 0, 'WindDirection');
+        $this->CreateVarProfile('OpenWeatherMap.WindDirection', VARIABLETYPE_STRING, '', 0, 0, 0, 0, 'WindDirection');
+        $this->CreateVarProfile('OpenWeatherMap.Rainfall', VARIABLETYPE_FLOAT, ' mm', 0, 60, 0, 1, 'Rainfall');
+        $this->CreateVarProfile('OpenWeatherMap.Snowfall', VARIABLETYPE_FLOAT, ' mm', 0, 60, 0, 1, 'Snow');
+        $this->CreateVarProfile('OpenWeatherMap.Cloudiness', VARIABLETYPE_FLOAT, ' %', 0, 0, 0, 0, 'Cloud');
 
         $this->RegisterTimer('UpdateData', 0, 'OpenWeatherData_UpdateData(' . $this->InstanceID . ');');
 
@@ -83,27 +83,27 @@ class OpenWeatherData extends IPSModule
         $with_summary = $this->ReadPropertyBoolean('with_summary');
 
         $vpos = 0;
-        $this->MaintainVariable('Temperature', $this->Translate('Temperature'), vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, true);
-        $this->MaintainVariable('Humidity', $this->Translate('Humidity'), vtFloat, 'OpenWeatherMap.Humidity', $vpos++, true);
-        $this->MaintainVariable('AbsoluteHumidity', $this->Translate('absolute humidity'), vtFloat, 'OpenWeatherMap.absHumidity', $vpos++, $with_absolute_humidity);
-        $this->MaintainVariable('Dewpoint', $this->Translate('Dewpoint'), vtFloat, 'OpenWeatherMap.Dewpoint', $vpos++, $with_dewpoint);
-        $this->MaintainVariable('Heatindex', $this->Translate('Heatindex'), vtFloat, 'OpenWeatherMap.Heatindex', $vpos++, $with_heatindex);
-        $this->MaintainVariable('Windchill', $this->Translate('Windchill'), vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, $with_windchill);
-        $this->MaintainVariable('Pressure', $this->Translate('Air pressure'), vtFloat, 'OpenWeatherMap.Pressure', $vpos++, true);
-        $this->MaintainVariable('AbsolutePressure', $this->Translate('absolute pressure'), vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $with_absolute_pressure);
-        $this->MaintainVariable('WindSpeed', $this->Translate('Windspeed'), vtFloat, 'OpenWeatherMap.WindSpeed', $vpos++, true);
-        $this->MaintainVariable('WindStrength', $this->Translate('Windstrength'), vtInteger, 'OpenWeatherMap.WindStrength', $vpos++, $with_windstrength);
-        $this->MaintainVariable('WindStrengthText', $this->Translate('Windstrength'), vtString, '', $vpos++, $with_windstrength2text);
-        $this->MaintainVariable('WindAngle', $this->Translate('Winddirection'), vtInteger, 'OpenWeatherMap.WindAngle', $vpos++, $with_windangle);
-        $this->MaintainVariable('WindDirection', $this->Translate('Winddirection'), vtString, 'OpenWeatherMap.WindDirection', $vpos++, $with_winddirection);
-        $this->MaintainVariable('Rain_3h', $this->Translate('Rainfall of last 3 hours'), vtFloat, 'OpenWeatherMap.Rainfall', $vpos++, true);
-        $this->MaintainVariable('Snow_3h', $this->Translate('Snowfall of last 3 hours'), vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, true);
-        $this->MaintainVariable('Cloudiness', $this->Translate('Cloudiness'), vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $with_cloudiness);
-        $this->MaintainVariable('Conditions', $this->Translate('Conditions'), vtString, '', $vpos++, $with_conditions);
-        $this->MaintainVariable('ConditionIcon', $this->Translate('Condition-icon'), vtString, '', $vpos++, $with_icon);
-        $this->MaintainVariable('ConditionId', $this->Translate('Condition-id'), vtString, '', $vpos++, $with_condition_id);
-        $this->MaintainVariable('LastMeasurement', $this->Translate('last measurement'), vtInteger, '~UnixTimestamp', $vpos++, true);
-        $this->MaintainVariable('WeatherSummary', $this->Translate('Summary of weather'), vtString, '~HTMLBox', $vpos++, $with_summary);
+        $this->MaintainVariable('Temperature', $this->Translate('Temperature'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Temperatur', $vpos++, true);
+        $this->MaintainVariable('Humidity', $this->Translate('Humidity'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Humidity', $vpos++, true);
+        $this->MaintainVariable('AbsoluteHumidity', $this->Translate('absolute humidity'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.absHumidity', $vpos++, $with_absolute_humidity);
+        $this->MaintainVariable('Dewpoint', $this->Translate('Dewpoint'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Dewpoint', $vpos++, $with_dewpoint);
+        $this->MaintainVariable('Heatindex', $this->Translate('Heatindex'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Heatindex', $vpos++, $with_heatindex);
+        $this->MaintainVariable('Windchill', $this->Translate('Windchill'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Temperatur', $vpos++, $with_windchill);
+        $this->MaintainVariable('Pressure', $this->Translate('Air pressure'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Pressure', $vpos++, true);
+        $this->MaintainVariable('AbsolutePressure', $this->Translate('absolute pressure'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Pressure', $vpos++, $with_absolute_pressure);
+        $this->MaintainVariable('WindSpeed', $this->Translate('Windspeed'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.WindSpeed', $vpos++, true);
+        $this->MaintainVariable('WindStrength', $this->Translate('Windstrength'), VARIABLETYPE_INTEGER, 'OpenWeatherMap.WindStrength', $vpos++, $with_windstrength);
+        $this->MaintainVariable('WindStrengthText', $this->Translate('Windstrength'), VARIABLETYPE_STRING, '', $vpos++, $with_windstrength2text);
+        $this->MaintainVariable('WindAngle', $this->Translate('Winddirection'), VARIABLETYPE_INTEGER, 'OpenWeatherMap.WindAngle', $vpos++, $with_windangle);
+        $this->MaintainVariable('WindDirection', $this->Translate('Winddirection'), VARIABLETYPE_STRING, 'OpenWeatherMap.WindDirection', $vpos++, $with_winddirection);
+        $this->MaintainVariable('Rain_3h', $this->Translate('Rainfall of last 3 hours'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Rainfall', $vpos++, true);
+        $this->MaintainVariable('Snow_3h', $this->Translate('Snowfall of last 3 hours'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Snowfall', $vpos++, true);
+        $this->MaintainVariable('Cloudiness', $this->Translate('Cloudiness'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.Cloudiness', $vpos++, $with_cloudiness);
+        $this->MaintainVariable('Conditions', $this->Translate('Conditions'), VARIABLETYPE_STRING, '', $vpos++, $with_conditions);
+        $this->MaintainVariable('ConditionIcon', $this->Translate('Condition-icon'), VARIABLETYPE_STRING, '', $vpos++, $with_icon);
+        $this->MaintainVariable('ConditionId', $this->Translate('Condition-id'), VARIABLETYPE_STRING, '', $vpos++, $with_condition_id);
+        $this->MaintainVariable('LastMeasurement', $this->Translate('last measurement'), VARIABLETYPE_INTEGER, '~UnixTimestamp', $vpos++, true);
+        $this->MaintainVariable('WeatherSummary', $this->Translate('Summary of weather'), VARIABLETYPE_STRING, '~HTMLBox', $vpos++, $with_summary);
 
         for ($i = 0; $i < 40; $i++) {
             $vpos = 1000 + (100 * $i);
@@ -112,23 +112,23 @@ class OpenWeatherData extends IPSModule
             $pre = 'HourlyForecast';
             $post = '_' . sprintf('%02d', $i);
 
-            $this->MaintainVariable($pre . 'Begin' . $post, $this->Translate('Begin of forecast-period') . $s, vtInteger, '~UnixTimestamp', $vpos++, $use);
-            $this->MaintainVariable($pre . 'TemperatureMin' . $post, $this->Translate('minimum temperature') . $s, vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, $use);
-            $this->MaintainVariable($pre . 'TemperatureMax' . $post, $this->Translate('maximum temperature') . $s, vtFloat, 'OpenWeatherMap.Temperatur', $vpos++, $use);
-            $this->MaintainVariable($pre . 'Humidity' . $post, $this->Translate('Humidity') . $s, vtFloat, 'OpenWeatherMap.Humidity', $vpos++, $use);
-            $this->MaintainVariable($pre . 'Pressure' . $post, $this->Translate('Air pressure') . $s, vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $use);
-            $this->MaintainVariable($pre . 'AbsolutePressure' . $post, $this->Translate('absolute pressure') . $s, vtFloat, 'OpenWeatherMap.Pressure', $vpos++, $use && $with_absolute_pressure);
-            $this->MaintainVariable($pre . 'WindSpeed' . $post, $this->Translate('Windspeed') . $s, vtFloat, 'OpenWeatherMap.WindSpeed', $vpos++, $use);
-            $this->MaintainVariable($pre . 'WindStrength' . $post, $this->Translate('Windstrength') . $s, vtInteger, 'OpenWeatherMap.WindStrength', $vpos++, $use && $with_windstrength);
-            $this->MaintainVariable($pre . 'WindStrengthText' . $post, $this->Translate('Windstrength') . $s, vtString, '', $vpos++, $use && $with_windstrength2text);
-            $this->MaintainVariable($pre . 'WindAngle' . $post, $this->Translate('Winddirection') . $s, vtInteger, 'OpenWeatherMap.WindAngle', $vpos++, $use && $with_windangle);
-            $this->MaintainVariable($pre . 'WindDirection' . $post, $this->Translate('Winddirection') . $s, vtString, 'OpenWeatherMap.WindDirection', $vpos++, $use && $with_winddirection);
-            $this->MaintainVariable($pre . 'Rain_3h' . $post, $this->Translate('Rainfall') . $s, vtFloat, 'OpenWeatherMap.Rainfall', $vpos++, $use);
-            $this->MaintainVariable($pre . 'Snow_3h' . $post, $this->Translate('Snowfall') . $s, vtFloat, 'OpenWeatherMap.Snowfall', $vpos++, $use);
-            $this->MaintainVariable($pre . 'Cloudiness' . $post, $this->Translate('Cloudiness') . $s, vtFloat, 'OpenWeatherMap.Cloudiness', $vpos++, $use && $with_cloudiness);
-            $this->MaintainVariable($pre . 'Conditions' . $post, $this->Translate('Conditions') . $s, vtString, '', $vpos++, $use && $with_conditions);
-            $this->MaintainVariable($pre . 'ConditionIcon' . $post, $this->Translate('Condition-icon') . $s, vtString, '', $vpos++, $use && $with_icon);
-            $this->MaintainVariable($pre . 'ConditionId' . $post, $this->Translate('Condition-id') . $s, vtString, '', $vpos++, $use && $with_condition_id);
+            $this->MaintainVariable($pre . 'Begin' . $post, $this->Translate('Begin of forecast-period') . $s, VARIABLETYPE_INTEGER, '~UnixTimestamp', $vpos++, $use);
+            $this->MaintainVariable($pre . 'TemperatureMin' . $post, $this->Translate('minimum temperature') . $s, VARIABLETYPE_FLOAT, 'OpenWeatherMap.Temperatur', $vpos++, $use);
+            $this->MaintainVariable($pre . 'TemperatureMax' . $post, $this->Translate('maximum temperature') . $s, VARIABLETYPE_FLOAT, 'OpenWeatherMap.Temperatur', $vpos++, $use);
+            $this->MaintainVariable($pre . 'Humidity' . $post, $this->Translate('Humidity') . $s, VARIABLETYPE_FLOAT, 'OpenWeatherMap.Humidity', $vpos++, $use);
+            $this->MaintainVariable($pre . 'Pressure' . $post, $this->Translate('Air pressure') . $s, VARIABLETYPE_FLOAT, 'OpenWeatherMap.Pressure', $vpos++, $use);
+            $this->MaintainVariable($pre . 'AbsolutePressure' . $post, $this->Translate('absolute pressure') . $s, VARIABLETYPE_FLOAT, 'OpenWeatherMap.Pressure', $vpos++, $use && $with_absolute_pressure);
+            $this->MaintainVariable($pre . 'WindSpeed' . $post, $this->Translate('Windspeed') . $s, VARIABLETYPE_FLOAT, 'OpenWeatherMap.WindSpeed', $vpos++, $use);
+            $this->MaintainVariable($pre . 'WindStrength' . $post, $this->Translate('Windstrength') . $s, VARIABLETYPE_INTEGER, 'OpenWeatherMap.WindStrength', $vpos++, $use && $with_windstrength);
+            $this->MaintainVariable($pre . 'WindStrengthText' . $post, $this->Translate('Windstrength') . $s, VARIABLETYPE_STRING, '', $vpos++, $use && $with_windstrength2text);
+            $this->MaintainVariable($pre . 'WindAngle' . $post, $this->Translate('Winddirection') . $s, VARIABLETYPE_INTEGER, 'OpenWeatherMap.WindAngle', $vpos++, $use && $with_windangle);
+            $this->MaintainVariable($pre . 'WindDirection' . $post, $this->Translate('Winddirection') . $s, VARIABLETYPE_STRING, 'OpenWeatherMap.WindDirection', $vpos++, $use && $with_winddirection);
+            $this->MaintainVariable($pre . 'Rain_3h' . $post, $this->Translate('Rainfall') . $s, VARIABLETYPE_FLOAT, 'OpenWeatherMap.Rainfall', $vpos++, $use);
+            $this->MaintainVariable($pre . 'Snow_3h' . $post, $this->Translate('Snowfall') . $s, VARIABLETYPE_FLOAT, 'OpenWeatherMap.Snowfall', $vpos++, $use);
+            $this->MaintainVariable($pre . 'Cloudiness' . $post, $this->Translate('Cloudiness') . $s, VARIABLETYPE_FLOAT, 'OpenWeatherMap.Cloudiness', $vpos++, $use && $with_cloudiness);
+            $this->MaintainVariable($pre . 'Conditions' . $post, $this->Translate('Conditions') . $s, VARIABLETYPE_STRING, '', $vpos++, $use && $with_conditions);
+            $this->MaintainVariable($pre . 'ConditionIcon' . $post, $this->Translate('Condition-icon') . $s, VARIABLETYPE_STRING, '', $vpos++, $use && $with_icon);
+            $this->MaintainVariable($pre . 'ConditionId' . $post, $this->Translate('Condition-id') . $s, VARIABLETYPE_STRING, '', $vpos++, $use && $with_condition_id);
         }
 
         $appid = $this->ReadPropertyString('appid');

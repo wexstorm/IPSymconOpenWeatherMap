@@ -45,7 +45,7 @@ class OpenWeatherStation extends IPSModule
         parent::ApplyChanges();
 
         $vpos = 0;
-        $this->MaintainVariable('LastTransmission', $this->Translate('last transmission'), vtInteger, '~UnixTimestamp', $vpos++, true);
+        $this->MaintainVariable('LastTransmission', $this->Translate('last transmission'), VARIABLETYPE_INTEGER, '~UnixTimestamp', $vpos++, true);
 
         $appid = $this->ReadPropertyString('appid');
         if ($appid == '') {
