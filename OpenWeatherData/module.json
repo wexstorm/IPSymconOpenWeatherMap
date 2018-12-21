@@ -1,11 +1,13 @@
 {
 	"id": "{8072158E-53BF-482A-B925-F4FBE522CEF2}",
-	"name": "OpenWeatherMap",
+	"name": "OpenWeatherData",
 	"type": 3,
 	"vendor": "",
-	"aliases": [],
+	"aliases": [
+			"OpenWeatherMap - Datenabruf"
+		],
 	"parentRequirements": [],
 	"childRequirements": [],
 	"implemented": [],
-	"prefix": "OpenWeatherMap"
+	"prefix": "OpenWeatherData"
 }
