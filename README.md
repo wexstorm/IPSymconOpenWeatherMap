@@ -1,10 +1,10 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.0-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.0-blue.svg)
+![Module-Version](https://img.shields.io/badge/Modul_Version-1.1-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-[![StyleCI](https://github.styleci.io/repos/126683101/shield?branch=master)](https://github.styleci.io/repos/146979798)
+[![StyleCI](https://github.styleci.io/repos/126683101/shield?branch=master)](https://github.styleci.io/repos/150288134)
 
 ## Dokumentation
 
@@ -77,6 +77,9 @@ GUIDs
   - OpenWeatherMap: `{8072158E-53BF-482A-B925-F4FBE522CEF2}`
 
 ## 7. Versions-Historie
+
+- 1.1 @ 21.12.2018 13:10<br>
+  - Standard-Konstanten verwenden
 
 - 1.0 @ 25.09.2018 17:35<br>
   Initiale Version
