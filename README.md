@@ -79,6 +79,9 @@ Verweise:
 
 ## 7. Versions-Historie
 
+- 1.11 @ 22.12.2018 12:10<br>
+  - Fehler in der http-Kommunikation nun nicht mehr mit _echo_ (also als **ERROR**) sondern mit _LogMessage_ als **NOTIFY**
+
 - 1.10 @ 21.12.2018 13:10<br>
   - Standard-Konstanten verwenden
 
