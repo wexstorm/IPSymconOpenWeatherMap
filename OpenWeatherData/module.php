@@ -10,7 +10,7 @@ class OpenWeatherData extends IPSModule
     {
         parent::Create();
 
-		$this->RegisterPropertyBoolean('module_disable', false);
+        $this->RegisterPropertyBoolean('module_disable', false);
 
         $this->RegisterPropertyString('appid', '');
         $this->RegisterPropertyFloat('longitude', 0);
@@ -133,12 +133,12 @@ class OpenWeatherData extends IPSModule
             $this->MaintainVariable($pre . 'ConditionId' . $post, $this->Translate('Condition-id') . $s, VARIABLETYPE_STRING, '', $vpos++, $use && $with_condition_id);
         }
 
-		$module_disable = $this->ReadPropertyBoolean('module_disable');
-		if ($module_disable) {
-		    $this->SetTimerInterval('UpdateData', 0);
-			$this->SetStatus(IS_INACTIVE);
-			return;
-		}
+        $module_disable = $this->ReadPropertyBoolean('module_disable');
+        if ($module_disable) {
+            $this->SetTimerInterval('UpdateData', 0);
+            $this->SetStatus(IS_INACTIVE);
+            return;
+        }
 
         $appid = $this->ReadPropertyString('appid');
         if ($appid == '') {
@@ -152,7 +152,7 @@ class OpenWeatherData extends IPSModule
     public function GetConfigurationForm()
     {
         $formElements = [];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'module_disable', 'caption' => 'Instance is disabled'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'module_disable', 'caption' => 'Instance is disabled'];
         $formElements[] = ['type' => 'Label', 'label' => 'OpenWeatherMap - fetch current observations and forecast'];
         $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'appid', 'caption' => 'API-Key'];
 
@@ -222,11 +222,11 @@ class OpenWeatherData extends IPSModule
 
     public function UpdateData()
     {
-		$inst = IPS_GetInstance($this->InstanceID);
-		if ($inst['InstanceStatus'] == IS_INACTIVE) {
-			$this->SendDebug(__FUNCTION__, 'instance is inactive, skip', 0);
-			return;
-		}
+        $inst = IPS_GetInstance($this->InstanceID);
+        if ($inst['InstanceStatus'] == IS_INACTIVE) {
+            $this->SendDebug(__FUNCTION__, 'instance is inactive, skip', 0);
+            return;
+        }
 
         $with_summary = $this->ReadPropertyBoolean('with_summary');
 
@@ -246,11 +246,11 @@ class OpenWeatherData extends IPSModule
 
     public function UpdateCurrent()
     {
-		$inst = IPS_GetInstance($this->InstanceID);
-		if ($inst['InstanceStatus'] == IS_INACTIVE) {
-			$this->SendDebug(__FUNCTION__, 'instance is inactive, skip', 0);
-			return;
-		}
+        $inst = IPS_GetInstance($this->InstanceID);
+        if ($inst['InstanceStatus'] == IS_INACTIVE) {
+            $this->SendDebug(__FUNCTION__, 'instance is inactive, skip', 0);
+            return;
+        }
 
         $lat = $this->ReadPropertyFloat('latitude');
         $lng = $this->ReadPropertyFloat('longitude');
@@ -407,11 +407,11 @@ class OpenWeatherData extends IPSModule
 
     public function UpdateHourlyForecast()
     {
-		$inst = IPS_GetInstance($this->InstanceID);
-		if ($inst['InstanceStatus'] == IS_INACTIVE) {
-			$this->SendDebug(__FUNCTION__, 'instance is inactive, skip', 0);
-			return;
-		}
+        $inst = IPS_GetInstance($this->InstanceID);
+        if ($inst['InstanceStatus'] == IS_INACTIVE) {
+            $this->SendDebug(__FUNCTION__, 'instance is inactive, skip', 0);
+            return;
+        }
 
         $hourly_forecast_count = $this->ReadPropertyInteger('hourly_forecast_count');
         if (!$hourly_forecast_count) {
@@ -690,8 +690,8 @@ class OpenWeatherData extends IPSModule
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         $cdata = curl_exec($ch);
-		$cerrno = curl_errno($ch);
-		$cerror = $cerrno ? curl_error($ch) : '';
+        $cerrno = curl_errno($ch);
+        $cerror = $cerrno ? curl_error($ch) : '';
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
@@ -703,9 +703,9 @@ class OpenWeatherData extends IPSModule
         $err = '';
         $jdata = '';
         if ($cerrno) {
-			$statuscode = IS_SERVERERROR;
-			$err = 'got curl-errno ' . $cerrno . ' (' . $cerror . ')';
-		} elseif ($httpcode != 200) {
+            $statuscode = IS_SERVERERROR;
+            $err = 'got curl-errno ' . $cerrno . ' (' . $cerror . ')';
+        } elseif ($httpcode != 200) {
             if ($httpcode >= 500 && $httpcode <= 599) {
                 $statuscode = IS_SERVERERROR;
                 $err = "got http-code $httpcode (server error)";

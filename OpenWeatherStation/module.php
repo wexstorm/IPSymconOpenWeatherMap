@@ -10,7 +10,7 @@ class OpenWeatherStation extends IPSModule
     {
         parent::Create();
 
-		$this->RegisterPropertyBoolean('module_disable', false);
+        $this->RegisterPropertyBoolean('module_disable', false);
 
         $this->RegisterPropertyString('appid', '');
         $this->RegisterPropertyString('station_id', '');
@@ -49,12 +49,12 @@ class OpenWeatherStation extends IPSModule
         $vpos = 0;
         $this->MaintainVariable('LastTransmission', $this->Translate('last transmission'), VARIABLETYPE_INTEGER, '~UnixTimestamp', $vpos++, true);
 
-		$module_disable = $this->ReadPropertyBoolean('module_disable');
-		if ($module_disable) {
-		    $this->SetTimerInterval('TransmitMeasurements', 0);
-			$this->SetStatus(IS_INACTIVE);
-			return;
-		}
+        $module_disable = $this->ReadPropertyBoolean('module_disable');
+        if ($module_disable) {
+            $this->SetTimerInterval('TransmitMeasurements', 0);
+            $this->SetStatus(IS_INACTIVE);
+            return;
+        }
 
         $appid = $this->ReadPropertyString('appid');
         if ($appid == '') {
@@ -69,7 +69,7 @@ class OpenWeatherStation extends IPSModule
     public function GetConfigurationForm()
     {
         $formElements = [];
-		$formElements[] = ['type' => 'CheckBox', 'name' => 'module_disable', 'caption' => 'Instance is disabled'];
+        $formElements[] = ['type' => 'CheckBox', 'name' => 'module_disable', 'caption' => 'Instance is disabled'];
         $formElements[] = ['type' => 'Label', 'label' => 'OpenWeatherMap - Transmission of measurement values of own weather station'];
         $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'appid', 'caption' => 'API-Key'];
 
@@ -322,11 +322,11 @@ class OpenWeatherStation extends IPSModule
 
     private function do_HttpRequest($cmd, $args, $postdata, $mode, &$result)
     {
-		$inst = IPS_GetInstance($this->InstanceID);
-		if ($inst['InstanceStatus'] == IS_INACTIVE) {
-			$this->SendDebug(__FUNCTION__, 'instance is inactive, skip', 0);
-			return;
-		}
+        $inst = IPS_GetInstance($this->InstanceID);
+        if ($inst['InstanceStatus'] == IS_INACTIVE) {
+            $this->SendDebug(__FUNCTION__, 'instance is inactive, skip', 0);
+            return;
+        }
 
         $appid = $this->ReadPropertyString('appid');
 
