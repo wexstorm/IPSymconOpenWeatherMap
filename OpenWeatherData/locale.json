@@ -1,9 +1,12 @@
 {
 	"translations": {
 		"de": {
-			"OpenWeatherMap - fetch current observations and forecast": "OpenWeatherMap - Abruf aktueller Beobachtungen und Vorhersagen",
+			"Instance is disabled": "Instanz ist deaktiviert",
 
-			"station data - if position is not set, Modue 'Location' is used": "Angaben zur Station - falls die Position nicht angegeben ist, wird das Modul 'Location' verwendet",
+			"OpenWeatherMap - fetch current observations and forecast":
+				"OpenWeatherMap - Abruf aktueller Beobachtungen und Vorhersagen",
+			"station data - if position is not set, Modue 'Location' is used":
+				"Angaben zur Station - falls die Position nicht angegeben ist, wird das Modul 'Location' verwendet",
 			"Longitude" : "Längengrad",
 			"Latitude" : "Breitengrad",
 			"Altitude" : "Höhe",

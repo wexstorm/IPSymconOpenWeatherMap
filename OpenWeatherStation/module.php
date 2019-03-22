@@ -10,6 +10,8 @@ class OpenWeatherStation extends IPSModule
     {
         parent::Create();
 
+		$this->RegisterPropertyBoolean('module_disable', false);
+
         $this->RegisterPropertyString('appid', '');
         $this->RegisterPropertyString('station_id', '');
 
@@ -47,6 +49,13 @@ class OpenWeatherStation extends IPSModule
         $vpos = 0;
         $this->MaintainVariable('LastTransmission', $this->Translate('last transmission'), VARIABLETYPE_INTEGER, '~UnixTimestamp', $vpos++, true);
 
+		$module_disable = $this->ReadPropertyBoolean('module_disable');
+		if ($module_disable) {
+		    $this->SetTimerInterval('TransmitMeasurements', 0);
+			$this->SetStatus(IS_INACTIVE);
+			return;
+		}
+
         $appid = $this->ReadPropertyString('appid');
         if ($appid == '') {
             $this->SetStatus(IS_INVALIDCONFIG);
@@ -60,6 +69,7 @@ class OpenWeatherStation extends IPSModule
     public function GetConfigurationForm()
     {
         $formElements = [];
+		$formElements[] = ['type' => 'CheckBox', 'name' => 'module_disable', 'caption' => 'Instance is disabled'];
         $formElements[] = ['type' => 'Label', 'label' => 'OpenWeatherMap - Transmission of measurement values of own weather station'];
         $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'appid', 'caption' => 'API-Key'];
 
@@ -91,7 +101,7 @@ class OpenWeatherStation extends IPSModule
         $formElements[] = ['type' => 'SelectScript', 'name' => 'convert_script', 'caption' => 'script'];
 
         $formElements[] = ['type' => 'Label', 'label' => 'Transmit weatherdata every X minutes'];
-        $formElements[] = ['type' => 'IntervalBox', 'name' => 'transmit_interval', 'caption' => 'Minutes'];
+        $formElements[] = ['type' => 'NumberSpinner', 'name' => 'transmit_interval', 'caption' => 'Minutes'];
 
         $formActions = [];
         $formActions[] = ['type' => 'Button', 'label' => 'Transmit weatherdata', 'onClick' => 'OpenWeatherStation_TransmitMeasurements($id);'];
@@ -312,6 +322,12 @@ class OpenWeatherStation extends IPSModule
 
     private function do_HttpRequest($cmd, $args, $postdata, $mode, &$result)
     {
+		$inst = IPS_GetInstance($this->InstanceID);
+		if ($inst['InstanceStatus'] == IS_INACTIVE) {
+			$this->SendDebug(__FUNCTION__, 'instance is inactive, skip', 0);
+			return;
+		}
+
         $appid = $this->ReadPropertyString('appid');
 
         $url = 'https://api.openweathermap.org/' . $cmd . '?appid=' . $appid;

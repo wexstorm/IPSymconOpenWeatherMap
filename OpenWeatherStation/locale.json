@@ -1,8 +1,12 @@
 {
 	"translations": {
 		"de": {
-			"OpenWeatherMap - Transmission of measurement values of own weather station": "OpenWeatherMap - Übertragung von Werten einer eigenen Wetterstation",
-			"station data - if position is not set, Modue 'Location' is used": "Angaben zur Station - falls die Position nicht angegeben ist, wird das Modul 'Location' verwendet",
+			"Instance is disabled": "Instanz ist deaktiviert",
+
+			"OpenWeatherMap - Transmission of measurement values of own weather station":
+				"OpenWeatherMap - Übertragung von Werten einer eigenen Wetterstation",
+			"station data - if position is not set, Modue 'Location' is used":
+				"Angaben zur Station - falls die Position nicht angegeben ist, wird das Modul 'Location' verwendet",
 			"Longitude" : "Längengrad",
 			"Latitude" : "Breitengrad",
 			"Altitude" : "Höhe",
