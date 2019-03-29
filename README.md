@@ -1,7 +1,7 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.0+-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.13-blue.svg)
+![Module-Version](https://img.shields.io/badge/Modul_Version-1.14-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![StyleCI](https://github.styleci.io/repos/126683101/shield?branch=master)](https://github.styleci.io/repos/150288134)
@@ -78,6 +78,9 @@ Verweise:
 
 
 ## 7. Versions-Historie
+
+- 1.14 @ 29.03.2019 16:19<br>
+  - SetValue() abgesichert
 
 - 1.13 @ 22.03.2019 15:15<br>
   - Anpassungen IPS 5
