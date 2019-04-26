@@ -28,7 +28,7 @@ _OpenWeatherData_:
 - aktuellen Daten (_Current weather data_)
 - stündlichen Vorhersagen (_5 day / 3 hour forecast_)
 
-_OpenWeatherStation:
+_OpenWeatherStation_:
 - Übertragng von Daten einer lokalen Wetterstation an _OpenWeather_
 
 ## 2. Voraussetzungen
