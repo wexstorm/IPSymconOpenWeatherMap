@@ -29,7 +29,7 @@ _OpenWeatherData_:
 - stündlichen Vorhersagen (_5 day / 3 hour forecast_)
 
 _OpenWeatherStation_:
-- Übertragng von Daten einer lokalen Wetterstation an _OpenWeather_
+- Übertragung von Daten einer lokalen Wetterstation an _OpenWeather_
 
 ## 2. Voraussetzungen
 
