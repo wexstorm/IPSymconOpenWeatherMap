@@ -1,12 +1,12 @@
 {
 	"id": "{BCAEF996-FC2B-420D-A801-5C0B4A021225}",
 	"author": "Ch. Damsky",
-	"name": "IPSymconOpenWeatherMap",
+	"name": "OpenWeatherMap",
 	"url": "https://github.com/demel42/IPSymconOpenWeatherMap",
 	"compatibility": {
 		"version": "5.0"
 	},
-	"version": "1.16",
+	"version": "1.17",
 	"build": 0,
-	"date": 1565353933
+	"date": 1569752421
 }

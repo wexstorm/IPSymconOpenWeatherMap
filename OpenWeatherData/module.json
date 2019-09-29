@@ -9,5 +9,6 @@
 	"parentRequirements": [],
 	"childRequirements": [],
 	"implemented": [],
-	"prefix": "OpenWeatherData"
+	"prefix": "OpenWeatherData",
+	"url": "https://github.com/demel42/IPSymconOpenWeatherMap/blob/master/README.md"
 }
