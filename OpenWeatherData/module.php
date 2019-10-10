@@ -533,7 +533,7 @@ class OpenWeatherData extends IPSModule
             }
 
             if ($with_winddirection) {
-                $dir = $this->ConvertWindDirection2Text($wind_deg) . ' (' . $wind_deg . '°)';
+                $dir = $this->ConvertWindDirection2Text((int) $wind_deg) . ' (' . $wind_deg . '°)';
                 $this->SetValue($pre . 'WindDirection' . $post, $dir);
             }
 
@@ -678,7 +678,7 @@ class OpenWeatherData extends IPSModule
             foreach ($args as $arg => $value) {
                 $url .= '&' . $arg;
                 if ($value != '') {
-                    $url .= '=' . rawurlencode($value);
+                    $url .= '=' . rawurlencode((string) $value);
                 }
             }
         }

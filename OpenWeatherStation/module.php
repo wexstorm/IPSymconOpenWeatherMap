@@ -340,7 +340,7 @@ class OpenWeatherStation extends IPSModule
             foreach ($args as $arg => $value) {
                 $url .= '&' . $arg;
                 if ($value != '') {
-                    $url .= '=' . rawurlencode($value);
+                    $url .= '=' . rawurlencode((string) $value);
                 }
             }
         }
