@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../libs/common.php';  // globale Funktionen
 
 class OpenWeatherStation extends IPSModule
@@ -108,10 +110,10 @@ class OpenWeatherStation extends IPSModule
         if (IPS_GetKernelVersion() < 5.2) {
             $formActions[] = ['type' => 'Label', 'label' => '____________________________________________________________________________________________________'];
             $formActions[] = [
-                                'type'    => 'Button',
-                                'caption' => 'Module description',
-                                'onClick' => 'echo "https://github.com/demel42/IPSymconOpenWeatherMap/blob/master/README.md";'
-                            ];
+                'type'    => 'Button',
+                'caption' => 'Module description',
+                'onClick' => 'echo "https://github.com/demel42/IPSymconOpenWeatherMap/blob/master/README.md";'
+            ];
         }
 
         $formStatus = [];
@@ -145,14 +147,14 @@ class OpenWeatherStation extends IPSModule
         $now = time();
 
         $vars = [
-                'dt',
-                'temperature',
-                'wind_speed', 'wind_gust', 'wind_deg',
-                'pressure',
-                'humidity',
-                'rain_1h', 'rain_6h', 'rain_24h',
-                'snow_1h', 'snow_6h', 'snow_24h',
-            ];
+            'dt',
+            'temperature',
+            'wind_speed', 'wind_gust', 'wind_deg',
+            'pressure',
+            'humidity',
+            'rain_1h', 'rain_6h', 'rain_24h',
+            'snow_1h', 'snow_6h', 'snow_24h',
+        ];
 
         $values = [];
         foreach ($vars as $var) {
@@ -219,12 +221,12 @@ class OpenWeatherStation extends IPSModule
         }
 
         $args = [
-                'station_id' => $station_id,
-                'type'       => $type,
-                'limit'      => $limit,
-                'from'       => $from,
-                'to'         => $to
-            ];
+            'station_id' => $station_id,
+            'type'       => $type,
+            'limit'      => $limit,
+            'from'       => $from,
+            'to'         => $to
+        ];
 
         $statuscode = $this->do_HttpRequest('data/3.0/measurements', $args, '', 'GET', $result);
         if ($statuscode) {
@@ -255,12 +257,12 @@ class OpenWeatherStation extends IPSModule
         }
 
         $postdata = [
-                'external_id' => $external_id,
-                'name'        => $name,
-                'latitude'    => $latitude,
-                'longitude'   => $longitude,
-                'altitude'    => $altitude
-            ];
+            'external_id' => $external_id,
+            'name'        => $name,
+            'latitude'    => $latitude,
+            'longitude'   => $longitude,
+            'altitude'    => $altitude
+        ];
 
         $statuscode = $this->do_HttpRequest('data/3.0/stations', '', $postdata, 'POST', $result);
         if ($statuscode) {
@@ -291,12 +293,12 @@ class OpenWeatherStation extends IPSModule
         }
 
         $postdata = [
-                'external_id' => $external_id,
-                'name'        => $name,
-                'latitude'    => $latitude,
-                'longitude'   => $longitude,
-                'altitude'    => $altitude
-            ];
+            'external_id' => $external_id,
+            'name'        => $name,
+            'latitude'    => $latitude,
+            'longitude'   => $longitude,
+            'altitude'    => $altitude
+        ];
 
         $statuscode = $this->do_HttpRequest('data/3.0/stations/' . $station_id, '', $postdata, 'PUT', $result);
         return $result;

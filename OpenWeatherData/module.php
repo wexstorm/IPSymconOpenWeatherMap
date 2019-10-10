@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../libs/common.php';  // globale Funktionen
 
 class OpenWeatherData extends IPSModule
@@ -195,10 +197,10 @@ class OpenWeatherData extends IPSModule
         if (IPS_GetKernelVersion() < 5.2) {
             $formActions[] = ['type' => 'Label', 'label' => '____________________________________________________________________________________________________'];
             $formActions[] = [
-                                'type'    => 'Button',
-                                'caption' => 'Module description',
-                                'onClick' => 'echo "https://github.com/demel42/IPSymconOpenWeatherMap/blob/master/README.md";'
-                            ];
+                'type'    => 'Button',
+                'caption' => 'Module description',
+                'onClick' => 'echo "https://github.com/demel42/IPSymconOpenWeatherMap/blob/master/README.md";'
+            ];
         }
 
         $formStatus = [];
@@ -264,10 +266,10 @@ class OpenWeatherData extends IPSModule
         }
 
         $args = [
-                'lat'   => number_format($lat, 6, '.', ''),
-                'lon'   => number_format($lng, 6, '.', ''),
-                'units' => 'metric'
-            ];
+            'lat'   => number_format($lat, 6, '.', ''),
+            'lon'   => number_format($lng, 6, '.', ''),
+            'units' => 'metric'
+        ];
 
         $lang = $this->ReadPropertyString('lang');
         if ($lang != '') {
@@ -430,11 +432,11 @@ class OpenWeatherData extends IPSModule
         }
 
         $args = [
-                'lat'   => number_format($lat, 6, '.', ''),
-                'lon'   => number_format($lng, 6, '.', ''),
-                'cnt'   => $hourly_forecast_count,
-                'units' => 'metric'
-            ];
+            'lat'   => number_format($lat, 6, '.', ''),
+            'lon'   => number_format($lng, 6, '.', ''),
+            'cnt'   => $hourly_forecast_count,
+            'units' => 'metric'
+        ];
 
         $lang = $this->ReadPropertyString('lang');
         if ($lang != '') {
