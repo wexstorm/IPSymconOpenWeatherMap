@@ -363,7 +363,7 @@ class OpenWeatherData extends IPSModule
         }
 
         if ($with_winddirection) {
-            $dir = $this->ConvertWindDirection2Text($wind_deg) . ' (' . $wind_deg . '°)';
+            $dir = $this->ConvertWindDirection2Text((int) $wind_deg) . ' (' . $wind_deg . '°)';
             $this->SetValue('WindDirection', $dir);
         }
 
