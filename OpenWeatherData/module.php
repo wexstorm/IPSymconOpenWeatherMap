@@ -347,7 +347,7 @@ class OpenWeatherData extends IPSModule
             $this->SetValue('AbsoluteHumidity', $abs_humidity);
         }
 
-        $wind_speed = $this->ms2kmh($wind_speed);
+        $wind_speed = (int) $this->ms2kmh($wind_speed);
         $this->SetValue('WindSpeed', $wind_speed);
         if ($with_windangle) {
             $this->SetValue('WindAngle', $wind_deg);
@@ -517,7 +517,7 @@ class OpenWeatherData extends IPSModule
 
             $this->SetValue($pre . 'Humidity' . $post, $humidity);
 
-            $wind_speed = $this->ms2kmh($wind_speed);
+            $wind_speed = (int) $this->ms2kmh($wind_speed);
             $this->SetValue($pre . 'WindSpeed' . $post, $wind_speed);
             if ($with_windangle) {
                 $this->SetValue($pre . 'WindAngle' . $post, $wind_deg);
@@ -792,7 +792,7 @@ class OpenWeatherData extends IPSModule
 
     // gemessenen Luftdruck in absoluen Luftdruck (Meereshöhe) umrechnen
     //   Quelle: https://rechneronline.de/barometer/hoehe.php
-    public function CalcAbsolutePressure(float $pressure, float $temp, int $altitude)
+    public function CalcAbsolutePressure(float $pressure, float $temp, float $altitude)
     {
         // Temperaturgradient (geschätzt)
         $TG = 0.0065;

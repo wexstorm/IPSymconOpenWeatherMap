@@ -1,7 +1,7 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.0+-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.17-blue.svg)
+![Module-Version](https://img.shields.io/badge/Modul_Version-1.18-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
@@ -77,6 +77,9 @@ Verweise:
 
 
 ## 7. Versions-Historie
+
+- 1.18 @ 26.10.2019 17:34<br>
+  - Fix wegen strict_types=1
 
 - 1.17 @ 10.10.2019 17:27<br>
   - Anpassungen an IPS 5.2
