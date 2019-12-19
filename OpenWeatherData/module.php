@@ -155,18 +155,18 @@ class OpenWeatherData extends IPSModule
     {
         $formElements = [];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'module_disable', 'caption' => 'Instance is disabled'];
-        $formElements[] = ['type' => 'Label', 'label' => 'OpenWeatherMap - fetch current observations and forecast'];
+        $formElements[] = ['type' => 'Label', 'caption' => 'OpenWeatherMap - fetch current observations and forecast'];
         $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'appid', 'caption' => 'API-Key'];
 
-        $formElements[] = ['type' => 'Label', 'label' => 'station data - if position is not set, Modue \'Location\' is used'];
+        $formElements[] = ['type' => 'Label', 'caption' => 'station data - if position is not set, Modue \'Location\' is used'];
         $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'longitude', 'caption' => 'Longitude', 'suffix' => '°'];
         $formElements[] = ['type' => 'NumberSpinner', 'digits' => 5, 'name' => 'latitude', 'caption' => 'Latitude', 'suffix' => '°'];
         $formElements[] = ['type' => 'NumberSpinner', 'name' => 'altitude', 'caption' => 'Altitude', 'suffix' => 'm'];
 
-        $formElements[] = ['type' => 'Label', 'label' => 'Language setting for textual weather-information (de, en, ...)'];
+        $formElements[] = ['type' => 'Label', 'caption' => 'Language setting for textual weather-information (de, en, ...)'];
         $formElements[] = ['type' => 'ValidationTextBox', 'name' => 'lang', 'caption' => 'Language code'];
 
-        $formElements[] = ['type' => 'Label', 'label' => 'optional weather data'];
+        $formElements[] = ['type' => 'Label', 'caption' => 'optional weather data'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_absolute_pressure', 'caption' => ' ... absolute Pressure'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_absolute_humidity', 'caption' => ' ... absolute Humidity'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_dewpoint', 'caption' => ' ... Dewpoint'];
@@ -182,20 +182,20 @@ class OpenWeatherData extends IPSModule
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_condition_id', 'caption' => ' ... Condition-id'];
         $formElements[] = ['type' => 'CheckBox', 'name' => 'with_summary', 'caption' => ' ... html-box with summary of weather'];
 
-        $formElements[] = ['type' => 'Label', 'label' => 'script for alternate weather summary'];
+        $formElements[] = ['type' => 'Label', 'caption' => 'script for alternate weather summary'];
         $formElements[] = ['type' => 'SelectScript', 'name' => 'summary_script', 'caption' => 'script'];
 
-        $formElements[] = ['type' => 'Label', 'label' => '3-hour forecast (max 5 days every 3rd hour = 40)'];
+        $formElements[] = ['type' => 'Label', 'caption' => '3-hour forecast (max 5 days every 3rd hour = 40)'];
         $formElements[] = ['type' => 'NumberSpinner', 'name' => 'hourly_forecast_count', 'caption' => 'Count'];
-        $formElements[] = ['type' => 'Label', 'label' => ' ... attention: decreasing the number deletes the unused variables!'];
+        $formElements[] = ['type' => 'Label', 'caption' => ' ... attention: decreasing the number deletes the unused variables!'];
 
-        $formElements[] = ['type' => 'Label', 'label' => 'Update weatherdata every X minutes'];
+        $formElements[] = ['type' => 'Label', 'caption' => 'Update weatherdata every X minutes'];
         $formElements[] = ['type' => 'NumberSpinner', 'name' => 'update_interval', 'caption' => 'Minutes'];
 
         $formActions = [];
-        $formActions[] = ['type' => 'Button', 'label' => 'Update weatherdata', 'onClick' => 'OpenWeatherData_UpdateData($id);'];
+        $formActions[] = ['type' => 'Button', 'caption' => 'Update weatherdata', 'onClick' => 'OpenWeatherData_UpdateData($id);'];
         if (IPS_GetKernelVersion() < 5.2) {
-            $formActions[] = ['type' => 'Label', 'label' => '____________________________________________________________________________________________________'];
+            $formActions[] = ['type' => 'Label', 'caption' => '____________________________________________________________________________________________________'];
             $formActions[] = [
                 'type'    => 'Button',
                 'caption' => 'Module description',
