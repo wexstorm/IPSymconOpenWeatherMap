@@ -107,14 +107,6 @@ class OpenWeatherStation extends IPSModule
 
         $formActions = [];
         $formActions[] = ['type' => 'Button', 'caption' => 'Transmit weatherdata', 'onClick' => 'OpenWeatherStation_TransmitMeasurements($id);'];
-        if (IPS_GetKernelVersion() < 5.2) {
-            $formActions[] = ['type' => 'Label', 'caption' => '____________________________________________________________________________________________________'];
-            $formActions[] = [
-                'type'    => 'Button',
-                'caption' => 'Module description',
-                'onClick' => 'echo "https://github.com/demel42/IPSymconOpenWeatherMap/blob/master/README.md";'
-            ];
-        }
 
         $formStatus = [];
         $formStatus[] = ['code' => IS_CREATING, 'icon' => 'inactive', 'caption' => 'Instance getting created'];
