@@ -42,6 +42,16 @@ class OpenWeatherStation extends IPSModule
         $this->RegisterPropertyInteger('transmit_interval', 5);
 
         $this->RegisterTimer('TransmitMeasurements', 0, 'OpenWeatherStation_TransmitMeasurements(' . $this->InstanceID . ');');
+        $this->RegisterMessage(0, IPS_KERNELMESSAGE);
+    }
+
+    public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    {
+        parent::MessageSink($TimeStamp, $SenderID, $Message, $Data);
+
+        if ($Message == IPS_KERNELMESSAGE && $Data[0] == KR_READY) {
+            $this->SetUpdateInterval();
+        }
     }
 
     public function ApplyChanges()
@@ -61,11 +71,41 @@ class OpenWeatherStation extends IPSModule
         $appid = $this->ReadPropertyString('appid');
         if ($appid == '') {
             $this->SetStatus(IS_INVALIDCONFIG);
-        } else {
-            $this->SetStatus(IS_ACTIVE);
+            return;
         }
 
-        $this->SetTransmitInterval();
+        $refs = $this->GetReferenceList();
+        foreach ($refs as $ref) {
+            $this->UnregisterReference($ref);
+        }
+        $propertyNames = [
+            'convert_script',
+            'dt_var',
+            'humidity_var',
+            'pressure_var',
+            'rain_1h_var',
+            'rain_24h_var',
+            'rain_6h_var',
+            'snow_1h_var',
+            'snow_24h_var',
+            'snow_6h_var',
+            'temperature_var',
+            'wind_deg_var',
+            'wind_gust_var',
+            'wind_speed_var'
+        ];
+        foreach ($propertyNames as $name) {
+            $oid = $this->ReadPropertyInteger($name);
+            if ($oid > 0) {
+                $this->RegisterReference($oid);
+            }
+        }
+
+        if (IPS_GetKernelRunlevel() == KR_READY) {
+            $this->SetTransmitInterval();
+        }
+
+        $this->SetStatus(IS_ACTIVE);
     }
 
     public function GetConfigurationForm()
