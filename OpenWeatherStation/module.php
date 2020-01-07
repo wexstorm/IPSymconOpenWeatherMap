@@ -50,7 +50,7 @@ class OpenWeatherStation extends IPSModule
         parent::MessageSink($TimeStamp, $SenderID, $Message, $Data);
 
         if ($Message == IPS_KERNELMESSAGE && $Data[0] == KR_READY) {
-            $this->SetUpdateInterval();
+            $this->SetTransmitInterval();
         }
     }
 

@@ -78,7 +78,7 @@ Verweise:
 
 ## 7. Versions-Historie
 
-- 1.20 @ 06.01.2020 11:17
+- 1.20 @ 07.01.2020 15:53
   - Nutzung von RegisterReference() für im Modul genutze Objekte (Scripte, Kategorien etc)
   - SetTimerInterval() erst nach KR_READY
 
