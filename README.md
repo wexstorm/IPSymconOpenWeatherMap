@@ -1,7 +1,6 @@
 # IPSymconOpenWeatherMap
 
 [![IPS-Version](https://img.shields.io/badge/Symcon_Version-5.3+-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-![Module-Version](https://img.shields.io/badge/Modul_Version-1.20-blue.svg)
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
@@ -77,6 +76,10 @@ Verweise:
 
 
 ## 7. Versions-Historie
+
+- 1.21 @ 30.12.2019 10:56
+  - Anpassungen an IPS 5.3
+    - auch in der Dokumentation das 'PHP Long Tag' verwenden
 
 - 1.20 @ 07.01.2020 15:53
   - Nutzung von RegisterReference() für im Modul genutze Objekte (Scripte, Kategorien etc)

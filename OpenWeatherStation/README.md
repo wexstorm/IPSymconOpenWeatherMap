@@ -177,7 +177,7 @@ Erläuterung zu _convert_script_:
 mit diesem Scripten können Messwerte umgerechnet werden, Beispiel:
 
 ```
-<?
+<?php
 
 $instID = $_IPS['InstanceID'];
 $values = json_decode($_IPS['values'], true);
