@@ -59,6 +59,7 @@ class OpenWeatherData extends IPSModule
         $this->CreateVarProfile('OpenWeatherMap.Rainfall', VARIABLETYPE_FLOAT, ' mm', 0, 60, 0, 1, 'Rainfall');
         $this->CreateVarProfile('OpenWeatherMap.Snowfall', VARIABLETYPE_FLOAT, ' mm', 0, 60, 0, 1, 'Snow');
         $this->CreateVarProfile('OpenWeatherMap.Cloudiness', VARIABLETYPE_FLOAT, ' %', 0, 0, 0, 0, 'Cloud');
+        $this->CreateVarProfile('OpenWeatherMap.UVI', VARIABLETYPE_FLOAT, '', 0, 0, 0, 0, 'Sun');
 
         $this->SetMultiBuffer('Current', '');
         $this->SetMultiBuffer('HourlyForecast', '');
@@ -118,6 +119,7 @@ class OpenWeatherData extends IPSModule
         $this->MaintainVariable('ConditionId', $this->Translate('Condition-id'), VARIABLETYPE_STRING, '', $vpos++, $with_condition_id);
         $this->MaintainVariable('LastMeasurement', $this->Translate('last measurement'), VARIABLETYPE_INTEGER, '~UnixTimestamp', $vpos++, true);
         $this->MaintainVariable('WeatherSummary', $this->Translate('Summary of weather'), VARIABLETYPE_STRING, '~HTMLBox', $vpos++, $with_summary);
+        $this->MaintainVariable('UVI', $this->Translate('UVI'), VARIABLETYPE_FLOAT, 'OpenWeatherMap.UVI', $vpos++, true);
 
         for ($i = 0; $i < 40; $i++) {
             $vpos = 1000 + (100 * $i);
@@ -143,6 +145,7 @@ class OpenWeatherData extends IPSModule
             $this->MaintainVariable($pre . 'Conditions' . $post, $this->Translate('Conditions') . $s, VARIABLETYPE_STRING, '', $vpos++, $use && $with_conditions);
             $this->MaintainVariable($pre . 'ConditionIcon' . $post, $this->Translate('Condition-icon') . $s, VARIABLETYPE_STRING, '', $vpos++, $use && $with_icon);
             $this->MaintainVariable($pre . 'ConditionId' . $post, $this->Translate('Condition-id') . $s, VARIABLETYPE_STRING, '', $vpos++, $use && $with_condition_id);
+            $this->MaintainVariable($pre . 'UVI' . $post, $this->Translate('UVI') . $s, VARIABLETYPE_FLOAT, '', $vpos++, $use);
         }
 
         $module_disable = $this->ReadPropertyBoolean('module_disable');
@@ -301,6 +304,23 @@ class OpenWeatherData extends IPSModule
             return;
         }
 
+        $jdatauv = $this->do_HttpRequest('data/2.5/uvi', $args);
+        $this->SendDebug(__FUNCTION__, 'jdatauv=' . print_r($jdatauv, true), 0);
+        
+        
+        if ($jdatauv == '') {
+            
+            return;
+        }
+        $uvi = 0.;
+        if (isset($jdatauv['value'])) {
+            $uvi = $jdatauv['value'];
+            $this->SendDebug(__FUNCTION__, 'uvi=' . print_r($uvi, true), 0);
+        }
+
+        
+
+
         if (isset($jdata['weather'])) {
             $weather = $jdata['weather'];
             $this->SendDebug(__FUNCTION__, 'weather=' . print_r($weather, true), 0);
@@ -335,6 +355,8 @@ class OpenWeatherData extends IPSModule
 
         $clouds = $this->GetArrayElem($jdata, 'clouds.all', 0);
 
+        
+
         $conditions = '';
         $icon = '';
         $id = '';
@@ -351,6 +373,8 @@ class OpenWeatherData extends IPSModule
         }
 
         $this->SetValue('Temperature', $temperature);
+
+        $this->SetValue('UVI', $uvi);
 
         $this->SetValue('Pressure', $pressure);
         if ($with_absolute_pressure) {
